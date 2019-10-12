@@ -1,0 +1,63 @@
+@import (reference) '../../shared.less';
+
+.MentalMapper {
+
+    .Relationship {
+        position: absolute;
+        cursor: pointer;
+        z-index: 0;
+
+        &--excluded-by-filter {
+            opacity: @excluded-opacity;
+        }
+
+        &--temp {
+            z-index: 2;
+            // pointer-events: none;
+            // > * {
+            //     pointer-events: none;
+            // }
+        }
+
+        &__svg {
+            overflow: visible !important;
+            position: absolute;
+            pointer-events: none;
+
+            &--hit {
+                
+                line {
+                    pointer-events: auto;
+                }
+            }
+        }
+
+        &--temp-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        &--has-temp-relationship {
+            pointer-events: none;
+            
+            > .Relationship__svg--hit > line {
+                pointer-events: none;
+            }
+        }
+        
+        &__svg-arrow {
+            &--positive {
+                fill: #0351A6;
+            }
+
+            &--negative {
+                fill: #BF5513;
+            }
+
+            &--neutral {
+                fill: #333;
+            }
+        }
+    }
+}   
