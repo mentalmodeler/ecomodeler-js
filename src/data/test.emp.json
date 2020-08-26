@@ -1,0 +1,78 @@
+{
+   "info": {
+      "version": "0.1",
+      "date": "Mon Nov 4 12:09:25 GMT-0600 2019",
+      "author": "",
+      "description": ""
+   },
+   "groupNames": { 
+         "0": "",
+         "1": "",
+         "2": "",
+         "3": "",
+         "4": "",
+         "5": ""
+   },
+   "concepts": [
+      {
+         "id": "0",
+         "name": "A",
+         "notes": [],
+         "group": "0",
+         "x": "59",
+         "y": "135",
+         "properties": [
+            {
+               "id": "2",
+               "name": "A_C0",
+               "notes": [],
+               "group": "0",
+               "x": "59",
+               "y": "166",
+               "relationships": {
+                  "relationship": {
+                     "id": "1",
+                     "name": "B",
+                     "label": "Test description",
+                     "notes": []
+                  }
+               }
+            },
+            {
+               "id": "3",
+               "name": "A_C1",
+               "notes": [],
+               "group": "0",
+               "x": "59",
+               "y": "197"
+            }
+         ]
+      },
+      {
+         "id": "1",
+         "name": "B",
+         "notes": [],
+         "group": "0",
+         "x": "500",
+         "y": "345",
+         "properties": [
+            {
+               "id": "4",
+               "name": "B_C0",
+               "notes": [],
+               "group": "0",
+               "x": "500",
+               "y": "376"
+            },
+            {
+               "id": "5",
+               "name": "B_C1",
+               "notes": [],
+               "group": "0",
+               "x": "500",
+               "y": "407"
+            }
+         ]
+      }
+   ]
+}

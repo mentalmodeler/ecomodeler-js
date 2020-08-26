@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import debounce from 'lodash.debounce';
 import classnames from 'classnames';
-// import PropTypes from 'prop-types';
 
 import {
+    conceptAdd,
     conceptMove,
     conceptFocus,
     conceptChange,
@@ -16,16 +16,6 @@ import {
 } from '../../actions/index';
 
 import './Concept.css';
-
-
-// const TEXTAREA_STYLES = {
-//     fontSize: 14,
-//     lineHeight: 18,
-//     padding: 6
-// };
-
-// const arrowheadHeight = 16; // 6
-// const arrowheadWidth = 16; // 9
 
 class Concept extends Component {
     constructor(props) {
@@ -56,7 +46,7 @@ class Concept extends Component {
 
     debouncedConceptChange = debounce(() => {
         if (this.root) {
-            const {id, conceptChange} = this.props;
+            const {id, conceptChange, updateStackHeight} = this.props;
             const {value} = this.state;
             const {width, height} = this.root.getBoundingClientRect();
             const isHovered = this.root.matches(':hover');
@@ -67,6 +57,7 @@ class Concept extends Component {
             this.width = roundedWidth;
             this.height = roundedHeight;
             conceptChange(id, value, roundedWidth, roundedHeight);
+            updateStackHeight();
         }
     }, 150)
 
@@ -137,6 +128,7 @@ class Concept extends Component {
             this.centerClickDiffY = e.clientY - middleY;
             this.xBeforeDrag = middleX;
             this.yBeforeDrag = middleY;
+            e.stopPropagation();
         }
 
         if (!selected) {
@@ -153,9 +145,8 @@ class Concept extends Component {
     }
 
     onMouseMove = (e) => {
-        const {id, conceptMove, relationshipDrawTemp, x, y, width} = this.props; // eslint-disable-line
+        const {id, conceptMove, relationshipDrawTemp, stackHeight} = this.props; // eslint-disable-line
         const {lineMouseDown} = this.state;
-
         const deltaX = e.screenX - this.screenXBeforeDrag;
         const deltaY = e.screenY - this.screenYBeforeDrag;
         const newX = Math.max(deltaX + this.xBeforeDrag, 0);
@@ -183,8 +174,6 @@ class Concept extends Component {
             this.setState({
                 lineMouseDown: false
             });
-
-            
         }
     }
 
@@ -209,8 +198,6 @@ class Concept extends Component {
         }
     }
 
-    onBlur = (e) => {}
-
     setRef = (ref) => {
         this.root = ref;
     }
@@ -219,9 +206,16 @@ class Concept extends Component {
         this.textarea = ref;
     }
 
+    onClickAdd = (e) => {
+        const {id, conceptAdd, updateStackHeight} = this.props;
+        conceptAdd(id);
+        updateStackHeight();
+    }
+
     onClickDelete = (e) => {
-        const {id, conceptDelete} = this.props;
+        const {id, conceptDelete, updateStackHeight} = this.props;
         conceptDelete(id);
+        updateStackHeight();
     }
     
     setLineButtonRef = (ref) => {
@@ -229,14 +223,14 @@ class Concept extends Component {
     }
 
     render() {
-        const { id, name, selected, x, y, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter} = this.props // eslint-disable-line
-        const { value, lineMouseDown } = this.state
+        const { id, selected, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter, parentComponent} = this.props; // eslint-disable-line
+        const { value, lineMouseDown } = this.state;
+        const isSub = parentComponent && parentComponent !== '';
         const rootStyle = {
-            left: `${x}px`,
-            top: `${y}px`,
+            position: 'relative',
             padding: '2px',
             paddingBottom: '0px'
-        }
+        };
         const groupNum = group || '0';
         // console.log('groupNum:', groupNum);
         // console.log(id, '> isExcludedByFilter:', isExcludedByFilter);
@@ -248,15 +242,19 @@ class Concept extends Component {
             'Concept--excluded-by-filter': isExcludedByFilter
         });
 
-
-        const bgClassnames = classnames('Concept__bg', `Concept__bg--group-${groupNum}`, {
+        const bgClassnames = classnames('Concept__bg', `Concept__bg--group-${groupNum}${isSub ? "-sub" : ""}`, {
             'Concept__bg--focused': selected,
+            'Concept__bg--sub': isSub
+        });
+
+        const textAreaClassnames = classnames('Concept__textarea', {
+            'Concept__textarea--sub': isSub
         });
         
         // console.log('\t\tConcept >', this.props.id, '> render');
 
         const bgStyle = {
-            borderRadius: '6px',
+            borderRadius: '0px',
             border: '1px solid #000',
             boxShadow: 'inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15)'
         };
@@ -269,29 +267,46 @@ class Concept extends Component {
             color: '#333'
         };
 
+        const placeholder = isSub ? "Enter property" : "Enter component";
+
         return (
             <div
                 className={rootClassnames}
-                style={rootStyle}
-                ref={this.setRef}
                 onMouseDown={this.onMouseDown}
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
+                style={rootStyle}
+                ref={this.setRef}
                 dataid={id}
             >
             <textarea
-                    className="Concept__textarea"
+                    className={textAreaClassnames}
                     value={value}
                     onFocus={this.onFocus}
-                    onBlur={this.onBlur}
                     onChange={this.onChange}
                     ref={this.setTextareaRef}
-                    placeholder="Enter name"
+                    placeholder={placeholder}
+                    rows={1}
                     style={textAreaStyle}
                 />
-                <div className="Concept__button-wrapper Concept__button-wrapper--top">
+                {!isSub &&
+                    <div className="Concept__button-wrapper Concept__button-wrapper--top">
+                        <button
+                            className="Concept__button Concept__button--top"
+                            onClick={this.onClickAdd}
+                            tabIndex={-1}
+                        >
+                            <svg className="Concept__icon--add" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24">
+                                <g>
+                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/>
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                }
+                <div className="Concept__button-wrapper Concept__button-wrapper--left">
                     <button 
-                        className="Concept__button Concept__button--top"
+                        className="Concept__button Concept__button--left"
                         onClick={this.onClickDelete}
                         tabIndex={-1}
                     >
@@ -306,14 +321,14 @@ class Concept extends Component {
                         </svg>
                     </button>
                 </div>
-                <div  className="Concept__button-wrapper Concept__button-wrapper--bottom">
+                <div  className="Concept__button-wrapper Concept__button-wrapper--right">
                     <button
-                        className="Concept__button Concept__button--bottom"
+                        className="Concept__button Concept__button--right"
                         ref={this.setLineButtonRef}
                         tabIndex={-1}
                     >
                         <svg className="Concept__icon--line" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 612 612" style={{enableBackground: 'new 0 0 612 612'}} xmlSpace="preserve">
-                            <g>
+                            <g transform="rotate(-90,306,306)">
                                 <path d="M306,0C137.012,0,0,136.992,0,306s137.012,306,306,306s306-137.012,306-306S475.008,0,306,0z M431.001,322.811
                                     l-108.19,108.19c-4.59,4.59-10.862,6.005-16.811,4.953c-5.929,1.052-12.221-0.382-16.811-4.953l-108.19-108.19
                                     c-7.478-7.478-7.478-19.583,0-27.042c7.478-7.478,19.584-7.478,27.043,0l78.833,78.814V172.125
@@ -323,7 +338,7 @@ class Concept extends Component {
                         </svg>
                     </button>
                 </div>
-                <div  className={bgClassnames} style={bgStyle}></div>
+                <div className={bgClassnames} style={bgStyle}></div>
             </div>
         );
     }
@@ -331,6 +346,10 @@ class Concept extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        conceptAdd: (parentComponent) => {
+            dispatch(conceptAdd(parentComponent))
+        },
+
         conceptMove: (id, x, y) => {
             dispatch(conceptMove(id, x, y))
         },

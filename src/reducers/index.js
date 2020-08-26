@@ -132,6 +132,13 @@ const concepts = (
                     influence: action.value
                 })
             };
+        case 'RELATIONSHIP_CHANGE_DESCRIPTION':
+            return {
+                ...state,
+                collection: updateCollectionRelationship(collection, action.influencerId, action.influenceeId, {
+                    descriptionText: action.value
+                })
+            };
         case 'RELATIONSHIP_DELETE':
             return {
                 ...state,
@@ -175,7 +182,8 @@ const concepts = (
         case 'CONCEPT_ADD':
             const newCollection = [...collection];
             const {x, y} = util.getStartPosition(newCollection)
-            newCollection.push(createConcept({x, y}));
+            const parentComponent = action.parentComponent;
+            newCollection.push(createConcept({x, y, parentComponent}));
             return {
                 ...state,
                 collection: newCollection
@@ -265,7 +273,7 @@ const allReducers = (state, action) => {
     if (action.type === 'MODEL_LOAD') {
         state = action.state || {}
     }
-    return appReducers(state, action)
+    return appReducers(state, action);
 }
 
 export default allReducers;

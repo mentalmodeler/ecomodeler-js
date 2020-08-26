@@ -208,6 +208,22 @@ class Relationship extends Component {
                 >   
                     <defs>
                         <marker
+                            id="semi-circle-neutral"
+                            orient="auto"
+                            refX="1"
+                            refY="1"
+                        >
+                            <circle cx="1" cy="1" r="1" fill="#333" />
+                        </marker>
+                        <marker
+                            id="semi-circle-selected"
+                            orient="auto"
+                            refX="1"
+                            refY="1"
+                        >
+                            <circle cx="1" cy="1" r="1" fill="#83A603" />
+                        </marker>
+                        <marker
                             id="arrow-neutral"
                             markerWidth={`${arrowheadWidth}`}
                             markerHeight={`${arrowheadHeight}`}
@@ -270,7 +286,8 @@ class Relationship extends Component {
                         y1={erY}
                         y2={eeY}
                         stroke="transparent"
-                        strokeWidth="10"
+                        strokeWidth="6"
+                        markerStart={`url(#semi-circle-${influenceModifier})`}
                         markerEnd={`url(#arrow-${influenceModifier})`}
                     />
                 </svg>

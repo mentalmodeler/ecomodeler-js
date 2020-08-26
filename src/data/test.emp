@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?><ecoModeler>
+  <info>
+    <version>0.1</version>
+    <date>Mon Nov 4 12:09:25 GMT-0600 2019</date>
+    <author><![CDATA[]]></author>
+    <description><![CDATA[]]></description>
+  </info>
+  <groupNames>
+    <groupName index="0"><![CDATA[]]></groupName>
+    <groupName index="1"><![CDATA[]]></groupName>
+    <groupName index="2"><![CDATA[]]></groupName>
+    <groupName index="3"><![CDATA[]]></groupName>
+    <groupName index="4"><![CDATA[]]></groupName>
+    <groupName index="5"><![CDATA[]]></groupName>
+  </groupNames>
+  <concepts>
+    <concept>
+      <id>0</id>
+      <name><![CDATA[A]]></name>
+      <notes><![CDATA[]]></notes>
+      <group>0</group>
+      <x>359</x>
+      <y>135</y>
+      <properties>
+        <concept>
+          <id>2</id>
+          <name><![CDATA[A_C0]]></name>
+          <notes><![CDATA[]]></notes>
+          <group>0</group>
+          <x>359</x>
+          <y>166</y>
+          <relationships>
+            <relationship>
+              <id>1</id>
+              <name><![CDATA[B]]></name>
+              <label><![CDATA[Test description]]></label>
+              <notes><![CDATA[]]></notes>
+            </relationship>
+          </relationships>
+        </concept>
+        <concept>
+          <id>3</id>
+          <name><![CDATA[A_C1]]></name>
+          <notes><![CDATA[]]></notes>
+          <group>0</group>
+          <x>359</x>
+          <y>197</y>
+        </concept>
+      </properties>
+    </concept>
+    <concept>
+      <id>1</id>
+      <name><![CDATA[B]]></name>
+      <notes><![CDATA[]]></notes>
+      <group>0</group>
+      <x>903</x>
+      <y>345</y>
+      <properties>
+        <concept>
+          <id>4</id>
+          <name><![CDATA[B_C0]]></name>
+          <notes><![CDATA[]]></notes>
+          <group>0</group>
+          <x>903</x>
+          <y>376</y>
+        </concept>
+        <concept>
+          <id>5</id>
+          <name><![CDATA[B_C1]]></name>
+          <notes><![CDATA[]]></notes>
+          <group>0</group>
+          <x>903</x>
+          <y>407</y>
+        </concept>
+      </properties>
+    </concept>
+  </concepts>
+</ecoModeler>

@@ -6,8 +6,6 @@ import ControlPanel from './ControlPanel';
 import TextAreaControl from './TextAreaControl';
 import SelectedControl from './SelectedControl';
 import GroupControl from './GroupControl';
-import ConfidenceControl from './ConfidenceControl';
-import FilterViewControl from './FilterViewControl';
 
 import {
     conceptChangeNotes,
@@ -135,7 +133,7 @@ class Controls extends Component {
     }
 
     render() {
-        const {selectedType, selectedData, associatedData, groupNames, viewFilter} = this.props;
+        const {selectedType, selectedData, associatedData, groupNames} = this.props;
         // console.log('Controls > render\nthis.props:', this.props, '\n\n');
         // const dataSource = selectedType === ELEMENT_TYPE.CONCEPT ? 'influencer' : 'relationship';
 
@@ -162,7 +160,7 @@ class Controls extends Component {
                         </ControlPanel>
                         {selectedType === ELEMENT_TYPE.CONCEPT &&
                             <Fragment>
-                                <ControlPanel title="Unit of measurement">
+                                {/* <ControlPanel title="Unit of measurement">
                                     <TextAreaControl
                                         className="control-panel__body-content"
                                         maxHeight={80}
@@ -172,7 +170,7 @@ class Controls extends Component {
                                         onBlur={this.onUnitsBlur}
                                         placeholder="Enter units"
                                     />  
-                                </ControlPanel>
+                                </ControlPanel> */}
                                 <ControlPanel title="Group">
                                     <GroupControl
                                         selectedType={selectedType}
@@ -184,7 +182,7 @@ class Controls extends Component {
                                 </ControlPanel>
                             </Fragment>
                         }
-                        {selectedType === ELEMENT_TYPE.RELATIONSHIP &&
+                        {/* {selectedType === ELEMENT_TYPE.RELATIONSHIP &&
                             <ControlPanel title="Confidence Rating">
                                     <ConfidenceControl
                                         maxHeight={200}
@@ -193,8 +191,8 @@ class Controls extends Component {
                                         value={selectedData && selectedData.confidence ? selectedData.confidence : '0'}
                                     />  
                                 </ControlPanel>
-                        }
-                        {(selectedType === ELEMENT_TYPE.CONCEPT || (selectedType === ELEMENT_TYPE.RELATIONSHIP && viewFilter > -1)) &&
+                        } */}
+                        {/* {(selectedType === ELEMENT_TYPE.CONCEPT || (selectedType === ELEMENT_TYPE.RELATIONSHIP && viewFilter > -1)) &&
                             <ControlPanel title="View Filter ">
                                 <FilterViewControl
                                     selectedType={selectedType}
@@ -202,7 +200,7 @@ class Controls extends Component {
                                     onFilterChange={this.onViewFilterChange}
                                 />
                             </ControlPanel>
-                        }
+                        } */}
                     </Fragment>
                 }
             </div>

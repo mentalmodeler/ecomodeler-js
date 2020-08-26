@@ -4,8 +4,8 @@ const ELEMENT_TYPE = {
     RELATIONSHIP: 'relationship'
 };
 const SETTINGS = {
-    START_X: 20,
-    START_Y: 20,
+    START_X: 0,
+    START_Y: 0,
     CONCEPT_START_INCR: 10
 };
 
@@ -159,6 +159,10 @@ const util = {
 
     findConcept(collection, id) {
         return collection.find((concept) => (concept.id === id));
+    },
+
+    findSubconcepts(collection, parentId) {
+        return collection.filter((concept) => (concept.parentComponent === parentId));
     },
 
     getPropValue(object = {}, path = [], defaultValue = '') {

@@ -56,9 +56,10 @@ const conceptDelete = (id) => {
     }
 };
 
-const conceptAdd = () => {
+const conceptAdd = (parentComponent) => {
     return {
-        type: 'CONCEPT_ADD'
+        type: 'CONCEPT_ADD',
+        parentComponent
     }
 };
 
@@ -121,8 +122,16 @@ const relationshipChangeInfluence = (influencerId, influenceeId, value) => {
     }
 }
 
+const relationshipChangeDescription = (influencerId, influenceeId, value) => {
+    return {
+        type: 'RELATIONSHIP_CHANGE_DESCRIPTION',
+        influencerId,
+        influenceeId,
+        value
+    }
+}
+
 const relationshipDelete = (influencerId, influenceeId) => {
-    console.log('relationshipDelete\n\tinfluencerId:', influencerId, '\n\tinfluenceeId:', influenceeId);
     return {
         type: 'RELATIONSHIP_DELETE',
         influencerId,
@@ -167,6 +176,7 @@ export {
     relationshipSetTempTarget,
     relationshipAdd,
     relationshipChangeInfluence,
+    relationshipChangeDescription,
     relationshipDelete,
     modelLoad,
     viewFilterChange,

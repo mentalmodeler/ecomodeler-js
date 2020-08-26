@@ -14,6 +14,8 @@ import simple from './data/simple.mmp'; // eslint-disable-line
 
 import './index.css';
 
+const TEST_EMP = require('./data/test.emp.json');
+
 //--------------
 // polyfills
 //--------------
@@ -121,7 +123,8 @@ function screenshot () {
 if (initialize) {
     render();
     // load(simple);
-    load(fire);
+    // load(fire);
+    // load(TEST_EMP);
 }
 
 // Define public API

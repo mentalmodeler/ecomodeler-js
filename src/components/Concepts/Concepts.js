@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Concept from '../Concept/Concept';
+import ConceptStack from '../Concept/ConceptStack';
 import util from '../../utils/util';
 
 
@@ -30,27 +30,32 @@ class Concepts extends Component {
         // );
         return (
             <div className="map__concepts">
-            {collection.map((concept, index) => {
-                const isExcludedByFilter = util.isConceptExcludedByFilter({
-                    viewFilter,
-                    selectedConcept,
-                    selectedRelationships,
-                    concept,
-                    collection
-                });
-                // console.log(`id:${concept.id}, isExcludedByFilter: ${isExcludedByFilter}\n`);
-                return (
-                    <Concept
-                        key={`concept_${concept.id}`}
-                        {...concept}
-                        hasTempRelationship={hasTempRelationship}
-                        isTempRelationship={hasTempRelationship && concept.id === tempRelationship.id}
-                        tempTarget={tempTarget}
-                        selected={concept.id === selectedConcept && selectedRelationship === null}
-                        isExcludedByFilter={isExcludedByFilter}
-                    />
-                );
-            })}
+            {collection
+                .filter((concept) => (!concept.parentComponent || concept.parentComponent === ''))
+                .map((concept) => {
+                    const isExcludedByFilter = util.isConceptExcludedByFilter({
+                        viewFilter,
+                        selectedConcept,
+                        selectedRelationships,
+                        concept,
+                        collection
+                    });
+                    const concepts = [concept].concat(util.findSubconcepts(collection, concept.id));
+                    // console.log(`id:${concept.id}, isExcludedByFilter: ${isExcludedByFilter}\n`);
+                    return (
+                        <ConceptStack
+                            key={`concept-stack_${concept.id}`}
+                            {...concept}
+                            hasTempRelationship={hasTempRelationship}
+                            isTempRelationship={hasTempRelationship && concept.id === tempRelationship.id}
+                            tempTarget={tempTarget}
+                            selected={concept.id === selectedConcept && selectedRelationship === null}
+                            isExcludedByFilter={isExcludedByFilter}
+                            concepts={concepts}
+                        />
+                    );
+                })
+            }
             </div>
         );
     }

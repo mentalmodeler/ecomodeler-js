@@ -10,6 +10,13 @@
         position: absolute;
         z-index: 1;
 
+        &__text {
+            display: flex;
+            height: 25px;
+            justify-content: center;
+            align-items: center;
+        }
+
         &__collapsed {
             .mm-button();
             width: 24px;
@@ -46,26 +53,38 @@
         &__expanded {
             overflow: hidden;
             border-radius: 6px;
-            // height: 150px;
-            width: @expanded-width + 2;
-            // background-color: @concept-0-grad-dark;
+            width: @expanded-width * 2;
             display: flex;
-            flex-flow: column;
-            border: 1px solid #000;
+            flex-flow: row;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35); // 0 3px 8px rgba(0, 0, 0, 0.15);
         }
 
         &__delete-icon {
             fill: #fff;
-            height: 14px;
-            width: 14px;
+            height: 16px;
+            width: 16px;
+        }
+
+        &__edit-icon {
+            fill: #fff;
+            height: 20px;
+            width: 20px;
         }
 
         &__delete {
             .mm-button();
-            border-radius: 6px 6px 0 0;
+            border-radius: 6px 0 0 6px;
             width: @expanded-width;
-            height: 24px;
+            height: 30px;
+            padding-top: 2px;
+            border: 1px solid #000;
+        }
+
+        &__edit {
+            .mm-button();
+            border-radius: 0 6px 6px 0;
+            width: @expanded-width;
+            height: 30px;
             padding-top: 2px;
             border: 1px solid #000;
         }
@@ -135,22 +154,14 @@
         }
 
         &__input {
-            .mm-button();
-            font-weight: 300;
-            background: #000;
-            border: none;
-            color: #fff;
-            height: 22px;
-            font-size: 14px;
-            line-height: 22px;
+            border-radius: 6px;
+            padding: 5px;
+            width: 300px;
+            height: 36px;
             text-align: center;
             outline: none;
-            cursor: text;
-            margin: 0;
-            
-            &:focus {
-                .mixin-button-bg(@button-grad-hover-light, @button-grad-hover-dark);
-            }
+            overflow: hidden;
+            resize: none;
         }
     }
 }

@@ -4,10 +4,9 @@ import classnames from 'classnames';
 import debounce from 'lodash.debounce';
 import ReactDOM from 'react-dom';
 
-import util from '../../utils/util';
-
 import {
     relationshipChangeInfluence,
+    relationshipChangeDescription,
     relationshipDelete,
     relationshipFocus
 } from '../../actions/index';
@@ -20,25 +19,18 @@ class RelationshipValueDisplay extends Component {
        
         this.state = {
             expanded: false,
-            positionPct: 0.5,
-            influenceValue: this.props.influence || 0,
-            tempInfluenceTextValue: this.props.influence || 0
+            editing: false,
+            descriptionText: ""
         }
     }
     
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.expanded && !this.props.expanded) {
-            this.expandMenu();
-        }
-    }
-
-    componentDidMount() {
-        if (this.state.expanded) {
+    componentDidMount = () => {
+        if (this.state.expanded || this.state.editing) {
             this.toggleWindowMouseDownListener(true);
         }
     }
 
-    toggleWindowMouseDownListener(enable) {
+    toggleWindowMouseDownListener = (enable) => {
         if (typeof window !== 'undefined') {
             window.removeEventListener('mousedown', this.handleWindowMouseDown);
 
@@ -49,62 +41,40 @@ class RelationshipValueDisplay extends Component {
     }
 
     handleWindowMouseDown = (e) => {
-        if (this.state.expanded && this.root && !this.root.contains(e.target)) {
+        if ((this.state.expanded || this.state.editing) && this.root && !this.root.contains(e.target)) {
             this.toggleWindowMouseDownListener(false);
             this.setState({
-                expanded: false
-            })
+                expanded: false,
+                editing: false
+            });
         }
     }
 
-    debouncedChangeInfluenceText = debounce(() => {
+    debouncedChangeDescriptionText = debounce(() => {
         this.setTextValue();
-    }, 2000)
+    }, 2000);
 
-    onChangeInfluenceSlider = (e) => {
-        const {influenceValue} = this.state;
-        const {influencerId, influenceeId} = this.props;
+    onChangeDescriptionText = (e) => {
+        const {descriptionText} = this.state;
         const value = e.target.value;
-        if (value !== influenceValue) {
-            this.props.relationshipChangeInfluence(influencerId, influenceeId, value);
+        if (value !== descriptionText) {
             this.setState({
-                influenceValue: value,
-                tempInfluenceTextValue: value
+                descriptionText: value
             });
         }
-    }
-
-    onChangeInfluenceText = (e) => {
-        const {tempInfluenceTextValue} = this.state;
-        const value = e.target.value;
-        if (value !== tempInfluenceTextValue) {
-            this.setState({
-                tempInfluenceTextValue: value
-            });
-        }
-        this.debouncedChangeInfluenceText();
+        this.debouncedChangeDescriptionText();
     }
 
     setTextValue = () => {
-        const {tempInfluenceTextValue, influenceValue} = this.state;
-        const parsedValue = parseFloat(tempInfluenceTextValue);
-        let value = influenceValue;
-        if (!isNaN(parsedValue)) {
-            let norm = util.normalize(parsedValue);
-            if (norm !== influenceValue) {
-                value = norm;
-            }
-        }
-        if (value !== influenceValue || value !== tempInfluenceTextValue) {
-            if (value !== influenceValue) {
-                const {influencerId, influenceeId} = this.props;
-                this.props.relationshipChangeInfluence(influencerId, influenceeId, value);
-            }
-            this.setState({
-                influenceValue: value,
-                tempInfluenceTextValue: value
-            });
-        }
+        const {descriptionText} = this.state;
+        const {influencerId, influenceeId} = this.props;
+
+        this.setState({
+            descriptionText: descriptionText,
+            editing: false
+        });
+
+        relationshipChangeDescription(influencerId, influenceeId, descriptionText);
     }
 
     onKeyDown = (e) => {
@@ -118,14 +88,32 @@ class RelationshipValueDisplay extends Component {
         relationshipDelete(influencerId, influenceeId);
     }
 
-    onClickExpand = (e) => {
+    onClickEdit = (e) => {
+        if(!this.state.editing) {
+            this.setState({
+                editing: true,
+                expanded: false
+            });
+            this.toggleWindowMouseDownListener(true);
+        }
+    }
+
+    onMouseEnter = (e) => {
         const {influencerId, influenceeId, relationshipFocus} = this.props;
         relationshipFocus(influencerId, influenceeId);
         this.expandMenu();
-        
     }
 
-    expandMenu() {
+    onMouseLeave = (e) => {
+        if (this.state.expanded) {
+            this.setState({
+                expanded: false
+            });
+            this.toggleWindowMouseDownListener(false);
+        }
+    }
+
+    expandMenu = () => {
         if (!this.state.expanded) {
             this.setState({
                 expanded: true
@@ -136,51 +124,65 @@ class RelationshipValueDisplay extends Component {
 
     setRef = (ref) => {
         this.root = ref;
+
+        const textArea = ref && this.root.querySelector("textarea");
+        if (textArea) {
+            textArea.focus();
+        }
     }
 
-    render() {
-        const {expanded, positionPct, influenceValue, tempInfluenceTextValue} = this.state;
+    render = () => {
+        const {expanded, descriptionText, editing} = this.state;
         const {erX, erY, eeX, eeY} = this.props;
-        const x = eeX + (erX - eeX) * positionPct;
-        const y = eeY + (erY - eeY) * positionPct;
-        const posStyle = expanded
-            ? {
-                left: `${x - 21}px`,
-                top: `${y - 70}px`,
-                zIndex: '3'
-            }
-            : {
-                left: `${x - 12}px`,
-                top: `${y - 12}px`,
-            };
-        let display = '?';
-        if (influenceValue !== 0) {
-            display = influenceValue > 0
-                ? '+'
-                : '–';
-        }
-        
-        const collapsedClasses = classnames('relationship-value-display__collapsed', {
-            'relationship-value-display__collapsed--has-influence-value' : influenceValue !== 0
-        });
+        const cx = Math.round((erX + eeX) / 2);
+        const cy = Math.round((erY + eeY) / 2);
 
-        const expandedClasses = classnames('relationship-value-display__expanded', {});
-        const domNode = document && document.querySelector('.MentalMapper .map__content');
-        if (!expanded) {
+        if (!editing) {
+            const textPadding = 24;
+            const dist = Math.round(Math.sqrt(Math.pow(eeX - erX, 2) + Math.pow(eeY - erY, 2)));
+            const angle = Math.round(Math.atan2(eeY - erY, eeX - erX) * (180 / Math.PI));
+            const textAngle = (angle >= -90 && angle <= 90) ? angle : 180 + angle;
+            const x = Math.round(((erX - cx) * Math.cos(angle * Math.PI / 180) + (erY - cy) * Math.sin(angle * Math.PI / 180)) + cx);
+            const y = Math.round((-(erX - cx) * Math.sin(angle * Math.PI / 180) + (erY - cy) * Math.cos(angle * Math.PI / 180)) + cy);
+            const expandedClassNames = classnames('relationship-value-display', {
+                'relationship-value-display--expanded': expanded,
+                'relationship-value-display__expanded': expanded
+            });
+            const textBoxStyle = { 
+                left: `${x}px`, 
+                top: `${y - textPadding / 2}px`, 
+                transform: `rotate(${textAngle}deg)`, 
+                paddingBottom: `${textPadding}px`,
+                width: `${dist}px` 
+            };
+            const expandedPosStyle = {
+                left: `${cx - 40}px`,
+                top: `${cy - 12}px`,
+                zIndex: '3'
+            };
+
             return (
-                <div className="relationship-value-display" style={posStyle} ref={this.setRef}>
-                    <button className={collapsedClasses} onClick={this.onClickExpand}>
-                        <div><span>{display}</span></div>
-                    </button>
-                </div>
-            )    
-        }
-        else if (domNode) {
-            return ReactDOM.createPortal(
-                <div className="relationship-value-display relationship-value-display--expanded" style={posStyle} ref={this.setRef}>
-                    <div className={expandedClasses}>
-                        <button className="relationship-value-display__delete" onClick={this.onClickDelete}>
-                            <svg className="relationship-value-display__delete-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 900.5 900.5">
+                <div 
+                    className="relationship-value-display__wrapper"
+                    onMouseEnter={this.onMouseEnter}
+                    onMouseLeave={this.onMouseLeave}
+                >
+                    <div 
+                        key="descriptionText" 
+                        className="relationship-value-display relationship-value-display__text" 
+                        style={textBoxStyle}
+                        ref={this.setRef}
+                    >
+                        {descriptionText ? descriptionText : 'Enter line description'}
+                    </div>
+                    {expanded && 
+                        <div 
+                            key="relationship-value-edit-delete"
+                            className={expandedClassNames}
+                            style={expandedPosStyle} 
+                            ref={this.setRef}>
+                            <button className="relationship-value-display__delete" onClick={this.onClickDelete}>
+                                <svg className="relationship-value-display__delete-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 900.5 900.5">
                                 <g>
                                     <path d="M176.415,880.5c0,11.046,8.954,20,20,20h507.67c11.046,0,20-8.954,20-20V232.487h-547.67V880.5L176.415,880.5z
                                         M562.75,342.766h75v436.029h-75V342.766z M412.75,342.766h75v436.029h-75V342.766z M262.75,342.766h75v436.029h-75V342.766z"/>
@@ -188,49 +190,44 @@ class RelationshipValueDisplay extends Component {
                                         c-11.046,0-20,8.954-20,20v50.576c0,11.045,8.954,20,20,20h34.541h547.67h34.541c11.046,0,20-8.955,20-20v-50.576
                                         c0-11.046-8.954-20-20-20H618.825v-12.5V91.911z M543.825,112.799h-187.15v-8.389v-12.5V75h187.15v16.911v12.5V112.799z"/>
                                 </g>
-                            </svg>
-                        </button>
-                        <div className="relationship-value-display__slider-wrapper">
-                            <div className="relationship-value-display__slider-bg">
-                                <div className="relationship-value-display__slider-bg-left">
-                                    <svg className="relationship-value-display__increase-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 40">
-                                        <polygon points="5,0 18,0 18,40"/>
-                                    </svg>
-                                    <svg className="relationship-value-display__decrease-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 40">
-                                        <polygon points="18,0 5,40 18,40"/>
-                                    </svg>
-                                </div>
-                                <div className="relationship-value-display__slider-bg-right">
-                                    <span className="relationship-value-display__plus-icon">{'+'}</span>
-                                    <span className="relationship-value-display__minus-icon">{'–'}</span>
-                                </div>
-                            </div>
-                            <input
-                                type="range"
-                                className="relationship-value-display__slider"
-                                orient="vertical"
-                                max="1"
-                                min="-1"
-                                step="0.01"
-                                value={influenceValue}
-                                onChange={this.onChangeInfluenceSlider}
-                            />
-                        </div>                        
-                        <input
-                            type="text"
-                            className="relationship-value-display__input"
-                            maxLength="5"
-                            value={tempInfluenceTextValue}
-                            onChange={this.onChangeInfluenceText}
-                            onBlur={this.setTextValue}
-                            onKeyDown={this.onKeyDown}
-                        />
-                    </div>
+                                </svg>
+                            </button>
+                            <button className="relationship-value-display__edit" onClick={this.onClickEdit}>
+                                <svg className="relationship-value-display__edit-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 600 600">
+                                    <g stroke="#ffffff" fill="none">
+                                        <path id="rect2990" d="m70.064 422.35 374.27-374.26 107.58 107.58-374.26 374.27-129.56 21.97z" strokeWidth="50"/>
+                                        <path id="path3771" d="m70.569 417.81 110.61 110.61" strokeWidth="50"/>
+                                        <path id="path3777" d="m491.47 108.37-366.69 366.68" strokeWidth="50"/>
+                                        <path id="path3763" d="m54.222 507.26 40.975 39.546" strokeWidth="50"/>
+                                    </g>
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                </div>
+            );
+        }
+        else {
+            const domNode = document && document.querySelector('.MentalMapper .map__content');
+            const editingPosStyle = {
+                left: `${cx - 150}px`,
+                top: `${cy - 18}px`
+            };
+
+            return ReactDOM.createPortal(
+                <div className="relationship-value-display relationship-value-display__edit-wrapper" style={editingPosStyle} ref={this.setRef}>
+                    <textarea
+                        className="relationship-value-display relationship-value-display__input"
+                        value={descriptionText}
+                        onKeyDown={this.onKeyDown}
+                        onChange={this.onChangeDescriptionText}
+                        maxLength="138"
+                        wrap="soft"
+                    />
                 </div>,
                 domNode
             );
         }
-        return <div/>;
     }
 }
 
@@ -238,6 +235,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         relationshipChangeInfluence: (influencerId, influenceeId, value) => {
             dispatch(relationshipChangeInfluence(influencerId, influenceeId, value))
+        },
+
+        relationshipChangeDescription: (influencerId, influenceeId, value) => {
+            dispatch(relationshipChangeDescription(influencerId, influenceeId, value))
         },
 
         relationshipDelete: (influencerId, influenceeId) => {
