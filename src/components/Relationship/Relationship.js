@@ -146,7 +146,7 @@ class Relationship extends Component {
         
         const negative = influence < 0;
         let influenceModifier = selected ? 'selected' : 'neutral';
-        let color = selected ? '#83A603' : '#333';
+        let color = selected ? '#d44c36' : '#333';
         if (!selected && influence !== 0) {
             color = negative ? '#BF5513' : '#0351A6';
             influenceModifier = negative ? 'negative' : 'positive';
@@ -221,7 +221,7 @@ class Relationship extends Component {
                             refX="1"
                             refY="1"
                         >
-                            <circle cx="1" cy="1" r="1" fill="#83A603" />
+                            <circle cx="1" cy="1" r="1" fill="#d44c36" />
                         </marker>
                         <marker
                             id="arrow-neutral"
@@ -276,7 +276,7 @@ class Relationship extends Component {
                         >
                             <path
                                 d={`M0,0 L0,${arrowheadHeight} L${arrowheadWidth},${arrowheadHeight / 2} z`}
-                                fill={'#83A603'}
+                                fill={'#d44c36'}
                             />
                         </marker>
                     </defs>

@@ -12,7 +12,7 @@ import {
 
 import './Map.css';
 
-const showSaveLoad = false;
+const showSaveLoad = true;
 
 class Map extends Component {
     onClickMap = (e) => {

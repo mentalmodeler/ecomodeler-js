@@ -58,8 +58,8 @@ function load(json) {
 function save() {
     try {
         const data =  util.exportData(store.getState());
-        // console.log('\n\n---- MentalModelerConceptMap > save\ndata:', data, '\n\n');
-        return data;
+        console.log('\n\n---- MentalModelerConceptMap > save\ndata:', data, '\n\n');
+        // return data;
     } catch (e) {
         console.error('ERROR - ConceptMap > save, e:', e);
     }

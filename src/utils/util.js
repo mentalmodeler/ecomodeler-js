@@ -66,6 +66,8 @@ const util = {
         }
         if (state.concepts && state.concepts.collection) {
             concepts = state.concepts.collection.map((concept) => {
+                // TODO - store sub-components in the properties array
+                // const properties;
                 const relationships = concept && concept.relationships ? concept.relationships : [];
                 const newRelationships = relationships.map((relationship) => (
                     {
@@ -82,6 +84,7 @@ const util = {
                     notes: concept.notes,
                     units: concept.units,
                     group: concept.group,
+                    parent: concept.parentComponent,
                     x: concept.x,
                     y: concept.y,
                     preferredState: concept.preferredState,
@@ -161,8 +164,8 @@ const util = {
         return collection.find((concept) => (concept.id === id));
     },
 
-    findSubconcepts(collection, parentId) {
-        return collection.filter((concept) => (concept.parentComponent === parentId));
+    findSubconcepts(collection, parentComponent) {
+        return collection.filter((concept) => (concept.parentComponent === parentComponent));
     },
 
     getPropValue(object = {}, path = [], defaultValue = '') {
@@ -254,6 +257,44 @@ const util = {
             }
         }
         return {x: startX, y: startY};
+    },
+
+    getSelectedAndAssociatedData({collection, selectedConcept, selectedRelationship}) {
+        let selectedType;
+        let selectedData;
+        const associatedData = {
+            influencer: {},
+            influencee: {}
+        };        
+        if (selectedConcept !== null || selectedRelationship  !== null) {
+            selectedType = selectedRelationship !== null
+                ? ELEMENT_TYPE.RELATIONSHIP
+                : ELEMENT_TYPE.CONCEPT;
+            const selectedConceptData = collection.find((concept) => (
+                concept.id === selectedConcept
+            ));
+            let selectedRelationshipData;
+            if (selectedType === ELEMENT_TYPE.RELATIONSHIP && selectedConceptData && selectedConceptData.relationships) {
+                selectedRelationshipData = selectedConceptData.relationships.find((relationship) => (
+                    relationship.id === selectedRelationship
+                ));
+            }
+            selectedData = selectedConceptData;
+            if (selectedType === ELEMENT_TYPE.RELATIONSHIP) {
+                selectedData = selectedRelationshipData;
+                associatedData.influencer = selectedConceptData;
+                associatedData.influencee = util.findConcept(collection, selectedRelationshipData.id);
+            }
+        }
+
+        return {
+            selectedType,
+            selectedData,
+            associatedData
+        };
+    },
+    isValidRelationship({id, parentComponent, subconcepts, targetId}) {
+
     }
 };
 

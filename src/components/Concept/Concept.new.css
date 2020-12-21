@@ -1,8 +1,5 @@
-.MentalMapper .Concept-wrapper {
-  position: absolute;
-}
 .MentalMapper .Concept {
-  position: relative;
+  position: absolute;
   padding: 2px;
   padding-bottom: 0px;
   z-index: 1;
@@ -50,11 +47,11 @@
   bottom: 0;
   left: 0;
   border-radius: 6px;
-  border: 1px solid #4c4c4c;
+  border: 1px solid #000;
   box-shadow: inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--sub {
-  box-shadow: inset 0 0 0 2px #a9a9a9, 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: inset 0 0 0 2px #ccc, 0 3px 8px rgba(0, 0, 0, 0.15) !important;
 }
 .MentalMapper .Concept__bg--focused.Concept__bg--group-0 {
   box-shadow: inset 0 0 4px 2px #d44c36;
@@ -135,13 +132,13 @@
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .MentalMapper .Concept__bg--group-0-sub {
-  background: #666;
+  background: #aaa;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #666 0%, #a9a9a9 100%);
+  background: -moz-linear-gradient(top, #aaa 0%, #e6e6e6 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #666 0%, #a9a9a9 100%);
+  background: -webkit-linear-gradient(top, #aaa 0%, #e6e6e6 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #a9a9a9 0%, #666 100%);
+  background: linear-gradient(to bottom, #e6e6e6 0%, #aaa 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .MentalMapper .Concept__button-wrapper {

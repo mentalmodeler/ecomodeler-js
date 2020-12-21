@@ -4,17 +4,7 @@ import debounce from 'lodash.debounce';
 import classnames from 'classnames';
 
 import {
-    renderAddButton,
-    renderDeleteButton,
-    renderLineButton,
-    getTextAreaStyle,
-
-} from './ConceptDisplays';
-
-import {
-    // conceptAdd,
-    propertyAdd,
-    propertyDelete,
+    conceptAdd,
     conceptMove,
     conceptFocus,
     conceptChange,
@@ -28,27 +18,19 @@ import {
 import './Concept.css';
 
 class Concept extends Component {
-    static defaultProps = {
-        updateStackHeight: () => {},
-        properties: [],
-    };
-
     constructor(props) {
         super(props);
 
         this.state = {
             value: this.props.name || '',
             isOver: false,
-            lineMouseDown: false,
+            lineMouseDown: false
         }
 
         this.height = 0;
         this.width = 0;
-        this.totalHeight = 0;
         this.centerClickDiffX = 0;
         this.centerClickDiffY = 0;
-        this.xBeforeDrag = 0;
-        this.yBeforeDrag = 0;
 
         // console.log('this.props:', this.props);
     }
@@ -64,7 +46,7 @@ class Concept extends Component {
 
     debouncedConceptChange = debounce(() => {
         if (this.root) {
-            const {id, conceptChange, parentComponentId} = this.props;
+            const {id, conceptChange, updateStackHeight} = this.props;
             const {value} = this.state;
             const {width, height} = this.root.getBoundingClientRect();
             const isHovered = this.root.matches(':hover');
@@ -74,30 +56,15 @@ class Concept extends Component {
             // console.log('mult:', mult, ', height:', height, ', roundedHeight:', roundedHeight);
             this.width = roundedWidth;
             this.height = roundedHeight;
-            this.totalHeight = roundedHeight;
-
-            if (!parentComponentId) {
-                const parentNode = this.root.parentNode;
-                if (parentNode) {
-                    const {height: totalHeight} = parentNode.getBoundingClientRect();
-                    console.log('totalHeight:', totalHeight);
-                    this.totalHeight = totalHeight;
-                }
-            }
-
-            conceptChange(id, value, roundedWidth, roundedHeight, this.totalHeight);
+            conceptChange(id, value, roundedWidth, roundedHeight);
+            updateStackHeight();
         }
     }, 150)
 
     componentDidUpdate(prevProps, prevState) {
-        const {properties, parentComponentId} = this.props;
         const valueChanged = this.state.value !== prevState.value;
         if (valueChanged) {
             this.autoExpand();
-        }
-        if (!parentComponentId && properties.length !== prevProps.properties.length) {
-            console.log('updateHeight');
-            this.debouncedConceptChange();
         }
     }
 
@@ -144,14 +111,7 @@ class Concept extends Component {
     }
 
     onMouseDown = (e) => {
-        const {id, selected, conceptFocus, parentComponent, parentComponentId} = this.props;
-        let {x, y} = this.props;
-        if (typeof x === 'undefined' && parentComponent) {
-            x = parentComponent.x;
-        }
-        if (typeof y === 'undefined' && parentComponent) {
-            y = parentComponent.y;
-        }
+        const {id, selected, conceptFocus, x, y} = this.props;
         const lineButtonMouseDown = e.target === this.lineButtonRef;
         
         // store positions
@@ -168,8 +128,6 @@ class Concept extends Component {
             this.centerClickDiffY = e.clientY - middleY;
             this.xBeforeDrag = middleX;
             this.yBeforeDrag = middleY;
-
-            // NEW
             e.stopPropagation();
         }
 
@@ -187,7 +145,7 @@ class Concept extends Component {
     }
 
     onMouseMove = (e) => {
-        const {id, parentComponentId, conceptMove, relationshipDrawTemp} = this.props; // eslint-disable-line
+        const {id, conceptMove, relationshipDrawTemp, stackHeight} = this.props; // eslint-disable-line
         const {lineMouseDown} = this.state;
         const deltaX = e.screenX - this.screenXBeforeDrag;
         const deltaY = e.screenY - this.screenYBeforeDrag;
@@ -195,12 +153,10 @@ class Concept extends Component {
         const newY = Math.max(deltaY + this.yBeforeDrag, 0);
         // const newX = Math.max(0, e.movementX + x);
         // const newY = Math.max(0, e.movementY + y);
-        const dragId = parentComponentId || id;
-        // console.log('dragId:', dragId,', newX:', newX, ', newY:', newY);
         if (lineMouseDown) {
-            relationshipDrawTemp(dragId, true, this.xBeforeDrag, this.yBeforeDrag, newX, newY, this.width, this.height, this.centerClickDiffX, this.centerClickDiffY);
+            relationshipDrawTemp(id, true, this.xBeforeDrag, this.yBeforeDrag, newX, newY, this.width, this.height, this.centerClickDiffX, this.centerClickDiffY);
         } else {
-            conceptMove(dragId, newX, newY);
+            // conceptMove(id, newX, newY);
         }
     }
 
@@ -208,8 +164,10 @@ class Concept extends Component {
         const {id, relationshipDrawTemp, relationshipAdd, tempTarget} = this.props;
         const {lineMouseDown} = this.state;
         this.toggleDragHandlers(false, e);
+        console.log('Concept > onMouseUp, tempTarget:', tempTarget);
         if (lineMouseDown) {
-            if (!!tempTarget && id !== tempTarget) { // if (tempTarget !== null && id !== tempTarget) {
+            // if (tempTarget !== null && id !== tempTarget) {
+            if (!!tempTarget && id !== tempTarget) {
                 relationshipAdd(id, tempTarget);
             }
             this.centerClickDiffX = 0;
@@ -223,6 +181,7 @@ class Concept extends Component {
 
     onMouseOver = (e) => {
         const {id, hasTempRelationship, relationshipSetTempTarget} = this.props;
+        console.log('------------\nConcept > onMouseOver\n\tid:', id)
         if (hasTempRelationship) {
             relationshipSetTempTarget(id)
         }
@@ -242,9 +201,6 @@ class Concept extends Component {
         }
     }
 
-    // REMOVED
-    onBlur = (e) => {}
-
     setRef = (ref) => {
         this.root = ref;
     }
@@ -253,25 +209,16 @@ class Concept extends Component {
         this.textarea = ref;
     }
 
-    // NEW
-    // onClickAdd = (e) => {
-    //     const {id, conceptAdd, updateStackHeight} = this.props;
-    //     conceptAdd(id);    
-    //     // NEW
-    //     updateStackHeight();
-    // }
     onClickAdd = (e) => {
-        const {id, propertyAdd} = this.props;
-        propertyAdd(id);    
-        // NEW
-        // updateStackHeight();
+        const {id, conceptAdd, updateStackHeight} = this.props;
+        conceptAdd(id);
+        updateStackHeight();
     }
 
     onClickDelete = (e) => {
-        const {id, parentComponentId, propertyDelete, conceptDelete, updateStackHeight} = this.props;
-        return parentComponentId
-            ? propertyDelete(id, parentComponentId)
-            : conceptDelete(id);
+        const {id, conceptDelete, updateStackHeight} = this.props;
+        conceptDelete(id);
+        updateStackHeight();
     }
     
     setLineButtonRef = (ref) => {
@@ -279,11 +226,17 @@ class Concept extends Component {
     }
 
     render() {
-        const {id, parentComponentId, selected, name, x, y, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter, parentComponent, properties} = this.props; // eslint-disable-line
+        const { id, selected, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter, parentComponent} = this.props; // eslint-disable-line
         const { value, lineMouseDown } = this.state;
-        // NEW 
-        const isSub = parentComponentId;
+        const isSub = parentComponent && parentComponent !== '';
+        const rootStyle = {
+            position: 'relative',
+            padding: '2px',
+            paddingBottom: '0px'
+        };
         const groupNum = group || '0';
+        // console.log('groupNum:', groupNum);
+        // console.log(id, '> isExcludedByFilter:', isExcludedByFilter);
         const rootClassnames = classnames('Concept', `Concept--group-${groupNum}`, {
             'Concept--focused': selected,
             'Concept--line-mouse-down': lineMouseDown,
@@ -292,45 +245,41 @@ class Concept extends Component {
             'Concept--excluded-by-filter': isExcludedByFilter
         });
 
-        // NEW
         const bgClassnames = classnames('Concept__bg', `Concept__bg--group-${groupNum}${isSub ? "-sub" : ""}`, {
             'Concept__bg--focused': selected,
             'Concept__bg--sub': isSub
         });
-        // NEW
+
         const textAreaClassnames = classnames('Concept__textarea', {
             'Concept__textarea--sub': isSub
         });
         
-        // OLD
-        // const bgClassnames = classnames('Concept__bg', `Concept__bg--group-${groupNum}`, {
-        //     'Concept__bg--focused': selected,
-        // });
+        // console.log('\t\tConcept >', this.props.id, '> render');
 
-        // NEW
         const bgStyle = {
             borderRadius: '0px',
-            border: '1px solid #4c4c4c',
+            border: '1px solid #000',
             boxShadow: 'inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15)'
         };
-        // OLD
-        // const bgStyle = {
-        //     borderRadius: '6px',
-        //     border: '1px solid #000',
-        //     boxShadow: 'inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15)'
-        // };
 
-        // NEW
+        const textAreaStyle = {
+            lineHeight: '18px',
+            fontSize: '14px',
+            padding: '6px',
+            fontFamily: '"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            color: '#333'
+        };
+
         const placeholder = isSub ? "Enter property" : "Enter component";
 
-        return  (
+        return (
             <div
                 className={rootClassnames}
-                // style={rootStyle}
-                ref={this.setRef}
                 onMouseDown={this.onMouseDown}
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
+                style={rootStyle}
+                ref={this.setRef}
                 dataid={id}
             >
             <textarea
@@ -341,13 +290,57 @@ class Concept extends Component {
                     ref={this.setTextareaRef}
                     placeholder={placeholder}
                     rows={1}
-                    style={getTextAreaStyle()}
+                    style={textAreaStyle}
                 />
                 {!isSub &&
-                    renderAddButton(this.onClickAdd)
+                    <div className="Concept__button-wrapper Concept__button-wrapper--top">
+                        <button
+                            className="Concept__button Concept__button--top"
+                            onClick={this.onClickAdd}
+                            tabIndex={-1}
+                        >
+                            <svg className="Concept__icon--add" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24">
+                                <g>
+                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/>
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
                 }
-                {renderDeleteButton(this.onClickDelete)}
-                {renderLineButton(this.setLineButtonRef)}
+                <div className="Concept__button-wrapper Concept__button-wrapper--left">
+                    <button 
+                        className="Concept__button Concept__button--left"
+                        onClick={this.onClickDelete}
+                        tabIndex={-1}
+                    >
+                        <svg className="Concept__icon--trash" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 900.5 900.5">
+                            <g>
+                                <path d="M176.415,880.5c0,11.046,8.954,20,20,20h507.67c11.046,0,20-8.954,20-20V232.487h-547.67V880.5L176.415,880.5z
+                                    M562.75,342.766h75v436.029h-75V342.766z M412.75,342.766h75v436.029h-75V342.766z M262.75,342.766h75v436.029h-75V342.766z"/>
+                                <path d="M618.825,91.911V20c0-11.046-8.954-20-20-20h-297.15c-11.046,0-20,8.954-20,20v71.911v12.5v12.5H141.874
+                                    c-11.046,0-20,8.954-20,20v50.576c0,11.045,8.954,20,20,20h34.541h547.67h34.541c11.046,0,20-8.955,20-20v-50.576
+                                    c0-11.046-8.954-20-20-20H618.825v-12.5V91.911z M543.825,112.799h-187.15v-8.389v-12.5V75h187.15v16.911v12.5V112.799z"/>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+                <div  className="Concept__button-wrapper Concept__button-wrapper--right">
+                    <button
+                        className="Concept__button Concept__button--right"
+                        ref={this.setLineButtonRef}
+                        tabIndex={-1}
+                    >
+                        <svg className="Concept__icon--line" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 612 612" style={{enableBackground: 'new 0 0 612 612'}} xmlSpace="preserve">
+                            <g transform="rotate(-90,306,306)">
+                                <path d="M306,0C137.012,0,0,136.992,0,306s137.012,306,306,306s306-137.012,306-306S475.008,0,306,0z M431.001,322.811
+                                    l-108.19,108.19c-4.59,4.59-10.862,6.005-16.811,4.953c-5.929,1.052-12.221-0.382-16.811-4.953l-108.19-108.19
+                                    c-7.478-7.478-7.478-19.583,0-27.042c7.478-7.478,19.584-7.478,27.043,0l78.833,78.814V172.125
+                                    c0-10.557,8.568-19.125,19.125-19.125c10.557,0,19.125,8.568,19.125,19.125v202.457l78.814-78.814
+                                    c7.478-7.478,19.584-7.478,27.042,0C438.46,303.227,438.46,315.333,431.001,322.811z"/>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
                 <div className={bgClassnames} style={bgStyle}></div>
             </div>
         );
@@ -355,18 +348,14 @@ class Concept extends Component {
 }
 
 const mapStateToProps = (state) => {
-    // console.log('state:', state);
+    console.log('state:', state);
     return {};
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        propertyAdd: (parentComponentId) => {
-            dispatch(propertyAdd(parentComponentId))
-        },
-
-        propertyDelete: (id, parentComponentId) => {
-            dispatch(propertyDelete(id, parentComponentId))
+        conceptAdd: (parentComponent) => {
+            dispatch(conceptAdd(parentComponent))
         },
 
         conceptMove: (id, x, y) => {
@@ -377,8 +366,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(conceptFocus(id))
         },
 
-        conceptChange: (id, text, width, height, totalHeight) => {
-            dispatch(conceptChange(id, text, width, height, totalHeight))
+        conceptChange: (id, text, width, height) => {
+            dispatch(conceptChange(id, text, width, height))
         },
 
         conceptDelete: (id) => {

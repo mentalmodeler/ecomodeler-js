@@ -10,10 +10,10 @@
   position: relative;
 }
 .MentalMapper .controls__bg {
-  transform: rotateZ(270deg) scale(9);
+  transform: rotateZ(270deg) scale(10);
   position: absolute;
   bottom: 0;
-  left: 50px;
+  left: 40px;
   transform-origin: top left;
   color: #ececec;
   z-index: 0;
@@ -23,13 +23,13 @@
   padding: 10px;
 }
 .MentalMapper .selected-control--group-0 {
-  background: #A0CA24;
+  background: #D14A35;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #657F14 0%, #A0CA24 100%);
+  background: linear-gradient(to bottom, #7E2E21 0%, #D14A35 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .MentalMapper .selected-control--group-1 {
@@ -119,7 +119,7 @@
   height: 100%;
 }
 .MentalMapper .control-panel__header {
-  background-color: #4a4b4d;
+  background-color: #666;
   padding: 8px;
   border-bottom: 1px solid #000;
   position: relative;
@@ -297,16 +297,16 @@
   color: #fff;
   outline: none;
   text-shadow: 0 0 2px #000;
-  border: 1px solid #000;
+  border: 1px solid #4c4c4c;
   padding: 0;
   box-shadow: none;
-  background: #000;
+  background: #666;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -moz-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -webkit-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #333 0%, #333 15%, #000 85%, #000 100%);
+  background: linear-gradient(to bottom, #7f7f7f 0%, #7f7f7f 15%, #666 85%, #666 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   width: 100%;
   padding: 4px;
@@ -315,24 +315,24 @@
   margin-bottom: 4px;
 }
 .MentalMapper .filter-view-control__reset:hover {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  border-color: #657F14;
+  border-color: #7E2E21;
 }
 .MentalMapper .filter-view-control__reset:active {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   box-shadow: inset 0 0 12px 2px rgba(0, 0, 0, 0.4);
 }

@@ -13,15 +13,16 @@
   color: #fff;
   outline: none;
   text-shadow: 0 0 2px #000;
+  border: 1px solid #4c4c4c;
   padding: 0;
   box-shadow: none;
-  background: #000;
+  background: #666;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -moz-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -webkit-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #333 0%, #333 15%, #000 85%, #000 100%);
+  background: linear-gradient(to bottom, #7f7f7f 0%, #7f7f7f 15%, #666 85%, #666 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   width: 24px;
   height: 24px;
@@ -30,24 +31,24 @@
   border: 1px solid #000;
 }
 .MentalMapper .relationship-value-display__collapsed:hover {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  border-color: #657F14;
+  border-color: #7E2E21;
 }
 .MentalMapper .relationship-value-display__collapsed:active {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   box-shadow: inset 0 0 12px 2px rgba(0, 0, 0, 0.4);
 }
@@ -97,15 +98,16 @@
   color: #fff;
   outline: none;
   text-shadow: 0 0 2px #000;
+  border: 1px solid #4c4c4c;
   padding: 0;
   box-shadow: none;
-  background: #000;
+  background: #666;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -moz-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -webkit-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #333 0%, #333 15%, #000 85%, #000 100%);
+  background: linear-gradient(to bottom, #7f7f7f 0%, #7f7f7f 15%, #666 85%, #666 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   border-radius: 6px 0 0 6px;
   width: 40px;
@@ -114,24 +116,24 @@
   border: 1px solid #000;
 }
 .MentalMapper .relationship-value-display__delete:hover {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  border-color: #657F14;
+  border-color: #7E2E21;
 }
 .MentalMapper .relationship-value-display__delete:active {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   box-shadow: inset 0 0 12px 2px rgba(0, 0, 0, 0.4);
 }
@@ -143,15 +145,16 @@
   color: #fff;
   outline: none;
   text-shadow: 0 0 2px #000;
+  border: 1px solid #4c4c4c;
   padding: 0;
   box-shadow: none;
-  background: #000;
+  background: #666;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -moz-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #000 0%, #000 15%, #333 85%, #333 100%);
+  background: -webkit-linear-gradient(top, #666 0%, #666 15%, #7f7f7f 85%, #7f7f7f 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #333 0%, #333 15%, #000 85%, #000 100%);
+  background: linear-gradient(to bottom, #7f7f7f 0%, #7f7f7f 15%, #666 85%, #666 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   border-radius: 0 6px 6px 0;
   width: 40px;
@@ -160,24 +163,24 @@
   border: 1px solid #000;
 }
 .MentalMapper .relationship-value-display__edit:hover {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  border-color: #657F14;
+  border-color: #7E2E21;
 }
 .MentalMapper .relationship-value-display__edit:active {
-  background: #657F14;
+  background: #7E2E21;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -moz-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #657F14 0%, #657F14 15%, #A0CA24 85%, #A0CA24 100%);
+  background: -webkit-linear-gradient(top, #7E2E21 0%, #7E2E21 15%, #D14A35 85%, #D14A35 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #A0CA24 0%, #A0CA24 15%, #657F14 85%, #657F14 100%);
+  background: linear-gradient(to bottom, #D14A35 0%, #D14A35 15%, #7E2E21 85%, #7E2E21 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   box-shadow: inset 0 0 12px 2px rgba(0, 0, 0, 0.4);
 }

@@ -4,12 +4,8 @@
 
     @concept-transform: scale(1.1) translateZ(0);
 
-    .Concept-wrapper {
-        position: absolute;
-    }
-    
     .Concept {
-        position: relative; // absolute;
+        position: absolute;
         padding: 2px;
         padding-bottom: 0px;
         z-index: 1;
@@ -69,11 +65,11 @@
             bottom: 0;
             left: 0;
             border-radius: 6px;
-            border: 1px solid @gray;
+            border: 1px solid #000;
             box-shadow:inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15);
 
             &--sub {
-                box-shadow: inset 0 0 0 2px @subconcept-0-sub-grad-light, 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+                box-shadow: inset 0 0 0 2px #ccc, 0 3px 8px rgba(0, 0, 0, 0.15) !important;
             }
 
             &--focused {
@@ -92,7 +88,7 @@
             &--group-4 { .mixin-concept-bg(@concept-4-grad-light, @concept-4-grad-dark); }
             &--group-5 { .mixin-concept-bg(@concept-5-grad-light, @concept-5-grad-dark); }
 
-            &--group-0-sub { .mixin-concept-bg(@subconcept-0-sub-grad-light, @subconcept-0-sub-grad-dark); }
+            &--group-0-sub { .mixin-concept-bg(@subconcept-0-grad-light, @subconcept-0-grad-dark); }
         }
 
         &__button-wrapper {

@@ -1,0 +1,33 @@
+CONCEPT
+concepts: (2) [{…}, {…}]
+group: 0
+hasTempRelationship: false
+height: 32
+id: "dAVB-Qia9-eCsp-TrFM"
+isExcludedByFilter: false
+isTempRelationship: false
+name: ""
+notes: ""
+parentComponent: undefined
+preferredState: 0
+relationships: []
+selected: false
+tempTarget: null
+units: ""
+width: 204
+x: 251
+y: 154
+
+SUBCONCEPT
+group: 0
+height: 32
+id: "OIIO-zohs-1SKP-ZjSB"
+name: ""
+notes: ""
+parentComponent: "dAVB-Qia9-eCsp-TrFM"
+preferredState: 0
+relationships: []
+units: ""
+width: 204
+x: 0
+y: 0

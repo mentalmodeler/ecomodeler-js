@@ -1,6 +1,6 @@
 @text-shadow: 0 1px 1px rgba(0, 0, 0, 0.95);
 @text-shadow-selected-control: 0 1px 3px rgba(0, 0, 0, 1);
-@control-panel-header-bg: #4a4b4d;
+@control-panel-header-bg: #666; // #4a4b4d;
 @controls-transition-duration: 250ms;
 @concept-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 @placeholder-color: #9b9c9d;
@@ -8,9 +8,12 @@
 @relationship-color-positive: #0351A6;
 @relationship-color-negative: #E57429; //#BF5513;
 
-@main-color: #83A603; // #A0CA24; // #83A603; //#84a41f;
-@main-color-grad-dark: #657F14;
-@main-color-grad-light: #A0CA24;
+@gray:  #4c4c4c;
+@main-color: #d44c36; // #83A603; // #A0CA24; // #83A603; //#84a41f;
+@main-color-grad-dark: #7E2E21; //#657F14;
+@main-color-grad-light: #D14A35; //#A0CA24;
+
+@sub-concept-color: #fff; // #808080;
 
 @concept-0-outline: @main-color;
 @concept-0-grad-light: #fff;
@@ -19,6 +22,8 @@
 @subconcept-0-group-bg: #aaa;
 @subconcept-0-grad-light: #e6e6e6;
 @subconcept-0-grad-dark: #aaa;
+@subconcept-0-sub-grad-light: #a9a9a9;
+@subconcept-0-sub-grad-dark: #666;
 
 @concept-1-outline: #E57429;
 @concept-1-grad-light: #fff;
@@ -45,8 +50,8 @@
 @concept-5-grad-dark: #B2FFE5;
 @concept-5-group-bg: #B4FEE5;
 
-@button-grad-dark: #000;
-@button-grad-light: #333;
+@button-grad-dark: #666; // #000;
+@button-grad-light: #7f7f7f; //#333;
 @button-grad-hover-light: @main-color-grad-light;
 @button-grad-hover-dark: @main-color-grad-dark;
 
@@ -89,7 +94,7 @@
     color: #fff;
     outline: none;
     text-shadow: 0 0 2px #000;
-    border: 1px solid #000;
+    border: 1px solid @gray; // #000;
 
     // foundation.css overrides
     padding: 0;

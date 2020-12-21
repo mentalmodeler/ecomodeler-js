@@ -15,13 +15,14 @@ const conceptFocus = (id, data = {}) => {
     }
 };
 
-const conceptChange = (id, name, width, height) => {
+const conceptChange = (id, name, width, height, totalHeight) => {
     return {
         type: 'CONCEPT_CHANGE',
         id,
         name,
         width,
-        height
+        height,
+        totalHeight
     }
 };
 
@@ -56,10 +57,24 @@ const conceptDelete = (id) => {
     }
 };
 
-const conceptAdd = (parentComponent) => {
+const conceptAdd = () => {
     return {
-        type: 'CONCEPT_ADD',
-        parentComponent
+        type: 'CONCEPT_ADD'
+    }
+};
+
+const propertyAdd = (parentComponentId) => {
+    return {
+        type: 'PROPERTY_ADD',
+        parentComponentId
+    }
+};
+
+const propertyDelete = (id, parentComponentId) => {
+    return {
+        type: 'PROPERTY_DELETE',
+        id,
+        parentComponentId
     }
 };
 
@@ -170,6 +185,8 @@ export {
     conceptChangeUnits,
     conceptChangeGroup,
     conceptAdd,
+    propertyAdd,
+    propertyDelete,
     relationshipFocus,
     relationshipChangeConfidence,
     relationshipDrawTemp,

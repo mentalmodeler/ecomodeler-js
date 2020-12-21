@@ -7,10 +7,40 @@ const createRelationship = function(props = {}) {
 }
 
 const createConcept = function(props = {}) {
-    return {...{id: util.createId(), name: '', notes:  '', units: '', group: 0, x: SETTINGS.START_X, y: SETTINGS.START_X, preferredState: 0, relationships: []}, ...props};
+    console.log('Reducer > createConcept\n\tprops:', props);
+    return {
+        id: util.createId(),
+        name: '',
+        notes:  '',
+        units: '',
+        preferredState: 0,
+        group: 0,
+        x: SETTINGS.START_X,
+        y: SETTINGS.START_X,
+        relationships: [],
+        properties: [],
+        ...props
+    };
 }
 
+const createProperty = function(props = {}) {
+    return {
+        id: util.createId(),
+        parentComponentId: '',
+        name: '',
+        notes:  '',
+        relationships: [],
+        ...props
+    };
+}
+
+const getConcept = function (collection, id) {
+    const concept = collection.find((concept) => concept.id === id) || {};
+    return {...concept};
+};
+
 const updateCollectionConcept = function (collection, id, updatedProps = {}) {
+    // console.log('updateCollectionConcept\n\tid:', id, '\n\tupdatedProps:', updatedProps );
     return collection.map((concept) => (concept.id === id ? {...concept, ...updatedProps} : concept));
 };
 
@@ -105,6 +135,7 @@ const concepts = (
         state.viewFilter = -1
     }
     const {collection} = state;
+    // console.log(action.type);
     switch (action.type) {
         case 'CONCEPT_MOVE':
             return {
@@ -166,6 +197,7 @@ const concepts = (
                 tempRelationship
             };
         case 'RELATIONSHIP_SET_TEMP_TARGET':
+            console.log('RELATIONSHIP_SET_TEMP_TARGET, tempTarget:', action.id);
             return {
                 ...state,
                 tempTarget: action.id
@@ -180,13 +212,18 @@ const concepts = (
                 tempTarget: null
             };
         case 'CONCEPT_ADD':
-            const newCollection = [...collection];
+            console.log('CONCEPT_ADD > action:', action);
+            let newCollection = [...collection];
             const {x, y} = util.getStartPosition(newCollection)
-            const parentComponent = action.parentComponent;
-            newCollection.push(createConcept({x, y, parentComponent}));
+            newCollection.push(createConcept({x, y}));
             return {
                 ...state,
                 collection: newCollection
+            };
+        case 'CONCEPT_DELETE':
+            return {
+                ...state,
+                collection: removeConceptFromCollection(collection, action.id)
             };
         case 'CONCEPT_CHANGE':
             return {
@@ -194,13 +231,9 @@ const concepts = (
                 collection: updateCollectionConcept(collection, action.id, {
                     name: action.name,
                     width: action.width,
-                    height: action.height
+                    height: action.height,
+                    totalHeight: action.totalHeight,
                 })
-            };
-        case 'CONCEPT_DELETE':
-            return {
-                ...state,
-                collection: removeConceptFromCollection(collection, action.id)
             };
         case 'CONCEPT_CHANGE_NOTES':
             return {
@@ -223,6 +256,38 @@ const concepts = (
                     group: action.groupIndex
                 })
             };
+        case 'PROPERTY_ADD':
+            console.log('PROPERTY_ADD > action:', action);
+            let concept = getConcept(collection, action.parentComponentId);
+            let property = createProperty({parentComponentId: action.parentComponentId});
+            newCollection = updateCollectionConcept(collection, action.parentComponentId, {
+                properties: [...concept.properties, property.id]
+            });
+            newCollection.push(property);
+            // console.log('concept:', concept, ', property:', property,', newCollection:', newCollection);
+            return {
+                ...state,
+                collection: newCollection,
+            };
+        case 'PROPERTY_DELETE':
+            console.log('PROPERTY_DELETE > action:', action);
+            concept = getConcept(collection, action.parentComponentId);
+            property = getConcept(collection, action.parentComponentId);
+            const newProperties = concept.properties.filter((pId) => pId !== action.id);
+            newCollection = updateCollectionConcept(collection, action.parentComponentId, {
+                properties: newProperties
+            });
+            newCollection = removeConceptFromCollection(newCollection, action.id)
+            // console.log('concept:',concept, '\nnewProperties:', newProperties, '\nnewCollection:', newCollection, '\n\n');
+            return {
+                ...state,
+                collection: newCollection
+            };
+        case 'PROPERTY_CHANGE':
+                console.log('PROPERTY_CHANGE > action:', action);
+                return {
+                    ...state,
+                };
         case 'VIEW_FILTER_CHANGE':
             return {
                 ...state,

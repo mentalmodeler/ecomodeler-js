@@ -1,5 +1,6 @@
 import React from 'react';
-import Concept from './Concept';
+import {connect} from 'react-redux';
+import Concept from './Concept.orig';
 
 class ConceptStack extends React.Component {
     state = {
@@ -83,7 +84,7 @@ class ConceptStack extends React.Component {
             left: `${translateX}px`,
             top: `${translateY}px`
         };
-
+        // console.log('ConceptStack > render\n\tthis.props:', this.props);
         return (
             <div
                 className="ConceptStack"
@@ -98,6 +99,7 @@ class ConceptStack extends React.Component {
                 />
                 {subconcepts &&
                     subconcepts.map((subconcept) => {
+                        // console.log('\tsubconcept:', subconcept);
                         return (
                             <Concept
                                 key={`subconcept_${subconcept.id}`}

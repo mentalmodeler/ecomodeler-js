@@ -83,7 +83,7 @@ class Relationships extends Component {
                     })
                 })
             }
-            {tempRelationship && console.log(tempRelationship.height)}
+            {/* {tempRelationship && console.log(tempRelationship.height)} */}
             {tempRelationship &&
                 <Relationship
                     className="Relationship--temp"

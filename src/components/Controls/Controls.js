@@ -21,36 +21,8 @@ import './Controls.css';
 const mapStateToProps = (state) => {
     const {concepts, groupNames} = state;
     const {collection, selectedConcept, selectedRelationship, viewFilter} = concepts;
-    let selectedType;
-    let selectedData;
-    const associatedData = {
-        influencer: {},
-        influencee: {}
-    };
+    const {selectedType, selectedData, associatedData} = util.getSelectedAndAssociatedData(concepts);
     
-    // console.log('Controls > mapStateToProps\n\tselectedConcept:', selectedConcept, '\n\tselectedRelationship:', selectedRelationship);
-    
-    if (selectedConcept !== null || selectedRelationship  !== null) {
-        selectedType = selectedRelationship !== null
-            ? ELEMENT_TYPE.RELATIONSHIP
-            : ELEMENT_TYPE.CONCEPT;
-        const selectedConceptData = collection.find((concept) => (
-            concept.id === selectedConcept
-        ));
-        let selectedRelationshipData;
-        if (selectedType === ELEMENT_TYPE.RELATIONSHIP && selectedConceptData && selectedConceptData.relationships) {
-            selectedRelationshipData = selectedConceptData.relationships.find((relationship) => (
-                relationship.id === selectedRelationship
-            ));
-        }
-        selectedData = selectedConceptData;
-        if (selectedType === ELEMENT_TYPE.RELATIONSHIP) {
-            selectedData = selectedRelationshipData;
-            associatedData.influencer = selectedConceptData;
-            associatedData.influencee = util.findConcept(collection, selectedRelationshipData.id);
-        }
-    }
-
     // console.log('Controls, \n\tselectedConcept:', selectedConcept, ', selectedRelationship:', selectedRelationship, '\n\tselectedType:', selectedType, '\n\tselectedData:', selectedData);
     
     return {
@@ -140,7 +112,7 @@ class Controls extends Component {
         return (
             <div className="controls">
                 {!(selectedType || selectedData) &&
-                    <div className="controls__bg">{'MentalModeler'}</div>
+                    <div className="controls__bg">{'EcoModeler'}</div>
                 }
                 {selectedType && selectedData &&
                     <Fragment>

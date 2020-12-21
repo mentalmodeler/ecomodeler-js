@@ -39,6 +39,8 @@ class SelectedControl extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
+        // console.log('this.props:', this.props);
+        // console.log('nextProps:', nextProps);
         const {selectedType, selectedData, associatedData} = this.props;
         return (selectedType !== nextProps.selectedType)
             || (selectedData.id !== nextProps.selectedData.id)
