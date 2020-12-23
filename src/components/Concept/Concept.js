@@ -253,18 +253,9 @@ class Concept extends Component {
         this.textarea = ref;
     }
 
-    // NEW
-    // onClickAdd = (e) => {
-    //     const {id, conceptAdd, updateStackHeight} = this.props;
-    //     conceptAdd(id);    
-    //     // NEW
-    //     updateStackHeight();
-    // }
     onClickAdd = (e) => {
         const {id, propertyAdd} = this.props;
         propertyAdd(id);    
-        // NEW
-        // updateStackHeight();
     }
 
     onClickDelete = (e) => {
@@ -279,10 +270,9 @@ class Concept extends Component {
     }
 
     render() {
-        const {id, parentComponentId, selected, name, x, y, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter, parentComponent, properties} = this.props; // eslint-disable-line
+        const {id, parentComponentId, selected, selectedRelationship, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter, parentComponent, properties} = this.props; // eslint-disable-line
         const { value, lineMouseDown } = this.state;
-        // NEW 
-        const isSub = parentComponentId;
+        const isSub = !!parentComponentId;
         const groupNum = group || '0';
         const rootClassnames = classnames('Concept', `Concept--group-${groupNum}`, {
             'Concept--focused': selected,
@@ -291,42 +281,25 @@ class Concept extends Component {
             'Concept--is-temp-relationship': isTempRelationship,
             'Concept--excluded-by-filter': isExcludedByFilter
         });
-
-        // NEW
         const bgClassnames = classnames('Concept__bg', `Concept__bg--group-${groupNum}${isSub ? "-sub" : ""}`, {
             'Concept__bg--focused': selected,
+            'Concept__bg--relationship-focused': selectedRelationship,
             'Concept__bg--sub': isSub
         });
-        // NEW
         const textAreaClassnames = classnames('Concept__textarea', {
             'Concept__textarea--sub': isSub
         });
         
-        // OLD
-        // const bgClassnames = classnames('Concept__bg', `Concept__bg--group-${groupNum}`, {
-        //     'Concept__bg--focused': selected,
-        // });
-
-        // NEW
         const bgStyle = {
-            borderRadius: '0px',
-            border: '1px solid #4c4c4c',
-            boxShadow: 'inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15)'
+            // borderRadius: '0px',
+            // border: '1px solid #4c4c4c',
+            // boxShadow: 'inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15)'
         };
-        // OLD
-        // const bgStyle = {
-        //     borderRadius: '6px',
-        //     border: '1px solid #000',
-        //     boxShadow: 'inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15)'
-        // };
-
-        // NEW
         const placeholder = isSub ? "Enter property" : "Enter component";
 
         return  (
             <div
                 className={rootClassnames}
-                // style={rootStyle}
                 ref={this.setRef}
                 onMouseDown={this.onMouseDown}
                 onMouseOver={this.onMouseOver}
@@ -340,7 +313,7 @@ class Concept extends Component {
                     onChange={this.onChange}
                     ref={this.setTextareaRef}
                     placeholder={placeholder}
-                    rows={1}
+                    // rows={1}
                     style={getTextAreaStyle()}
                 />
                 {!isSub &&
@@ -352,11 +325,6 @@ class Concept extends Component {
             </div>
         );
     }
-}
-
-const mapStateToProps = (state) => {
-    // console.log('state:', state);
-    return {};
 }
 
 const mapDispatchToProps = (dispatch) => {

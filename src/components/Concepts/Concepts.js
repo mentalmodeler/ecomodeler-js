@@ -8,7 +8,17 @@ import util from '../../utils/util';
 class Concepts extends Component {
     render() {
         const {concepts} = this.props;
-        const {collection, selectedConcept, selectedRelationship, tempRelationship, tempTarget, viewFilter} = concepts;
+        const {
+            collection,
+            selectedConcept,
+            selectedRelationship,
+            selectedType,
+            selectedData,
+            associatedData,
+            tempRelationship,
+            tempTarget,
+            viewFilter
+        } = concepts;
         const hasTempRelationship = !!tempRelationship;
         let sConcept = {};
         let selectedRelationships = [];
@@ -18,7 +28,6 @@ class Concepts extends Component {
                 ? sConcept.relationships
                 : [];
         } 
-        const getConcept = (id) => collection.find(c => c.id === id);
         // console.log('\n\nConcepts > render'
         //     , '\n\tselectedConcept:', selectedConcept
         //     , '\n\tsConcept:', sConcept
@@ -31,6 +40,7 @@ class Concepts extends Component {
         // );
         // console.log('Concepts > render\n\tconcepts:', concepts);
         
+        // console.log('Concepts, collection:', collection);
         return (
             <div className="map__concepts">
             {collection
@@ -43,8 +53,6 @@ class Concepts extends Component {
                         concept,
                         collection
                     });
-                    // const concepts = [concept].concat(util.findSubconcepts(collection, concept.id));
-                    // console.log(`id:${concept.id}, isExcludedByFilter: ${isExcludedByFilter}\n`);
                     const { id, x, y, properties = []} = concept; // eslint-disable-line
                     return (
                         <div
@@ -58,11 +66,18 @@ class Concepts extends Component {
                                 hasTempRelationship={hasTempRelationship}
                                 isTempRelationship={hasTempRelationship && concept.id === tempRelationship.id}
                                 tempTarget={tempTarget}
-                                selected={id === selectedConcept && selectedRelationship === null}
+                                selected={!selectedRelationship && id === selectedConcept}
+                                selectedRelationship={!!selectedRelationship && (id === selectedConcept || id === selectedRelationship)}
                                 isExcludedByFilter={isExcludedByFilter}
+                                // selectedConcept={selectedConcept}
+                                // selectedRelationship={selectedRelationship}
+                                // selectedType={selectedType}
+                                // selectedData={selectedData}
+                                // associatedData={associatedData}
                             />
                             {properties.map((pId) => {
-                                const property = getConcept(pId);
+                                const property = util.findConcept(collection, pId);
+                                // console.log('pId:', pId, '\nproperty:', property, '\n\n');
                                 isExcludedByFilter = util.isConceptExcludedByFilter({
                                     viewFilter,
                                     selectedConcept,
@@ -74,13 +89,20 @@ class Concepts extends Component {
                                     <Concept
                                         key={`property-${property.id}`}
                                         {...property}
+                                        group={concept.group}
                                         parentComponentId={concept.id}
                                         parentComponent={{...concept}}
                                         hasTempRelationship={hasTempRelationship}
                                         isTempRelationship={hasTempRelationship && property.id === tempRelationship.id}
                                         tempTarget={tempTarget}
-                                        selected={property.id === selectedConcept && selectedRelationship === null}
+                                        selected={!selectedRelationship && property.id === selectedConcept}
+                                        selectedRelationship={!!selectedRelationship && (property.id === selectedConcept || property.id === selectedRelationship)}
                                         isExcludedByFilter={isExcludedByFilter}
+                                        // selectedConcept={selectedConcept}
+                                        // selectedRelationship={selectedRelationship}
+                                        // selectedType={selectedType}
+                                        // selectedData={selectedData}
+                                        // associatedData={associatedData}
                                     />
                                 );
                             })}
@@ -117,7 +139,7 @@ class Concepts extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        concepts: state.concepts
+        concepts: state.concepts,
     };
 }
 

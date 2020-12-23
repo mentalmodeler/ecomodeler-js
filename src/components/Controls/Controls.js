@@ -130,7 +130,7 @@ class Controls extends Component {
                                 placeholder="Enter notes"
                             />
                         </ControlPanel>
-                        {selectedType === ELEMENT_TYPE.CONCEPT &&
+                        {selectedType === ELEMENT_TYPE.CONCEPT && !selectedData.parentComponentId &&
                             <Fragment>
                                 {/* <ControlPanel title="Unit of measurement">
                                     <TextAreaControl

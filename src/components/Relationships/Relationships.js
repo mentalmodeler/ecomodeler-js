@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Relationship from '../Relationship/Relationship';
 import util from '../../utils/util';
 
-
-class Relationships extends Component {
+class Relationships extends PureComponent {
     render() {
         const {positions, concepts} = this.props;
         let {collection, selectedConcept, selectedRelationship, tempRelationship, viewFilter} = concepts;
@@ -21,17 +20,12 @@ class Relationships extends Component {
                 centerClickDiffY: 0
             };
         }
-        const hasTempRelationship = !!tempRelationship;
-        // console.log('hasTempRelationship:', hasTempRelationship);
-        if (tempRelationship) {
-            // console.log('tempRelationship\n\tcenterClickDiffX:', tempRelationship.centerClickDiffX, '\n\tcenterClickDiffY:', tempRelationship.centerClickDiffY, '\n');
-        }
         return (
             <div className="map__relationships">
             {
-                collection.map((concept, conceptIndex) => {
+                collection.map((concept) => {
                     const relationships = concept.relationships || [];
-                    return relationships.map((relationship, relationshipIndex) => {
+                    return relationships.map((relationship) => {
                         const {
                             id: influenceeId,
                             ...rest
@@ -40,31 +34,32 @@ class Relationships extends Component {
                             x: influenceeX,
                             y: influenceeY,
                             width: influenceeWidth,
-                            height: influenceeHeight
-                        } = util.getPosition(influenceeId, positions);    
+                            totalHeight: influenceeHeight
+                        } = util.getPosition(influenceeId, positions);
+                        const influencerId = concept.id; 
                         const {
-                            id: influencerId,
                             x: influencerX,
                             y: influencerY,
                             width: influencerWidth,
-                            height: influencerHeight
-                        } = concept;
-                        const comboId = `relationship_${influencerId}-${influenceeId}`;                        
-                        const selected = selectedConcept === influencerId
-                            && selectedRelationship === influenceeId;
-                        const isExcludedByFilter = util.isRelationshipExcludedByFilter({
+                            totalHeight: influencerHeight,
+                        } = util.getParentConcept({collection, concept});
+                        const isExcludedByFilter = false;
+                        {/* const isExcludedByFilter = util.isRelationshipExcludedByFilter({
                                 viewFilter,
                                 selectedConcept,
                                 concept,
                                 influencerId,
                                 influenceeId,
                                 collection
-                            });
+                            }); */}
+                        const comboId = `relationship_${influencerId}_to_${influenceeId}`
+                        // console.log(comboId);
                         return (
                             <Relationship
+                                {...rest}
                                 key={comboId}
-                                hasTempRelationship={hasTempRelationship}
                                 comboId={comboId}
+                                hasTempRelationship={!!tempRelationship}
                                 influenceeId={influenceeId}
                                 influenceeX={influenceeX}
                                 influenceeY={influenceeY}
@@ -75,9 +70,8 @@ class Relationships extends Component {
                                 influencerY={influencerY}
                                 influencerWidth={influencerWidth}
                                 influencerHeight={influencerHeight}
-                                selected={selected}
+                                selected={selectedConcept === influencerId && selectedRelationship === influenceeId}
                                 isExcludedByFilter={isExcludedByFilter}
-                                {...rest}
                             />
                         );
                     })
@@ -105,7 +99,7 @@ class Relationships extends Component {
                     selected={false}
                     influence={0}
                     tempLine={true}
-                    hasTempRelationship={hasTempRelationship}                            
+                    hasTempRelationship={!!tempRelationship}                            
                 />
             }
             </div>

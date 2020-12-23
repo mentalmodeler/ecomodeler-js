@@ -49,30 +49,96 @@
   right: 0;
   bottom: 0;
   left: 0;
-  border-radius: 6px;
+  border-radius: 2px;
   border: 1px solid #4c4c4c;
   box-shadow: inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--sub {
-  box-shadow: inset 0 0 0 2px #a9a9a9, 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: inset 0 0 0 2px #a9a9a9, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--focused.Concept__bg--group-0 {
-  box-shadow: inset 0 0 4px 2px #d44c36;
+  box-shadow: inset 0 0 0 3px #d44c36, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--focused.Concept__bg--group-1 {
-  box-shadow: inset 0 0 4px 2px #E57429;
+  box-shadow: inset 0 0 0 3px #E57429, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--focused.Concept__bg--group-2 {
-  box-shadow: inset 0 0 4px 2px #2971E5;
+  box-shadow: inset 0 0 0 3px #2971E5, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--focused.Concept__bg--group-3 {
-  box-shadow: inset 0 0 4px 2px #E5E529;
+  box-shadow: inset 0 0 0 3px #E5E529, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--focused.Concept__bg--group-4 {
-  box-shadow: inset 0 0 4px 2px #E529E5;
+  box-shadow: inset 0 0 0 3px #E529E5, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__bg--focused.Concept__bg--group-5 {
-  box-shadow: inset 0 0 4px 2px #14D192;
+  box-shadow: inset 0 0 0 3px #14D192, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept__bg--focused.Concept__bg--group-0-sub {
+  box-shadow: inset 0 0 0 3px #d44c36, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept__bg--focused.Concept__bg--group-1-sub {
+  box-shadow: inset 0 0 0 3px #E57429, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept__bg--focused.Concept__bg--group-2-sub {
+  box-shadow: inset 0 0 0 3px #2971E5, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept__bg--focused.Concept__bg--group-3-sub {
+  box-shadow: inset 0 0 0 3px #E5E529, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept__bg--focused.Concept__bg--group-4-sub {
+  box-shadow: inset 0 0 0 3px #E529E5, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept__bg--focused.Concept__bg--group-5-sub {
+  box-shadow: inset 0 0 0 3px #14D192, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-0 {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #d44c36;
+  border-color: #d44c36;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-1 {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #E57429;
+  border-color: #E57429;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-2 {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #2971E5;
+  border-color: #2971E5;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-3 {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #E5E529;
+  border-color: #E5E529;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-4 {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #E529E5;
+  border-color: #E529E5;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-5 {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #14D192;
+  border-color: #14D192;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-0-sub {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #d44c36;
+  border-color: #d44c36;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-1-sub {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #E57429;
+  border-color: #E57429;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-2-sub {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #2971E5;
+  border-color: #2971E5;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-3-sub {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #E5E529;
+  border-color: #E5E529;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-4-sub {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #E529E5;
+  border-color: #E529E5;
+}
+.MentalMapper .Concept__bg--relationship-focused.Concept__bg--group-5-sub {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px #14D192;
+  border-color: #14D192;
 }
 .MentalMapper .Concept__bg--group-0 {
   background: #e6e6e6;
@@ -142,6 +208,56 @@
   background: -webkit-linear-gradient(top, #666 0%, #a9a9a9 100%);
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #a9a9a9 0%, #666 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.MentalMapper .Concept__bg--group-1-sub {
+  background: #7C655C;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #7C655C 0%, #a9a9a9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #7C655C 0%, #a9a9a9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #a9a9a9 0%, #7C655C 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.MentalMapper .Concept__bg--group-2-sub {
+  background: #5C647E;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #5C647E 0%, #a9a9a9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #5C647E 0%, #a9a9a9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #a9a9a9 0%, #5C647E 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.MentalMapper .Concept__bg--group-3-sub {
+  background: #80805E;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #80805E 0%, #a9a9a9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #80805E 0%, #a9a9a9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #a9a9a9 0%, #80805E 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.MentalMapper .Concept__bg--group-4-sub {
+  background: #7A5C7E;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #7A5C7E 0%, #a9a9a9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #7A5C7E 0%, #a9a9a9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #a9a9a9 0%, #7A5C7E 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.MentalMapper .Concept__bg--group-5-sub {
+  background: #628074;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #628074 0%, #a9a9a9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #628074 0%, #a9a9a9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #a9a9a9 0%, #628074 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .MentalMapper .Concept__button-wrapper {
@@ -295,23 +411,26 @@
   transform: none;
 }
 .MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-0 {
-  box-shadow: inset 0 0 4px 2px #d44c36;
+  box-shadow: inset 0 0 0 3px #d44c36, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-1 {
-  box-shadow: inset 0 0 4px 2px #E57429;
+  box-shadow: inset 0 0 0 3px #E57429, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-2 {
-  box-shadow: inset 0 0 4px 2px #2971E5;
+  box-shadow: inset 0 0 0 3px #2971E5, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-3 {
-  box-shadow: inset 0 0 4px 2px #E5E529;
+  box-shadow: inset 0 0 0 3px #E5E529, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-4 {
-  box-shadow: inset 0 0 4px 2px #E529E5;
+  box-shadow: inset 0 0 0 3px #E529E5, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-5 {
-  box-shadow: inset 0 0 4px 2px #14D192;
+  box-shadow: inset 0 0 0 3px #14D192, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 .MentalMapper .Concept__textarea::placeholder {
-  color: #9b9c9d;
+  color: #9b9c9d !important;
+}
+.MentalMapper .Concept__textarea--sub::placeholder {
+  color: #bdbdbd !important;
 }

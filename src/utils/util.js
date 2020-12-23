@@ -1,11 +1,11 @@
-const LINE_VALUE_INDICATOR_WIDTH = 60;
+const LINE_VALUE_INDICATOR_WIDTH = 120;
 const ELEMENT_TYPE = {
     CONCEPT: 'concept',
     RELATIONSHIP: 'relationship'
 };
 const SETTINGS = {
-    START_X: 0,
-    START_Y: 0,
+    START_X: 10,
+    START_Y: 10,
     CONCEPT_START_INCR: 10
 };
 
@@ -19,30 +19,48 @@ const util = {
             info,
             scenarios
         } = data;
-        
         // initialize and format concept and relationship data
         
-        // old way
-        // const collection = [...concepts]; util.parsePositionData(collection);
-        
-        // new way
-        const collection = concepts.map((concept) => {
-            const relationships = concept && concept.relationships ? concept.relationships : [];
-            const newRelationships = relationships.map((relationship) => {
+        // parse out property concepts to be the same level as concepts.
+        // replace concept properties object array with an array of the properties ids
+        const properties = [];
+        let collection = concepts.map((concept) => {
+            const newProperties = (concept.properties || []).map((property) => {
+                properties.push({
+                    ...property,
+                    parentComponentId: concept.id
+                });
+                return property.id;
+            })
+            return {...concept, properties: newProperties};
+        });
+        collection = [...collection, ...properties];
+
+        // assign relationships dual relationship status, if needed
+        collection = collection.map((concept) => {
+            const newRelationships = (concept && concept.relationships || []).map((relationship) => {
                 if (!relationship.inDualRelationship) {
-                    const {makesDualRelationship, otherRelationship} = util.makesDualRelationship(concepts, concept.id, relationship.id);
+                    const {makesDualRelationship, otherRelationship} = util.makesDualRelationship({
+                        collection,
+                        influencerId: concept.id,
+                        influenceeId: relationship.id
+                    });
                     if (makesDualRelationship && otherRelationship) {
                         relationship.inDualRelationship = true;
                         relationship.isFirstInDualRelationship = false;
                         otherRelationship.inDualRelationship = true;
                         otherRelationship.isFirstInDualRelationship = true;
                     }
-                }    
-                return {...relationship, influence: parseFloat(relationship.influence)}
+                }
+                let influence = parseFloat(relationship.influence);
+                if (isNaN(influence)) {
+                    influence = 0;
+                }
+                return {...relationship, influence}
             });
             return {...concept, relationships: newRelationships, x: parseInt(concept.x, 10), y: parseInt(concept.y, 10)};
         })
-        
+        // console.log('initData, collection:', collection);
         return {
             concepts: {
                 collection,
@@ -103,20 +121,33 @@ const util = {
     getConceptsPosition(collection) {
         const positions = {};
         collection.forEach((concept) => {
+            const conceptForPosition = util.getParentConcept({collection, concept});
             positions[concept.id] = {
-                x: parseInt(concept.x, 10),
-                y: parseInt(concept.y, 10),
-                width: concept.width,
-                height: concept.height
+                x: parseInt(conceptForPosition.x, 10),
+                y: parseInt(conceptForPosition.y, 10),
+                width: conceptForPosition.width,
+                height: conceptForPosition.height,
+                totalHeight: conceptForPosition.totalHeight
             };
 
         });
         return positions;
     },
 
-    getPosition(id, positions) {
-        return positions[id] || {x: 0, y: 0, width: 0, height: 0};
+    getParentConcept({collection, concept, conceptId}) {
+        // console.log('getParentConcept\n\tconceptId:', conceptId, '\n\tconcept:', concept, ',\n\tcollection:', collection, '\n\n');
+        if (!concept) {
+            concept = util.findConcept(collection, conceptId);
+        }
+        return concept.parentComponentId
+            ? util.findConcept(collection, concept.parentComponentId)
+            : concept;
     },
+
+    getPosition(id, positions) {
+        return positions[id] || {x: 0, y: 0, width: 0, height: 0, totalHeight: 0};
+    },
+
 
     getDistanceBetweenPoints(x1, y1, x2, y2) {
         const a = x1 - x2;
@@ -124,7 +155,7 @@ const util = {
         return Math.sqrt(a * a + b * b);
     },
 
-    getOffset(inDualRelationship, isFirstInDualRelationship) {
+    getOffset({inDualRelationship, isFirstInDualRelationship}) {
         if (inDualRelationship) {
             return isFirstInDualRelationship
                 ? LINE_VALUE_INDICATOR_WIDTH / 2
@@ -138,8 +169,8 @@ const util = {
         const dist = util.getDistanceBetweenPoints(eeX, eeY, erX, erY);
         const eeRadians = Math.atan2(erX - eeX, erY - eeY);
         const w = eeWidth / 2 + (erX > eeX 
-            ? - util.getOffset(inDualRelationship, isFirstInDualRelationship)
-            : util.getOffset(inDualRelationship, isFirstInDualRelationship));
+            ? - util.getOffset({inDualRelationship, isFirstInDualRelationship})
+            : util.getOffset({inDualRelationship, isFirstInDualRelationship}));
         const h = eeHeight / 2;
         const cos = Math.cos(eeRadians);
         let hypo = Math.abs(h / cos);
@@ -162,10 +193,6 @@ const util = {
 
     findConcept(collection, id) {
         return collection.find((concept) => (concept.id === id));
-    },
-
-    findSubconcepts(collection, parentComponent) {
-        return collection.filter((concept) => (concept.parentComponent === parentComponent));
     },
 
     getPropValue(object = {}, path = [], defaultValue = '') {
@@ -201,10 +228,55 @@ const util = {
         return Math.max(Math.min(value, max), min);
     },
 
-    makesDualRelationship(collection, influencerId, influenceeId) {
-        const ee = util.findConcept(collection, influenceeId);
-        const relationships = ee && ee.relationships ? ee.relationships : [];
-        const relationship = relationships.find((r) => (r.id === influencerId))
+    getParentAndPropertyIds({collection, conceptId, concept}) {
+        const parentConcept = util.getParentConcept({collection, conceptId, concept});
+        return [parentConcept.id, ...(parentConcept && parentConcept.properties || [])]
+    },
+
+    getAllRelationships({collection, conceptId, concept}) {
+        // TODO Optimize to use concept ref from args instead of concept id
+        const conceptParent = util.getParentConcept({collection, conceptId});
+        const conceptParentRelationships = conceptParent && conceptParent.relationships || [];
+        const conceptParentPropertiesRelationships = (conceptParent && conceptParent.properties || []).flatMap((propertyId) => {
+            const property = util.findConcept(collection, propertyId);
+            return property.relationships || []
+        });
+        return [...conceptParentRelationships, ...conceptParentPropertiesRelationships];
+    },
+
+    alreadyHasRelationship({collection, influencerId, influenceeId, influencer, influencee}) {
+        // TODO Optimize to use concept ref from args instead of concept id
+        const allInfluencerRelationships = util.getAllRelationships({
+            collection,
+            conceptId: influencerId,
+            concept: influencer
+        });
+        const allInfluenceeIds = util.getParentAndPropertyIds({
+            collection,
+            conceptId: influenceeId,
+            concept: influencee
+        });
+        // console.log('alreadyHasRelationship:', alreadyHasRelationship, '\n-----\ninfluencerId:', influencerId, '\n\tallInfluencerRelationships:', allInfluencerRelationships, '\ninfluenceeId:', influenceeId, '\n\tallInfluenceeIds:', allInfluenceeIds, '\n\n');
+        return allInfluencerRelationships.some((relationship) => (
+            allInfluenceeIds.indexOf(relationship.id > -1)
+        ));
+    },
+
+    makesDualRelationship({collection, influencerId, influenceeId, influencer, influencee}) {
+        // TODO Optimize to use concept ref from args instead of concept id
+        const allInfluenceeRelationships = util.getAllRelationships({
+            collection,
+            conceptId: influenceeId
+        });
+        const allInfluencerIds = util.getParentAndPropertyIds({
+            collection,
+            conceptId: influencerId,
+            concept: influencer
+        });
+        const relationship = allInfluenceeRelationships['find']((_relationship) => (
+            allInfluencerIds.indexOf(_relationship.id) > -1
+        ));
+        // console.log('relationship:', relationship, '\nallInfluencerIds:', allInfluencerIds, '\nallInfluenceeRelationships:', allInfluenceeRelationships, '\n\n');
         return {
             makesDualRelationship: !!relationship,
             otherRelationship: relationship

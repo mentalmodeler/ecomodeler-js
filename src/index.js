@@ -124,7 +124,7 @@ if (initialize) {
     render();
     // load(simple);
     // load(fire);
-    // load(TEST_EMP);
+    load(TEST_EMP);
 }
 
 // Define public API

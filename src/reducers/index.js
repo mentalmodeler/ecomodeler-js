@@ -64,7 +64,7 @@ const removeRelationshipFromConcept = function(collection, influencerId, influen
                 relationship.id !== influenceeId
             ));
             // unmark other relationship in dual relationship, if exists
-            const {makesDualRelationship, otherRelationship} = util.makesDualRelationship(collection, influencerId, influenceeId);
+            const {makesDualRelationship, otherRelationship} = util.makesDualRelationship({collection, influencerId, influenceeId});
             if (makesDualRelationship && otherRelationship) {
                 otherRelationship.inDualRelationship = false;
                 otherRelationship.isFirstInDualRelationship = false;
@@ -79,31 +79,28 @@ const removeRelationshipFromConcept = function(collection, influencerId, influen
 
 const addRelationshipToConcept = function (collection, influencerId, influenceeId) {
     let inDualRelationship = false;
-    
+    console.log('addRelationshipToConcept\n\tinfluencerId:', influencerId, ', influenceeId:', influenceeId);
     let newCollection = collection.map((concept) => {
         if (concept.id === influencerId) {
             const relationships =  concept.relationships ? [...concept.relationships] : [];
-            const alreadyHasRelationship = !!(relationships.find(relationship => relationship.id === influenceeId))
-            if (!alreadyHasRelationship) {
-                // check to see if would make dual relationship
-                const {makesDualRelationship, otherRelationship} = util.makesDualRelationship(collection, influencerId, influenceeId);
-                inDualRelationship = makesDualRelationship;
-                relationships.push(createRelationship({
-                    id: influenceeId,
-                    inDualRelationship,
-                    isFirstInDualRelationship: false
-                }));
-                //  directly manipulating object.
-                if (otherRelationship) {
-                    otherRelationship.inDualRelationship = true;
-                    otherRelationship.isFirstInDualRelationship = true;
-                }
+            // check to see if would make dual relationship
+            const {makesDualRelationship, otherRelationship} = util.makesDualRelationship({collection, influencerId, influenceeId});
+            console.log('\tmakesDualRelationship:', makesDualRelationship, ', otherRelationship:', otherRelationship);
+            inDualRelationship = makesDualRelationship;
+            relationships.push(createRelationship({
+                id: influenceeId,
+                inDualRelationship,
+                isFirstInDualRelationship: false
+            }));
+            //  directly manipulating object.
+            if (otherRelationship) {
+                otherRelationship.inDualRelationship = true;
+                otherRelationship.isFirstInDualRelationship = true;
             }
             return {...concept, relationships: relationships};
         }
         return concept;
     });
-    
     return newCollection;
 };
 
@@ -146,9 +143,17 @@ const concepts = (
                 })
             };
         case 'CONCEPT_FOCUS':
-            return {...state, selectedConcept: action.id, selectedRelationship: null};
+            let selectedConcept = action.id;
+            let selectedRelationship = null;
+            let selectedAndAssociatedData = util.getSelectedAndAssociatedData({collection, selectedConcept, selectedRelationship});
+            // console.log('CONCEPT_FOCUS\n\tselectedConcept:', selectedConcept, ', selectedRelationship:', selectedRelationship, '\n\tselectedAndAssociatedData:', selectedAndAssociatedData);
+            return {...state, selectedConcept, selectedRelationship, ...selectedAndAssociatedData};
         case 'RELATIONSHIP_FOCUS':
-            return {...state, selectedConcept: action.influencerId, selectedRelationship: action.influenceeId};
+            selectedConcept = action.influencerId;
+            selectedRelationship = action.influenceeId;
+            selectedAndAssociatedData = util.getSelectedAndAssociatedData({collection, selectedConcept, selectedRelationship});
+            // console.log('RELATIONSHIP_FOCUS\n\tselectedConcept:', selectedConcept, ', selectedRelationship:', selectedRelationship, '\n\tselectedAndAssociatedData:', selectedAndAssociatedData);
+            return {...state, selectedConcept, selectedRelationship, ...selectedAndAssociatedData};
         case 'RELATIONSHIP_CHANGE_CONFIDENCE':
             return {
                 ...state,
@@ -197,22 +202,30 @@ const concepts = (
                 tempRelationship
             };
         case 'RELATIONSHIP_SET_TEMP_TARGET':
-            console.log('RELATIONSHIP_SET_TEMP_TARGET, tempTarget:', action.id);
+            // console.log('RELATIONSHIP_SET_TEMP_TARGET, tempTarget:', action.id);
             return {
                 ...state,
                 tempTarget: action.id
             };
         case 'RELATIONSHIP_ADD':
-            // console.log('RELATIONSHIP_ADD, action.influencerId:', action.influencerId, ', action.influenceeId:', action.influenceeId);
-            return {
-                ...state,
-                collection: addRelationshipToConcept(collection, action.influencerId, action.influenceeId),
-                selectedConcept: action.influencerId,
-                selectedRelationship: action.influenceeId,
-                tempTarget: null
-            };
+            const alreadyHasRelationship = util.alreadyHasRelationship({
+                collection,
+                influencerId: action.influencerId,
+                influenceeId: action.influenceeId
+            });
+            // console.log('RELATIONSHIP_ADD, alreadyHasRelationship:', alreadyHasRelationship, '\n\taction.influencerId:', action.influencerId, ', action.influenceeId:', action.influenceeId);
+            if (!alreadyHasRelationship) {
+                return {
+                    ...state,
+                    collection: addRelationshipToConcept(collection, action.influencerId, action.influenceeId),
+                    selectedConcept: action.influencerId,
+                    selectedRelationship: action.influenceeId,
+                    tempTarget: null
+                };
+            }
+            return state;
         case 'CONCEPT_ADD':
-            console.log('CONCEPT_ADD > action:', action);
+            // console.log('CONCEPT_ADD > action:', action);
             let newCollection = [...collection];
             const {x, y} = util.getStartPosition(newCollection)
             newCollection.push(createConcept({x, y}));
@@ -257,8 +270,8 @@ const concepts = (
                 })
             };
         case 'PROPERTY_ADD':
-            console.log('PROPERTY_ADD > action:', action);
-            let concept = getConcept(collection, action.parentComponentId);
+            // console.log('PROPERTY_ADD > action:', action);
+            let concept = util.findConcept(collection, action.parentComponentId);
             let property = createProperty({parentComponentId: action.parentComponentId});
             newCollection = updateCollectionConcept(collection, action.parentComponentId, {
                 properties: [...concept.properties, property.id]
@@ -270,9 +283,8 @@ const concepts = (
                 collection: newCollection,
             };
         case 'PROPERTY_DELETE':
-            console.log('PROPERTY_DELETE > action:', action);
-            concept = getConcept(collection, action.parentComponentId);
-            property = getConcept(collection, action.parentComponentId);
+            // console.log('PROPERTY_DELETE > action:', action);
+            concept = util.findConcept(collection, action.parentComponentId);
             const newProperties = concept.properties.filter((pId) => pId !== action.id);
             newCollection = updateCollectionConcept(collection, action.parentComponentId, {
                 properties: newProperties
@@ -284,7 +296,7 @@ const concepts = (
                 collection: newCollection
             };
         case 'PROPERTY_CHANGE':
-                console.log('PROPERTY_CHANGE > action:', action);
+                // console.log('PROPERTY_CHANGE > action:', action);
                 return {
                     ...state,
                 };

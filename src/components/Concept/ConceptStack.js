@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Concept from './Concept.orig';
+import Concept from './Concept';
 
 class ConceptStack extends React.Component {
     state = {

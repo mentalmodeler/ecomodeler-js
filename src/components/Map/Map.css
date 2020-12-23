@@ -21,7 +21,7 @@
 }
 .MentalMapper .map textarea::placeholder,
 .MentalMapper .map input::placeholder {
-  color: #9a9b9d !important;
+  color: #9a9b9d;
 }
 .MentalMapper .map-controls__add-component {
   cursor: pointer;

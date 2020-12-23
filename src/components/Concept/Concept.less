@@ -68,12 +68,12 @@
             right: 0;
             bottom: 0;
             left: 0;
-            border-radius: 6px;
+            border-radius: 2px; // 6px;
             border: 1px solid @gray;
             box-shadow:inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15);
 
             &--sub {
-                box-shadow: inset 0 0 0 2px @subconcept-0-sub-grad-light, 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+                box-shadow: inset 0 0 0 2px @concept-0-sub-grad-light, 0 3px 8px rgba(0, 0, 0, 0.15);
             }
 
             &--focused {
@@ -83,6 +83,27 @@
                 &.Concept__bg--group-3 { .mixin-selected-control-bg(@concept-3-outline); }
                 &.Concept__bg--group-4 { .mixin-selected-control-bg(@concept-4-outline); }
                 &.Concept__bg--group-5 { .mixin-selected-control-bg(@concept-5-outline); }
+                &.Concept__bg--group-0-sub { .mixin-selected-control-bg(@concept-0-outline); }
+                &.Concept__bg--group-1-sub { .mixin-selected-control-bg(@concept-1-outline); }
+                &.Concept__bg--group-2-sub { .mixin-selected-control-bg(@concept-2-outline); }
+                &.Concept__bg--group-3-sub { .mixin-selected-control-bg(@concept-3-outline); }
+                &.Concept__bg--group-4-sub { .mixin-selected-control-bg(@concept-4-outline); }
+                &.Concept__bg--group-5-sub { .mixin-selected-control-bg(@concept-5-outline); }
+            }
+
+            &--relationship-focused {
+                &.Concept__bg--group-0 { .mixin-relationship-selected-control-bg(@concept-0-outline); }
+                &.Concept__bg--group-1 { .mixin-relationship-selected-control-bg(@concept-1-outline); }
+                &.Concept__bg--group-2 { .mixin-relationship-selected-control-bg(@concept-2-outline); }
+                &.Concept__bg--group-3 { .mixin-relationship-selected-control-bg(@concept-3-outline); }
+                &.Concept__bg--group-4 { .mixin-relationship-selected-control-bg(@concept-4-outline); }
+                &.Concept__bg--group-5 { .mixin-relationship-selected-control-bg(@concept-5-outline); }
+                &.Concept__bg--group-0-sub { .mixin-relationship-selected-control-bg(@concept-0-outline); }
+                &.Concept__bg--group-1-sub { .mixin-relationship-selected-control-bg(@concept-1-outline); }
+                &.Concept__bg--group-2-sub { .mixin-relationship-selected-control-bg(@concept-2-outline); }
+                &.Concept__bg--group-3-sub { .mixin-relationship-selected-control-bg(@concept-3-outline); }
+                &.Concept__bg--group-4-sub { .mixin-relationship-selected-control-bg(@concept-4-outline); }
+                &.Concept__bg--group-5-sub { .mixin-relationship-selected-control-bg(@concept-5-outline); }
             }
         
             &--group-0 { .mixin-concept-bg(@concept-0-grad-light, @concept-0-grad-dark); }
@@ -92,7 +113,12 @@
             &--group-4 { .mixin-concept-bg(@concept-4-grad-light, @concept-4-grad-dark); }
             &--group-5 { .mixin-concept-bg(@concept-5-grad-light, @concept-5-grad-dark); }
 
-            &--group-0-sub { .mixin-concept-bg(@subconcept-0-sub-grad-light, @subconcept-0-sub-grad-dark); }
+            &--group-0-sub { .mixin-concept-bg(@concept-0-sub-grad-light, @concept-0-sub-grad-dark); }
+            &--group-1-sub { .mixin-concept-bg(@concept-0-sub-grad-light, @concept-1-sub-grad-dark); }
+            &--group-2-sub { .mixin-concept-bg(@concept-0-sub-grad-light, @concept-2-sub-grad-dark); }
+            &--group-3-sub { .mixin-concept-bg(@concept-0-sub-grad-light, @concept-3-sub-grad-dark); }
+            &--group-4-sub { .mixin-concept-bg(@concept-0-sub-grad-light, @concept-4-sub-grad-dark); }
+            &--group-5-sub { .mixin-concept-bg(@concept-0-sub-grad-light, @concept-5-sub-grad-dark); }
         }
 
         &__button-wrapper {
@@ -239,6 +265,10 @@
     }
 
     .Concept__textarea::placeholder {
-        color: @placeholder-color;
+        color: @placeholder-color !important;
+    }
+
+    .Concept__textarea--sub::placeholder {
+        color: @placeholder-sub-color !important;
     }
 }
