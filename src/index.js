@@ -58,7 +58,8 @@ function load(json) {
 function save() {
     try {
         const data =  util.exportData(store.getState());
-        console.log('\n\n---- MentalModelerConceptMap > save\ndata:', data, '\n\n');
+        console.log('\n\n---- MentalModelerConceptMap > save\ndata.js:', data.js, '\n\n');
+        util.downloadFile(data.json, data.js.info.name);
         // return data;
     } catch (e) {
         console.error('ERROR - ConceptMap > save, e:', e);
@@ -124,7 +125,7 @@ if (initialize) {
     render();
     // load(simple);
     // load(fire);
-    load(TEST_EMP);
+    // load(TEST_EMP);
 }
 
 // Define public API

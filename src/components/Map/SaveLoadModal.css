@@ -1,0 +1,193 @@
+.SaveLoadModal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+.SaveLoadModal__skrim {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.SaveLoadModal__dialog {
+  width: 600px;
+  max-width: 100%;
+  border-radius: 8px;
+  background-color: #333;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+.SaveLoadModal-enter .SaveLoadModal__skrim {
+  transition: opacity 200ms linear;
+  opacity: 0;
+}
+.SaveLoadModal-enter .SaveLoadModal__dialog {
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1) 200ms, opacity 300ms ease 200ms;
+  transform: scale(0.5);
+  opacity: 0;
+}
+.SaveLoadModal-enter-active .SaveLoadModal__skrim {
+  opacity: 1;
+}
+.SaveLoadModal-enter-active .SaveLoadModal__dialog {
+  transform: none;
+  opacity: 1;
+}
+.SaveLoadModal-exit .SaveLoadModal__skrim {
+  transition: opacity 100ms ease 200ms;
+  opacity: 1;
+}
+.SaveLoadModal-exit .SaveLoadModal__dialog {
+  transition: transform 300ms cubic-bezier(0.36, 0, 0.66, -0.56), opacity 300ms ease;
+  opacity: 1;
+}
+.SaveLoadModal-exit-active .SaveLoadModal__skrim {
+  opacity: 0;
+}
+.SaveLoadModal-exit-active .SaveLoadModal__dialog {
+  transform: scale(0.5);
+  opacity: 0;
+}
+.SaveLoadModal h2 {
+  color: #fff;
+  margin-bottom: 8px;
+  margin-top: -8px;
+}
+.SaveContent {
+  color: #fff;
+}
+.SaveContent__input-row {
+  width: 100%;
+  margin-top: 24px;
+}
+.SaveContent__input-row-title {
+  font-weight: 300;
+  font-size: 18px;
+  color: #ccc;
+  margin-bottom: 4px;
+}
+.SaveContent__input {
+  width: 100%;
+  border-radius: 2px;
+  padding: 8px;
+  background-color: #fff;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  flex-grow: 1;
+}
+.SaveContent__input:focus {
+  outline: none;
+}
+.SaveContent__control-row {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+.SaveContent__control-button {
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: #666;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #666 0%, #a9a9a9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #666 0%, #a9a9a9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #a9a9a9 0%, #666 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  border: solid 1px #121212;
+}
+.SaveContent__control-button > span {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.SaveContent__control-button:first-child {
+  margin-right: 24px;
+}
+.SaveContent__control-button:hover {
+  background: #a9a9a9;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #a9a9a9 0%, #a9a9a9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #a9a9a9 0%, #a9a9a9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #a9a9a9 0%, #a9a9a9 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.SaveContent__control-button:active {
+  background: #666;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #666 0%, #666 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #666 0%, #666 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #666 0%, #666 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.SaveContent__control-button:focus {
+  outline: none;
+}
+.dog__icon {
+  color: #fff;
+}
+.open__animation > svg {
+  animation: open 500ms ease-in-out;
+}
+.close__animation > svg {
+  animation: close 500ms ease-in-out;
+}
+.title {
+  color: #fff;
+  text-align: center;
+}
+.title__top {
+  margin-bottom: 24px;
+}
+.title__bottom {
+  margin-top: 24px;
+}
+.esc {
+  font-size: 12px;
+  display: inline-block;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  padding: 4px 12px;
+  margin: 0 4px;
+}
+.items__title {
+  margin-top: 24px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #fff;
+}
+@keyframes open {
+  0% {
+    transform: none;
+  }
+  50% {
+    transform: rotate(-90deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes close {
+  0% {
+    transform: none;
+  }
+  50% {
+    transform: rotate(90deg);
+  }
+  100% {
+    transform: none;
+  }
+}

@@ -1,0 +1,219 @@
+@import (reference) '../../shared.less';
+
+.SaveLoadModal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+
+    &__skrim {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    &__dialog {
+        width: 600px;
+        max-width: 100%;
+        border-radius: 8px;
+        background-color: #333;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    &-enter {
+        .SaveLoadModal__skrim {
+            transition: opacity 200ms linear;
+            opacity: 0;
+        }
+
+        .SaveLoadModal__dialog {
+            transition: transform 300ms @ease-out-back 200ms, opacity 300ms ease 200ms;
+            transform: scale(0.5);
+            opacity: 0;
+        }
+    }
+
+    &-enter-active {
+        .SaveLoadModal__skrim {
+            opacity: 1;
+        }
+
+        .SaveLoadModal__dialog {
+            transform: none;
+            opacity: 1;
+        }
+    }
+
+    &-exit {
+        .SaveLoadModal__skrim {
+            transition: opacity 100ms ease 200ms;
+            opacity: 1;
+        }
+
+        .SaveLoadModal__dialog {
+            transition: transform 300ms @ease-in-back, opacity 300ms ease;
+            opacity: 1;
+        }
+    }
+
+    &-exit-active {
+        .SaveLoadModal__skrim {
+            opacity: 0;
+        }
+
+        .SaveLoadModal__dialog {
+            transform: scale(0.5);
+            opacity: 0;
+        }        
+    }
+    
+    h2 {
+        color: #fff;
+        margin-bottom: 8px;
+        margin-top: -8px;
+    }
+}
+
+.SaveContent {
+    color: #fff;
+
+    &__input-row {
+        width: 100%;
+        margin-top: 24px;
+    }
+
+    &__input-row-title {
+        font-weight: 300;
+        font-size: 18px;
+        color: #ccc;
+        margin-bottom: 4px;
+    }
+
+    &__input {
+        width: 100%;
+        border-radius: 2px;
+        padding: 8px;
+        background-color: #fff;
+        border: none;
+        color: #333;
+        font-size: 16px;
+        flex-grow: 1;
+    
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__control-row {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__control-button {
+        padding: 12px 16px;
+        border-radius: 6px;
+        .mixin-concept-bg(@concept-0-sub-grad-light, @concept-0-sub-grad-dark);
+        border: solid 1px #121212;
+        
+        > span {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+        }
+
+        &:first-child {
+            margin-right: 24px;
+        }
+        
+        &:hover {
+            .mixin-concept-bg(@concept-0-sub-grad-light, @concept-0-sub-grad-light);
+        }
+
+        &:active {
+            .mixin-concept-bg(@concept-0-sub-grad-dark, @concept-0-sub-grad-dark);
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.dog__icon {
+    color: #fff;
+}
+
+.open__animation > svg {
+    animation: open 500ms ease-in-out;
+}
+
+.close__animation > svg {
+    animation: close 500ms ease-in-out;
+}
+
+.title {
+    color: #fff;
+    text-align: center;
+}
+
+.title__top {
+    margin-bottom: 24px;
+}
+
+.title__bottom {
+    margin-top: 24px;
+}
+
+.esc {
+    font-size: 12px;
+    display: inline-block;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin: 0 4px;
+}
+
+.items__title {
+    margin-top: 24px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #fff;
+}
+
+@keyframes open {
+    0% {
+        transform: none;
+    }
+
+    50% {
+        transform: rotate(-90deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes close {
+    0% {
+        transform: none;
+    }
+
+    50% {
+        transform: rotate(90deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}

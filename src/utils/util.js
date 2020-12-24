@@ -82,42 +82,71 @@ const util = {
         if (state.groupNames) {
             groupNames = {...groupNames, ...state.groupNames};
         }
+        const info = {
+            ...state.info,
+            date: new Date().toString()
+        };
         if (state.concepts && state.concepts.collection) {
-            concepts = state.concepts.collection.map((concept) => {
-                // TODO - store sub-components in the properties array
-                // const properties;
-                const relationships = concept && concept.relationships ? concept.relationships : [];
-                const newRelationships = relationships.map((relationship) => (
+            concepts = state.concepts.collection.filter((concept) => (
+                !concept.parentComponentId
+            )).map((concept) => {
+                const relationships = (concept && concept.relationships || []).map((relationship) => (
                     {
                         id: relationship.id,
                         notes: relationship.notes,
-                        confidence: relationship.confidence,
-                        influence: relationship.influence,
                         name: relationship.name
                     } 
                 ));
-                const newConcept = {
+                const properties = (concept && concept.properties || []).map((propertyId) => {
+                    const property = util.findConcept(state.concepts.collection, propertyId);
+                    const propertyRelationships = (property && property.relationships || []).map((relationship) => (
+                        {
+                            id: relationship.id,
+                            notes: relationship.notes,
+                            name: relationship.name
+                        } 
+                    ));
+                    return {
+                        id: property.id,
+                        name: property.name,
+                        notes: property.notes,
+                        group: concept.group,
+                        parentComponentId: concept.id,
+                        relationships: propertyRelationships,
+                    };     
+                });
+                return {
                     id: concept.id,
                     name: concept.name,
                     notes: concept.notes,
-                    units: concept.units,
                     group: concept.group,
                     parent: concept.parentComponent,
                     x: concept.x,
                     y: concept.y,
-                    preferredState: concept.preferredState,
-                }
-                return {...newConcept, relationships: newRelationships};
+                    relationships,
+                    properties
+                };
             })
         }
 
-        const js = {concepts, groupNames};
+        const js = {concepts, groupNames, info};
         return {
             js,
             json: JSON.stringify(js)
         };
     },
 
+    downloadFile(content, name = 'file') {
+        var bb = new Blob([content], { type: 'application/json'}); // 'text/plain' });
+        var a = document.createElement('a');
+        a.download = `${name}.emp`;
+        const objectURL = window.URL.createObjectURL(bb);
+        a.href = objectURL;
+        a.click();
+        window.URL.revokeObjectURL(objectURL);
+        a.remove();
+    },
+    
     getConceptsPosition(collection) {
         const positions = {};
         collection.forEach((concept) => {

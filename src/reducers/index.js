@@ -320,10 +320,14 @@ const groupNames = (state = {0: '', 1: '', 2: '', 3: '', 4: '', 5: ''}, action) 
     }
 }
 
-const info = (state = '', action) => {
+const info = (state = {author: '', name: '', date: ''}, action) => {
+    const {type, ...newState} = action;
     switch (action.type) {
-        case 'CHANGE_NAME':
-            return state;
+        case 'INFO_CHANGE':
+            return {
+                ...state,
+                ...newState
+            };
         default:
             return state;
     }

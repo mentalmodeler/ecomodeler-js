@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import {connect} from 'react-redux';
 
+import SaveLoadModal from './SaveLoadModal';
 import Concepts from '../Concepts/Concepts';
 import Relationships from '../Relationships/Relationships';
 
@@ -15,6 +16,11 @@ import './Map.css';
 const showSaveLoad = true;
 
 class Map extends Component {
+    state = {
+        isModalOpen: false,
+        modalMode: ''
+    }
+
     onClickMap = (e) => {
         if (e.target === this.mapContent) {
             this.props.conceptFocus(null);
@@ -134,12 +140,20 @@ class Map extends Component {
     }
 
     onClickSave = (e) => {
-        if (window.MentalModelerConceptMap) {
-            window.MentalModelerConceptMap.save();
-        }
+        this.setState({
+            isModalOpen: true,
+            modalMode: 'save',
+        })
     }
 
+    // onDoSave = ({author, name, date}) => {
+    //     if (window.MentalModelerConceptMap) {
+    //         window.MentalModelerConceptMap.save();
+    //     }
+    // }
+
     render() {
+        const {isModalOpen, modalMode} = this.state;
         return (
             <div className="map">
                 <div className="map__controls">
@@ -169,7 +183,7 @@ class Map extends Component {
                                 type="file"
                                 id="fileElem"
                                 ref={this.setInputRef}
-                                accept=".js,.xml,.mmp"
+                                accept=".js,.json,.xml,.emp"
                                 style={{display: 'none'}}
                                 onChange={this.handleInputChange}
                             />
@@ -194,6 +208,11 @@ class Map extends Component {
                     <Relationships />
                     <Concepts />
                 </div>
+                <SaveLoadModal
+                    isOpen={isModalOpen}
+                    mode={modalMode}
+                    onClose={() => this.setState({isModalOpen: false})}
+                />
             </div>
         );
     }
@@ -215,12 +234,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-const mapStateToProps = (state) => {
-    const {info} = state;
-    return {
-        name: info.name,
-        author: info.author
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default connect(null, mapDispatchToProps)(Map);

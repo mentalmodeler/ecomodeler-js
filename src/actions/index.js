@@ -176,6 +176,15 @@ const groupNameChange = (index, name) => {
     }
 };
 
+const infoChange = (author, name, date) => {
+    return {
+        type: 'INFO_CHANGE',
+        author,
+        name,
+        date
+    }
+};
+
 export {
     conceptMove,
     conceptFocus,
@@ -197,5 +206,6 @@ export {
     relationshipDelete,
     modelLoad,
     viewFilterChange,
-    groupNameChange
+    groupNameChange,
+    infoChange
 };
