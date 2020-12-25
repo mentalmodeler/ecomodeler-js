@@ -24,7 +24,7 @@ if (!Element.prototype.matches) {
 }
 
 const params = new URLSearchParams(document.location.search.substring(1));
-const initialize = !!params.has('init') && document.location.hostname === 'localhost';
+const initialize = true; // !!params.has('init') && document.location.hostname === 'localhost';
 
 // let loadTimeoutId;
 let store = createStore(allReducers, {});
