@@ -51,8 +51,6 @@ class SaveLoadModal extends Component {
 
 	render() {
 		const {isOpen, mode, onClose, author, name, date, infoChange} = this.props;
-		console.log('date:', date);
-
 		return (
 			<CSSTransition
 				in={isOpen}
@@ -64,7 +62,7 @@ class SaveLoadModal extends Component {
 				mountOnEnter
 				unmountOnExit
 			>
-				<div className="prompt" key={`prompt-trans-${isOpen ? 'enter' : 'exit'}`}>
+				<div key={`prompt-trans-${isOpen ? 'enter' : 'exit'}`}>
 					<div className="SaveLoadModal__skrim" />
 					<div className="SaveLoadModal">
 						<div className="SaveLoadModal__dialog">
@@ -100,8 +98,12 @@ class SaveLoadModal extends Component {
 									</div>
 								</div>
 							)}
-							{mode === 'load'
-							}
+							{mode === 'load' && (
+								<div className="LoadContent">
+									<h2>{'Load File'}</h2>
+									<p>{'Pleae use your the system dialog to select an EcoModeler (.emp) file to load.'}</p>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
@@ -121,7 +123,6 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
     const {info} = state;
     let {author = '', name = '', date} = info;
-    console.log('SaveLoadModal > info:',info)
     return {
         name,
         author,
@@ -132,79 +133,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SaveLoadModal);
-
-// export default function SaveLoadModal({isOpen, mode, author = 'sdf', name = 'qwer', description, saveCallback, cancelCallback}) {
-// 	const now = new Date();
-// 	const lastModified = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}).format(now)
-// 	const reducer = (state, newState) => ({...state, ...newState});
-// 	const [state, setState] = useReducer(reducer, {
-// 		isOpen: true,
-// 		tempName: name,
-// 		tempAuthor: author,
-// 	});
-// 	const removeSpaces = (s) => s.replace(/\s/g, ''); 
-// 	const handleNameChange = (e) => setState({tempName: e.target.value});
-// 	const handleAuthorChange = (e) => setState({tempAuthor: e.target.value});
-// 	const handleSave = () => {
-// 		saveCallback({
-// 			author: state.tempAuthor,
-// 			name: state.tempName,
-// 			date: now.toString(),
-// 		});
-// 	}
-// 	console.log('SaveLoadModal, name:', name, 'state.tempName:', state.tempName);
-// 	return (
-// 		<CSSTransition
-// 			in={isOpen}
-// 			timeout={{
-// 				enter: 500,
-// 				exit: 300
-// 			}}
-// 			classNames="SaveLoadModal"
-// 			mountOnEnter
-// 			unmountOnExit
-// 		>
-// 			<div className="prompt" key={`prompt-trans-${state.isOpen ? 'enter' : 'exit'}`}>
-// 				<div className="SaveLoadModal__skrim" />
-// 				<div className="SaveLoadModal">
-// 					<div className="SaveLoadModal__dialog">
-// 						{mode === 'save' && (
-// 							<div className="SaveContent">
-// 								<h2>{'Save File'}</h2>
-// 								{/* <div>{'Please enter an author and description for this file.'}<br/>{'* This is optional'}</div> */}
-// 								<div className="SaveContent__input-row">
-// 									<div className="SaveContent__input-row-title">{'Name'}</div>
-// 									<input
-// 										className="SaveContent__input"
-// 										value={state.tempName}
-// 										onChange={handleNameChange}
-// 										placeholder="Enter file name here"
-// 									/>
-// 								</div>
-// 								<div className="SaveContent__input-row">
-// 									<div className="SaveContent__input-row-title">{'Author'}</div>
-// 									<input
-// 										className="SaveContent__input"
-// 										value={state.tempAuthor}
-// 										onChange={handleAuthorChange}
-// 										placeholder="Enter your name here"
-// 									/>
-// 								</div>
-// 								<div className="SaveContent__input-row">
-// 									<div className="SaveContent__input-row-title">{'Last modified'}</div>
-// 									<div className="">{lastModified}</div>
-// 								</div>
-// 								<div className="SaveContent__control-row">
-// 									<button onClick={cancelCallback} className="SaveContent__control-button"><span>{'Cancel'}</span></button>
-// 									<button onClick={handleSave} className="SaveContent__control-button"><span>{'Save'}</span></button>
-// 								</div>
-// 							</div>
-// 						)}
-// 						{mode === 'load'
-// 						}
-// 					</div>
-// 				</div>
-// 			</div>
-// 		</CSSTransition>
-// 	);
-// }

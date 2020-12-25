@@ -10,7 +10,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1;
+    z-index: 5;
 
     &__skrim {
         position: absolute;
@@ -18,6 +18,7 @@
         right: 0;
         bottom: 0;
         left: 0;
+        z-index: 4;
         background-color: rgba(0, 0, 0, 0.4);
     }
 
@@ -77,16 +78,17 @@
             opacity: 0;
         }        
     }
-    
+}
+
+.SaveContent,
+.LoadContent {
+    color: #fff;
+
     h2 {
         color: #fff;
         margin-bottom: 8px;
         margin-top: -8px;
     }
-}
-
-.SaveContent {
-    color: #fff;
 
     &__input-row {
         width: 100%;

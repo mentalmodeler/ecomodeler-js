@@ -20,6 +20,7 @@ class Map extends Component {
         isModalOpen: false,
         modalMode: ''
     }
+    loadDialogWasLaunched = false;
 
     onClickMap = (e) => {
         if (e.target === this.mapContent) {
@@ -120,8 +121,12 @@ class Map extends Component {
     }
 
     handleInputChange = (e) => {
+        console.log('handleInputChange, e:', e);
         const file = e.target.files[0];
-        console.log('file:', file);
+        this.setState({
+            isModalOpen: false,
+            modalMode: 'load',
+        });
         if (file) {
             const fileReader = new FileReader();
             fileReader.onloadend = this.onFileReaderLoadEnd;
@@ -133,9 +138,36 @@ class Map extends Component {
         this.inputRef = ref;
     }
 
+    setLoadRef = (ref) => {
+        this.loadRef = ref;
+    }
+
+    onFocus = (e) => {
+        console.log('onFocus\n\tthis.file:', this.file, ', this.loadRef:', this.loadRef, '\n\te:', e, ', document.activeElement:', document.activeElement);
+        if (this.loadDialogWasLaunched && document.activeElement === this.loadRef) {
+            console.log('\n-----------\nclose dialog\n-------------\n\n')
+            this.loadDialogWasLaunched = false;
+            window.removeEventListener('focusin', this.onFocus);
+            this.setState({
+                isModalOpen: false,
+                modalMode: 'load',
+            });
+        }
+    }
+    onBlur = (e) => {
+        console.log('onBlur\n\tthis.file:', this.file, ', this.loadRef:', this.loadRef, '\n\te:', e, ', document.activeElement:', document.activeElement);
+    }
+
     onClickLoad = (e) => {
         if (this.inputRef) {
             this.inputRef.click();
+            this.loadDialogWasLaunched = true;
+            window.addEventListener('focusin', this.onFocus);
+            this.setState({
+                isModalOpen: true,
+                modalMode: 'load',
+            })
+
         }
     }
 
@@ -143,14 +175,8 @@ class Map extends Component {
         this.setState({
             isModalOpen: true,
             modalMode: 'save',
-        })
+        });
     }
-
-    // onDoSave = ({author, name, date}) => {
-    //     if (window.MentalModelerConceptMap) {
-    //         window.MentalModelerConceptMap.save();
-    //     }
-    // }
 
     render() {
         const {isModalOpen, modalMode} = this.state;
@@ -185,9 +211,10 @@ class Map extends Component {
                                 ref={this.setInputRef}
                                 accept=".js,.json,.xml,.emp"
                                 style={{display: 'none'}}
+                                tabIndex="-1"
                                 onChange={this.handleInputChange}
                             />
-                            <button className="map-controls__load" onClick={this.onClickLoad}>
+                            <button className="map-controls__load" ref={this.setLoadRef} onClick={this.onClickLoad}>
                                 <span>{'LOAD'}</span>
                             </button>
                         </div>

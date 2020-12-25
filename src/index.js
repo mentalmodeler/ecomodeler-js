@@ -59,8 +59,7 @@ function save() {
     try {
         const data =  util.exportData(store.getState());
         console.log('\n\n---- MentalModelerConceptMap > save\ndata.js:', data.js, '\n\n');
-        util.downloadFile(data.json, data.js.info.name);
-        // return data;
+        util.writeLocalFile(data.json, data.js.info.name);
     } catch (e) {
         console.error('ERROR - ConceptMap > save, e:', e);
     }
