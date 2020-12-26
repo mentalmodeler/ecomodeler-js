@@ -79,6 +79,7 @@ const propertyDelete = (id, parentComponentId) => {
 };
 
 const relationshipFocus = (influencerId, influenceeId) => {
+    console.log('Action > RELATIONSHIP_FOCUS');
     return {
         type: 'RELATIONSHIP_FOCUS',
         influencerId,
@@ -137,9 +138,10 @@ const relationshipChangeInfluence = (influencerId, influenceeId, value) => {
     }
 }
 
-const relationshipChangeDescription = (influencerId, influenceeId, value) => {
+const relationshipChangeLabel = (influencerId, influenceeId, value) => {
+    console.log('Actions > relationshipChangeLabel, value:', value);
     return {
-        type: 'RELATIONSHIP_CHANGE_DESCRIPTION',
+        type: 'RELATIONSHIP_CHANGE_LABEL',
         influencerId,
         influenceeId,
         value
@@ -202,7 +204,7 @@ export {
     relationshipSetTempTarget,
     relationshipAdd,
     relationshipChangeInfluence,
-    relationshipChangeDescription,
+    relationshipChangeLabel,
     relationshipDelete,
     modelLoad,
     viewFilterChange,

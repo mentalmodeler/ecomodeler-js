@@ -12,10 +12,10 @@ import './Relationship.css';
 const arrowheadHeight = 16; // 6
 const arrowheadWidth = 16; // 9
 
-class Relationship extends Component {    
+class Relationship extends Component {
     constructor(props) {
         super(props);
-
+        console.log('Relationship > props:', props);    
         this.state = {
             justMounted: false
         };        
@@ -64,6 +64,7 @@ class Relationship extends Component {
 
     onClick = (e) => {
         const {influencerId, influenceeId, relationshipFocus} = this.props;
+        console.log('relationship, onClick')
         relationshipFocus(influencerId, influenceeId);
     }
 
@@ -88,7 +89,8 @@ class Relationship extends Component {
             hasTempRelationship,
             inDualRelationship,
             isFirstInDualRelationship,
-            isExcludedByFilter
+            isExcludedByFilter,
+            label
         } = this.props
 
         // console.log('Relationship > render >', influencerId, '-', influenceeId, '\n\tinDualRelationship:', inDualRelationship, ', isFirstInDualRelationship:', isFirstInDualRelationship);
@@ -165,7 +167,7 @@ class Relationship extends Component {
         }
         return (
             <span className={rootClassname}>
-                {lineThickness > 1 &&
+                {/* {lineThickness > 1 &&
                     <svg
                         className="Relationship__svg Relationship__svg--bg"
                         version="1.1"
@@ -185,7 +187,7 @@ class Relationship extends Component {
                             // stroke={color}
                         />
                     </svg>
-                }
+                } */}
                 <svg
                     className="Relationship__svg Relationship__svg--line"
                     version="1.1"
@@ -300,6 +302,7 @@ class Relationship extends Component {
                         influencerId={influencerId}
                         influenceeId={influenceeId}
                         influence={influence}
+                        label={label}
                         expanded={this.state.justMounted}
                     />
                 }

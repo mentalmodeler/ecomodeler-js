@@ -143,6 +143,7 @@ const concepts = (
                 })
             };
         case 'CONCEPT_FOCUS':
+            console.log('CONCEPT_FOCUS, selectedConcept:', selectedConcept)
             let selectedConcept = action.id;
             let selectedRelationship = null;
             let selectedAndAssociatedData = util.getSelectedAndAssociatedData({collection, selectedConcept, selectedRelationship});
@@ -168,11 +169,12 @@ const concepts = (
                     influence: action.value
                 })
             };
-        case 'RELATIONSHIP_CHANGE_DESCRIPTION':
+        case 'RELATIONSHIP_CHANGE_LABEL':
+            console.log('RELATIONSHIP_CHANGE_LABEL, action.value:', action.value);
             return {
                 ...state,
                 collection: updateCollectionRelationship(collection, action.influencerId, action.influenceeId, {
-                    descriptionText: action.value
+                    label: action.value
                 })
             };
         case 'RELATIONSHIP_DELETE':
