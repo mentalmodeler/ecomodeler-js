@@ -170,11 +170,19 @@ const concepts = (
                 })
             };
         case 'RELATIONSHIP_CHANGE_LABEL':
-            console.log('RELATIONSHIP_CHANGE_LABEL, action.value:', action.value);
+            // console.log('RELATIONSHIP_CHANGE_LABEL, action.value:', action.value);
             return {
                 ...state,
                 collection: updateCollectionRelationship(collection, action.influencerId, action.influenceeId, {
                     label: action.value
+                })
+            };
+        case 'RELATIONSHIP_CHANGE_NOTES':
+            // console.log('RELATIONSHIP_CHANGE_NOTES, action.value:', action.value);
+            return {
+                ...state,
+                collection: updateCollectionRelationship(collection, action.influencerId, action.influenceeId, {
+                    notes: action.value
                 })
             };
         case 'RELATIONSHIP_DELETE':

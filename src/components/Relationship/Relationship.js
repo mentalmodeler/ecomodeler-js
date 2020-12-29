@@ -15,7 +15,6 @@ const arrowheadWidth = 16; // 9
 class Relationship extends Component {
     constructor(props) {
         super(props);
-        console.log('Relationship > props:', props);    
         this.state = {
             justMounted: false
         };        

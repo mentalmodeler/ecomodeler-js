@@ -12,6 +12,7 @@ import {
     conceptChangeUnits,
     conceptChangeGroup,
     relationshipChangeConfidence,
+    relationshipChangeNotes,
     viewFilterChange,
     groupNameChange
 } from '../../actions/index';
@@ -52,6 +53,10 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(relationshipChangeConfidence(influencerId, influenceeId, value))
         },
 
+        relationshipChangeNotes: (influencerId, influenceeId, value) => {
+            dispatch(relationshipChangeNotes(influencerId, influenceeId, value))
+        },
+
         viewFilterChange: (index) => {
             dispatch(viewFilterChange(index))
         },
@@ -65,9 +70,15 @@ const mapDispatchToProps = (dispatch) => {
 class Controls extends Component {
     onNotesChange = (value) => {}
     onNotesBlur = ({event, value, isDirty}) => {
-        const {selectedData, conceptChangeNotes} = this.props;
+        const {selectedType, selectedData, conceptChangeNotes, relationshipChangeNotes} = this.props;
         if (isDirty) {
-            conceptChangeNotes(selectedData.id, value);
+            if (selectedType === 'concept') {
+                conceptChangeNotes(selectedData.id, value);
+            } else if (selectedType === 'relationship') {
+                const {associatedData} = this.props;
+                const {influencer, influencee} = associatedData;
+                relationshipChangeNotes(influencer.id, influencee.id, value);
+            }
         }
     }
 

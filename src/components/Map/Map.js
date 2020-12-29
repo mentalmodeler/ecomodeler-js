@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import SaveLoadModal from './SaveLoadModal';
 import Concepts from '../Concepts/Concepts';
 import Relationships from '../Relationships/Relationships';
+import util from '../../utils/util';
 
 import {
     conceptFocus,
@@ -51,12 +52,8 @@ class Map extends Component {
         const {name, author} = this.props;
         const width = this.mapContent.scrollWidth;
         const height = this.mapContent.scrollHeight; 
-        let date = new Date();
-        const hour = date.getHours().toString().padStart(2, '0');
-        const minute = date.getMinutes().toString().padStart(2, '0');
-        const second = date.getSeconds().toString().padStart(2, '0');
-        date = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}_${hour}:${minute}:${second}`;
-        
+        const date = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'}).format(new Date());
+                
         const svgs = this.mapContent.querySelectorAll('svg');
         svgs.forEach((svg) => {
             svg.setAttributeNS(null, 'width', width);
@@ -89,26 +86,14 @@ class Map extends Component {
                 canvasContainer.addEventListener('click', clickHandler);
                 document.body.prepend(canvasContainer);
             } else {
-                this.saveScreenshot(canvas.toDataURL(), `MentalModeler__${name || '[name]'}__${author || '[author]'}__${date}`);
+                util.writeLocalFile({
+                    content: canvas, // canvas.toDataURL(),
+                    name: `EcoModeler - ${name || '[name]'} - ${author || '[author]'} - ${date}.png`,
+                    type: 'canvas'
+                });
                 document.body.removeChild(overlay);
             }
         });
-    }
-
-    saveScreenshot(uri, filename) {
-        const link = document.createElement('a');
-        if (typeof link.download === 'string') {
-            link.href = uri;
-            link.download = filename;
-            //Firefox requires the link to be in the body
-            document.body.appendChild(link);
-            //simulate click
-            link.click();
-            //remove the link when done
-            document.body.removeChild(link);
-        } else {
-            window.open(uri);
-        }
     }
 
     onFileReaderLoadEnd = (e) => {
@@ -143,9 +128,9 @@ class Map extends Component {
     }
 
     onFocus = (e) => {
-        console.log('onFocus\n\tthis.file:', this.file, ', this.loadRef:', this.loadRef, '\n\te:', e, ', document.activeElement:', document.activeElement);
+        // console.log('onFocus\n\tthis.file:', this.file, ', this.loadRef:', this.loadRef, '\n\te:', e, ', document.activeElement:', document.activeElement);
         if (this.loadDialogWasLaunched && document.activeElement === this.loadRef) {
-            console.log('\n-----------\nclose dialog\n-------------\n\n')
+            // console.log('\n-----------\nclose dialog\n-------------\n\n')
             this.loadDialogWasLaunched = false;
             window.removeEventListener('focusin', this.onFocus);
             this.setState({
@@ -245,6 +230,12 @@ class Map extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    const info = state.info || {};
+    const {author, name} = info;
+    return {author, name};
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         conceptFocus: (id) => {
@@ -261,4 +252,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-export default connect(null, mapDispatchToProps)(Map);
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

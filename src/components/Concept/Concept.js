@@ -80,7 +80,7 @@ class Concept extends Component {
                 const parentNode = this.root.parentNode;
                 if (parentNode) {
                     const {height: totalHeight} = parentNode.getBoundingClientRect();
-                    console.log('totalHeight:', totalHeight);
+                    // console.log('totalHeight:', totalHeight);
                     this.totalHeight = totalHeight;
                 }
             }
@@ -146,10 +146,10 @@ class Concept extends Component {
     onMouseDown = (e) => {
         const {id, selected, conceptFocus, parentComponent, parentComponentId} = this.props;
         let {x, y} = this.props;
-        if (typeof x === 'undefined' && parentComponent) {
+        if (parentComponent) { // && typeof x === 'undefined') {
             x = parentComponent.x;
         }
-        if (typeof y === 'undefined' && parentComponent) {
+        if (parentComponent) { // && typeof y === 'undefined') {
             y = parentComponent.y;
         }
         const lineButtonMouseDown = e.target === this.lineButtonRef;

@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver';
+
 const LINE_VALUE_INDICATOR_WIDTH = 120;
 const ELEMENT_TYPE = {
     CONCEPT: 'concept',
@@ -58,8 +60,21 @@ const util = {
                 }
                 return {...relationship, influence}
             });
-            return {...concept, relationships: newRelationships, x: parseInt(concept.x, 10), y: parseInt(concept.y, 10)};
-        })
+            // parse x/y position and remove those attributes if this is a property/sub-concept
+            const conceptWithPositionUpdated = {
+                ...concept,
+                x: concept.x && parseInt(concept.x, 10) || 13,
+                y: concept.y && parseInt(concept.y, 10) || 13,
+            };
+            if (concept.parentComponentId) {
+                delete conceptWithPositionUpdated.x;
+                delete conceptWithPositionUpdated.y;
+            };
+            return {
+                ...conceptWithPositionUpdated,
+                relationships: newRelationships,
+            };
+        });
         // console.log('initData, collection:', collection);
         return {
             concepts: {
@@ -136,70 +151,36 @@ const util = {
         };
     },
 
-    writeLocalFile(content, name = 'file') {
-        console.log('writeLocalFile, content:', content);
-        var bb = new Blob([content], { type: 'application/json'}); // 'text/plain' });
-        var a = document.createElement('a');
-        a.download = `${name}.emp`;
-        const objectURL = window.URL.createObjectURL(bb);
-        a.href = objectURL;
-        a.click();
-        window.URL.revokeObjectURL(objectURL);
-        a.remove();
-    },
-
-    writeLocalFileFromServer(content, name = 'file') {
-        // $.ajax({
-        //     type: "POST",
-        //     url: host + "/mm/save",
-        //     crossDomain: true,
-        //     data: this.getXML(),
-        //     contentType: "text/xml",
-        //     dataType: "text",
-        //     success: function(resp) { window.location.href = host + "/mm/download?id=" + resp + "&name=" + fileName; },
-        //     error: function(xhr, exception) { 
-        //         if(xhr.status === 0) {
-        //             console.log("No connection. Server is down or you have network issues.");
-        //         } else if(xhr.status === 404) {
-        //             console.log("Requested URI not found. [404]");
-        //         } else if(xhr.status === 500) {
-        //             console.log("Internal server error. [500]");
-        //         } else if(exception === "timeout") {
-        //             console.log("Request timed out. Please try again.");
-        //         } else if(exception === "abort") {
-        //             console.log("Request aborted. Please try again.");
-        //         } else {
-        //             console.log("Uncaught error.\n" + xhr.responseText);
-        //         }
-        //     }
-        // });
-
-        // async function postData(url = '', _content = '') {
-        //     // Default options are marked with *
-        //     const response = await fetch(url, {
-        //         method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        //         mode: 'cors', // no-cors, *cors, same-origin
-        //         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        //         credentials: 'same-origin', // include, *same-origin, omit
-        //         headers: {
-        //             // 'Content-Type': "text/xml"
-        //             'Content-Type': "text/plain"
-        //             // 'Content-Type': 'application/json'
-        //             // 'Content-Type': 'application/x-www-form-urlencoded',
-        //         },
-        //         redirect: 'follow', // manual, *follow, error
-        //         referrerPolicy: 'unsafe-url', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        //         body: _content // body data type must match "Content-Type" header
-        //     });
-        //     console.log('url:', url, ', response:', response);
-        //     return response; // parses JSON response into native JavaScript objects
-        // }
-        // var host = "http://45.55.174.38";
-        
-        // postData(`${host}/mm/save`, content)
-        //     .then(data => {
-        //         console.log('write response, data:',data); // JSON data parsed by `data.json()` call
-        //     });
+    writeLocalFile({content, name, type}) {
+        try {
+            name = name || `[name].${type === 'json' ? '.emp' : '.png'}`;
+            // console.log('writeLocalFile, content:', content);
+            const link = document.createElement('a');
+            let url = content;
+            if (type === 'json') {
+                var bb = new Blob([content], { type: 'application/json'}); // 'text/plain' });
+                url = window.URL.createObjectURL(bb);
+            } else if (type === 'canvas') {
+                url = content.toDataURL();
+            }
+            if (typeof link.download === 'string') {
+                // link.href = url;
+                // link.download = name
+                // document.body.appendChild(link);
+                // link.click();
+                saveAs(url, name);
+            } else {
+                if (type === 'json') {
+                    window.open(url);
+                } else {
+                    alert('Image download not supported in your current browser. Please use a modern browser.');
+                }
+            }
+            link.remove();
+            type === 'json' && url && window.URL.revokeObjectURL(url);
+        } catch (e) {
+            console.log('ERROR - writeLocalFile\ne:', e, '\ntype:', type, ', name:', name, '\ncontent:', content);
+        }
     },
     
     getConceptsPosition(collection) {

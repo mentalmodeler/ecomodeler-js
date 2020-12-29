@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
+import html2canvas from 'html2canvas';
+import 'core-js';
 
 // import registerServiceWorker from './registerServiceWorker'; 
 import allReducers from './reducers';
@@ -15,14 +17,6 @@ import simple from './data/simple.mmp'; // eslint-disable-line
 import './index.css';
 
 const TEST_EMP = require('./data/test.emp.json');
-
-//--------------
-// polyfills
-//--------------
-if (!Element.prototype.matches) {
-    Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
-}
-
 const params = new URLSearchParams(document.location.search.substring(1));
 const initialize = true; // !!params.has('init') && document.location.hostname === 'localhost';
 
@@ -56,13 +50,15 @@ function load(json) {
 }
 
 function save() {
-    try {
-        const data =  util.exportData(store.getState());
-        console.log('\n\n---- MentalModelerConceptMap > save\ndata.js:', data.js, '\n\n');
-        util.writeLocalFile(data.json, data.js.info.name);
-    } catch (e) {
-        console.error('ERROR - ConceptMap > save, e:', e);
-    }
+    const data =  util.exportData(store.getState());
+    const info = data.js.info;
+    const {author, name} = info;
+    // console.log('\n\n---- MentalModelerConceptMap > save\ndata.js:', data.js, '\n\n');
+    util.writeLocalFile({
+        content: data.json,
+        name: `${name || '[name]'} - ${author || '[author]'}.emp`,
+        type: 'json'
+    });
 }
 
 function render(target = '#root') {
@@ -140,6 +136,7 @@ let publicApi = {
 
 // Expose to global scope
 if (typeof window !== 'undefined') {
+    window.html2canvas = html2canvas;
     window.MentalModelerConceptMap = publicApi;
 }
 

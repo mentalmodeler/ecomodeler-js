@@ -79,7 +79,7 @@ const propertyDelete = (id, parentComponentId) => {
 };
 
 const relationshipFocus = (influencerId, influenceeId) => {
-    console.log('Action > RELATIONSHIP_FOCUS');
+    // console.log('Action > RELATIONSHIP_FOCUS');
     return {
         type: 'RELATIONSHIP_FOCUS',
         influencerId,
@@ -148,6 +148,16 @@ const relationshipChangeLabel = (influencerId, influenceeId, value) => {
     }
 }
 
+const relationshipChangeNotes = (influencerId, influenceeId, value) => {
+    console.log('Actions > relationshipChangeNotes, value:', value);
+    return {
+        type: 'RELATIONSHIP_CHANGE_NOTES',
+        influencerId,
+        influenceeId,
+        value
+    }
+}
+
 const relationshipDelete = (influencerId, influenceeId) => {
     return {
         type: 'RELATIONSHIP_DELETE',
@@ -205,6 +215,7 @@ export {
     relationshipAdd,
     relationshipChangeInfluence,
     relationshipChangeLabel,
+    relationshipChangeNotes,
     relationshipDelete,
     modelLoad,
     viewFilterChange,
