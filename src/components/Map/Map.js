@@ -39,7 +39,7 @@ class Map extends Component {
 
     onTakeScreenshot = () => {
         if (typeof window.html2canvas === 'undefined') {
-            console.error('ERROR: html2canvas is not defined (onTakeScreenshot)');
+            alert.error('ERROR - html2canvas is not defined (onTakeScreenshot)');
             return
         }
         
@@ -96,27 +96,28 @@ class Map extends Component {
         });
     }
 
-    onFileReaderLoadEnd = (e) => {
-        const result = e.target.result;
-        if (window.MentalModelerConceptMap) {
-            window.MentalModelerConceptMap.load(result);
-        } else {
-            console.error('ERROR - window.MentalModelerConceptMap is undefined');
-        }
-    }
+    // onFileReaderLoadEnd = (e) => {
+    //     const result = e.target.result;
+    //     if (window.MentalModelerConceptMap) {
+    //         window.MentalModelerConceptMap.load(result);
+    //     } else {
+    //         console.error('ERROR - window.MentalModelerConceptMap is undefined');
+    //     }
+    // }
 
     handleInputChange = (e) => {
         console.log('handleInputChange, e:', e);
-        const file = e.target.files[0];
         this.setState({
             isModalOpen: false,
             modalMode: 'load',
         });
-        if (file) {
-            const fileReader = new FileReader();
-            fileReader.onloadend = this.onFileReaderLoadEnd;
-            fileReader.readAsText(file);
-        }
+        util.loadFile(e);
+        // const file = e.target.files[0];
+        // if (file) {
+        //     const fileReader = new FileReader();
+        //     fileReader.onloadend = this.onFileReaderLoadEnd;
+        //     fileReader.readAsText(file);
+        // }
     }
 
     setInputRef = (ref) => {

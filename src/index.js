@@ -9,18 +9,16 @@ import 'core-js';
 import allReducers from './reducers';
 import App from './App';
 import util from './utils/util';
+import {mmpXMLToJSON} from './utils/xml2json';
 import {modelLoad} from './actions/index';
 
-import fire from './data/fire.mmp'; // eslint-disable-line
-import simple from './data/simple.mmp'; // eslint-disable-line
+import fire from './data/fire.mmp.json'; // eslint-disable-line
+import simple from './data/simple.mmp.json'; // eslint-disable-line
+import test_emp from './data/test.emp.json'; // eslint-disable-line
 
 import './index.css';
 
-const TEST_EMP = require('./data/test.emp.json');
 const params = new URLSearchParams(document.location.search.substring(1));
-const initialize = true; // !!params.has('init') && document.location.hostname === 'localhost';
-
-// let loadTimeoutId;
 let store = createStore(allReducers, {});
 
 function loadModel(state) {
@@ -28,24 +26,28 @@ function loadModel(state) {
     store.dispatch(modelLoad(state));
 }
 
-function load(json) {
-    let data = json;
+function load(result) {
+    let data = result;
     try {
         if (typeof data === 'string') {
-            data = JSON.parse(data);
-        }        
-        data = util.initData(data);
-        // clearTimeout(loadTimeoutId);
-        // loadTimeoutId = setTimeout(() => {
-        //     loadTimeoutId = undefined;
-        //     loadModel(data);
-        // }, 0);
-        // loadModel({});
-        loadModel({});
-        loadModel(data);
-            
+            data = result.indexOf('<?xml') > -1
+                ? mmpXMLToJSON(result)
+                : JSON.parse(result)
+            data = util.initData(data);
+            // clearTimeout(loadTimeoutId);
+            // loadTimeoutId = setTimeout(() => {
+            //     loadTimeoutId = undefined;
+            //     loadModel(data);
+            // }, 0);
+            // loadModel({});
+            loadModel({});
+            loadModel(data);
+        } else {
+            console.log('result:', result);
+            alert('ERROR - file loaded is not a string\nfile: '.concat(result.toString()));
+        }
     } catch (e) {
-        console.error('ERROR - ConceptMap > load, e:', e);
+        alert('ERROR - load failed\n'.concat(e));
     }
 }
 
@@ -116,12 +118,8 @@ function screenshot () {
     }
 }
 
-if (initialize) {
-    render();
-    // load(simple);
-    // load(fire);
-    load(TEST_EMP);
-}
+render();
+// load(JSON.stringify(test_emp));
 
 // Define public API
 let publicApi = {

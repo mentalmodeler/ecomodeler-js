@@ -45,10 +45,20 @@ const updateCollectionConcept = function (collection, id, updatedProps = {}) {
 };
 
 const removeConceptFromCollection = function (collection, removeId) {
+    // remove any properties and their relationships
+    collection = removePropertiesFromConcept(collection, removeId);
     // remove any relationships pointing to the removed concept
     return collection.map((concept) => (
         {...concept, relationships: removeRelationships(removeId, concept.relationships)}
     )).filter((concept) => (concept.id !== removeId));
+};
+
+const removePropertiesFromConcept = function (collection, removeId) {
+    const {properties = []} = util.findConcept(collection, removeId) || {properties: []};
+    properties.forEach((propertyId) => {
+        collection = removeConceptFromCollection(collection, propertyId);
+    }); 
+    return collection;
 };
 
 const removeRelationships = function (influenceeId, relationships = []) {

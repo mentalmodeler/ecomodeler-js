@@ -183,6 +183,22 @@ const util = {
         }
     },
     
+    loadFile(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const fileReader = new FileReader();
+            fileReader.onloadend = (e) => {
+                const result = e.target.result;
+                if (window.MentalModelerConceptMap) {
+                    window.MentalModelerConceptMap.load(result);
+                } else {
+                    alert.error('ERROR - window.MentalModelerConceptMap is undefined');
+                }
+            };
+            fileReader.readAsText(file);
+        }
+    },
+
     getConceptsPosition(collection) {
         const positions = {};
         collection.forEach((concept) => {
