@@ -14,11 +14,13 @@ import {modelLoad} from './actions/index';
 
 import fire from './data/fire.mmp.json'; // eslint-disable-line
 import simple from './data/simple.mmp.json'; // eslint-disable-line
-import test_emp from './data/test.emp.json'; // eslint-disable-line
+import test from './data/test.emp.json'; // eslint-disable-line
+import lines from './data/lines.emp.json'; // eslint-disable-line
 
 import './index.css';
 
 const params = new URLSearchParams(document.location.search.substring(1));
+const loadOnInit = !!params.has('init') && document.location.hostname === 'localhost';
 let store = createStore(allReducers, {});
 
 function loadModel(state) {
@@ -56,11 +58,12 @@ function save() {
     const info = data.js.info;
     const {author, name} = info;
     // console.log('\n\n---- MentalModelerConceptMap > save\ndata.js:', data.js, '\n\n');
-    util.writeLocalFile({
-        content: data.json,
-        name: `${name || '[name]'} - ${author || '[author]'}.emp`,
-        type: 'json'
-    });
+    console.log('data.json:', data.json);
+    // util.writeLocalFile({
+    //     content: data.json,
+    //     name: `${name || '[name]'} - ${author || '[author]'}.emp`,
+    //     type: 'json'
+    // });
 }
 
 function render(target = '#root') {
@@ -119,7 +122,9 @@ function screenshot () {
 }
 
 render();
-// load(JSON.stringify(test_emp));
+if (loadOnInit) {
+    load(JSON.stringify(lines));
+}
 
 // Define public API
 let publicApi = {
@@ -137,7 +142,3 @@ if (typeof window !== 'undefined') {
     window.html2canvas = html2canvas;
     window.MentalModelerConceptMap = publicApi;
 }
-
-// document.body.addEventListener('click', () => {
-//     console.log('screenshot:', screenshot());
-// });

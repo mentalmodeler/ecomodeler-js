@@ -12,7 +12,6 @@ import {
 } from './ConceptDisplays';
 
 import {
-    // conceptAdd,
     propertyAdd,
     propertyDelete,
     conceptMove,
@@ -96,7 +95,7 @@ class Concept extends Component {
             this.autoExpand();
         }
         if (!parentComponentId && properties.length !== prevProps.properties.length) {
-            console.log('updateHeight');
+            // console.log('updateHeight');
             this.debouncedConceptChange();
         }
     }
@@ -198,18 +197,19 @@ class Concept extends Component {
         const dragId = parentComponentId || id;
         // console.log('dragId:', dragId,', newX:', newX, ', newY:', newY);
         if (lineMouseDown) {
-            relationshipDrawTemp(dragId, true, this.xBeforeDrag, this.yBeforeDrag, newX, newY, this.width, this.height, this.centerClickDiffX, this.centerClickDiffY);
+            relationshipDrawTemp(id /* dragId */, true, this.xBeforeDrag, this.yBeforeDrag, newX, newY, this.width, this.height, this.centerClickDiffX, this.centerClickDiffY);
+            // relationshipDrawTemp(id, true, this.xBeforeDrag, this.yBeforeDrag, newX, newY, this.width, this.height, this.centerClickDiffX, this.centerClickDiffY);
         } else {
             conceptMove(dragId, newX, newY);
         }
     }
 
     onMouseUp = (e) => {
-        const {id, relationshipDrawTemp, relationshipAdd, tempTarget} = this.props;
+        const {id, relationshipDrawTemp, relationshipAdd, tempTarget, isIntraConceptRelationship} = this.props;
         const {lineMouseDown} = this.state;
         this.toggleDragHandlers(false, e);
         if (lineMouseDown) {
-            if (!!tempTarget && id !== tempTarget) { // if (tempTarget !== null && id !== tempTarget) {
+            if (!!tempTarget && id !== tempTarget) { // && !isIntraConceptRelationship) { // if (tempTarget !== null && id !== tempTarget) {
                 relationshipAdd(id, tempTarget);
             }
             this.centerClickDiffX = 0;
@@ -222,14 +222,14 @@ class Concept extends Component {
     }
 
     onMouseOver = (e) => {
-        const {id, hasTempRelationship, relationshipSetTempTarget} = this.props;
+        const {id, hasTempRelationship, isIntraConceptRelationship, relationshipSetTempTarget} = this.props;
         if (hasTempRelationship) {
             relationshipSetTempTarget(id)
         }
     }
 
     onMouseOut = (e) => {
-        const {hasTempRelationship, relationshipSetTempTarget} = this.props;
+        const {hasTempRelationship, isIntraConceptRelationship, relationshipSetTempTarget} = this.props;
         if (hasTempRelationship) {
             relationshipSetTempTarget(null)
         }
@@ -270,7 +270,7 @@ class Concept extends Component {
     }
 
     render() {
-        const {id, parentComponentId, selected, selectedRelationship, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter, parentComponent, properties} = this.props; // eslint-disable-line
+        const {id, parentComponentId, selected, selectedRelationship, isIntraConceptRelationship, group = '0', hasTempRelationship, isTempRelationship, isExcludedByFilter, parentComponent, properties} = this.props; // eslint-disable-line
         const { value, lineMouseDown } = this.state;
         const isSub = !!parentComponentId;
         const groupNum = group || '0';
@@ -278,6 +278,7 @@ class Concept extends Component {
             'Concept--focused': selected,
             'Concept--line-mouse-down': lineMouseDown,
             'Concept--temp-relationship-exists': hasTempRelationship,
+            'Concept--temp-relationship-is-intraconcept': isIntraConceptRelationship,
             'Concept--is-temp-relationship': isTempRelationship,
             'Concept--excluded-by-filter': isExcludedByFilter
         });

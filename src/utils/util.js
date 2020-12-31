@@ -309,55 +309,96 @@ const util = {
         return Math.max(Math.min(value, max), min);
     },
 
-    getParentAndPropertyIds({collection, conceptId, concept}) {
-        const parentConcept = util.getParentConcept({collection, conceptId, concept});
-        return [parentConcept.id, ...(parentConcept && parentConcept.properties || [])]
+    // getParentAndPropertyIds({collection, conceptId, concept}) {
+    //     const parentConcept = util.getParentConcept({collection, conceptId, concept});
+    //     return [parentConcept.id, ...(parentConcept && parentConcept.properties || [])]
+    // },
+
+    getParentAndProperties({collection, conceptId, concept, idsOnly = true}) {
+        // TODO Optimize to use concept ref from args instead of concept id
+        const conceptParent = util.getParentConcept({collection, conceptId}) || {};
+        const conceptPropertiesIds = conceptParent && conceptParent.properties || [];
+        // safety check with Array.filter might be overkill
+        return idsOnly
+            ? [conceptParent.id, ...conceptPropertiesIds] // .filter((id) => !!id)
+            : [conceptParent, ...conceptPropertiesIds.map((id) => util.findConcept(collection, id))]; // .filter((_concept) => !!_concept && !!_concept.id);
     },
 
-    getAllRelationships({collection, conceptId, concept}) {
+    isIntraConceptRelationship({collection, tempRelationship, tempTarget}) {
+        return tempTarget && tempRelationship && tempRelationship.id
+            ? util.getParentAndProperties({collection, conceptId: tempRelationship.id})
+                  .indexOf(tempTarget) > -1
+            : false;
+
+        // more verbose new way
+        // if (tempTarget && tempRelationship && tempRelationship.id) {
+        //     const conceptIds = util.getParentAndProperties({collection, conceptId: tempRelationship.id});
+        //     return conceptIds.indexOf(tempTarget) > -1
+        // }
+        // return false;
+
+        // old way
+        // const tempRelationshipId = tempRelationship && tempRelationship.id;
+        // const {properties = []} = util.findConcept(collection, tempRelationshipId) || {};
+        // const conceptIds = [tempRelationshipId, ...properties];
+        // return conceptIds.indexOf(tempTarget) > -1;        
+    },
+
+    getAllRelationships({collection, conceptId, concept, idsOnly = false}) {
         // TODO Optimize to use concept ref from args instead of concept id
-        const conceptParent = util.getParentConcept({collection, conceptId});
-        const conceptParentRelationships = conceptParent && conceptParent.relationships || [];
-        const conceptParentPropertiesRelationships = (conceptParent && conceptParent.properties || []).flatMap((propertyId) => {
-            const property = util.findConcept(collection, propertyId);
-            return property.relationships || []
-        });
-        return [...conceptParentRelationships, ...conceptParentPropertiesRelationships];
+        return util.getParentAndProperties({collection, conceptId, idsOnly: false})
+            .flatMap((_concept) => {
+                const relationships = (_concept && _concept.relationships) || [];
+                return idsOnly
+                    ? relationships.map((relationship) => relationship.id)
+                    : relationships;
+            });
+        
+        // old way
+        // const conceptParent = util.getParentConcept({collection, conceptId});
+        // const conceptParentRelationships = conceptParent && conceptParent.relationships || [];
+        // const conceptParentPropertiesRelationships = (conceptParent && conceptParent.properties || []).flatMap((propertyId) => {
+        //     const property = util.findConcept(collection, propertyId);
+        //     return property.relationships || []
+        // });
+        // return [...conceptParentRelationships, ...conceptParentPropertiesRelationships];
     },
 
     alreadyHasRelationship({collection, influencerId, influenceeId, influencer, influencee}) {
         // TODO Optimize to use concept ref from args instead of concept id
-        const allInfluencerRelationships = util.getAllRelationships({
+        const allInfluencerStackRelationships = util.getAllRelationships({
             collection,
             conceptId: influencerId,
             concept: influencer
         });
-        const allInfluenceeIds = util.getParentAndPropertyIds({
+        const allInfluenceeStackIds = util.getParentAndProperties({
             collection,
             conceptId: influenceeId,
             concept: influencee
         });
-        // console.log('alreadyHasRelationship:', alreadyHasRelationship, '\n-----\ninfluencerId:', influencerId, '\n\tallInfluencerRelationships:', allInfluencerRelationships, '\ninfluenceeId:', influenceeId, '\n\tallInfluenceeIds:', allInfluenceeIds, '\n\n');
-        return allInfluencerRelationships.some((relationship) => (
-            allInfluenceeIds.indexOf(relationship.id > -1)
-        ));
+        const alreadyHasRelationship = allInfluencerStackRelationships.some((relationship) => {
+            const alreadyHas = allInfluenceeStackIds.indexOf(relationship.id) > -1;
+            alreadyHas && console.log('--- has relationship with ', relationship.id);
+            return alreadyHas;
+        });
+        console.log('alreadyHasRelationship >', alreadyHasRelationship, '\n\tinfluencerId:', influencerId, ', influenceeId:', influenceeId);
+        return alreadyHasRelationship;
     },
 
     makesDualRelationship({collection, influencerId, influenceeId, influencer, influencee}) {
         // TODO Optimize to use concept ref from args instead of concept id
-        const allInfluenceeRelationships = util.getAllRelationships({
+        const allInfluenceeStackRelationships = util.getAllRelationships({
             collection,
             conceptId: influenceeId
         });
-        const allInfluencerIds = util.getParentAndPropertyIds({
+        const allInfluencerStackIds = util.getParentAndProperties({
             collection,
             conceptId: influencerId,
             concept: influencer
         });
-        const relationship = allInfluenceeRelationships['find']((_relationship) => (
-            allInfluencerIds.indexOf(_relationship.id) > -1
+        const relationship = allInfluenceeStackRelationships.find((_relationship) => (
+            allInfluencerStackIds.indexOf(_relationship.id) > -1
         ));
-        // console.log('relationship:', relationship, '\nallInfluencerIds:', allInfluencerIds, '\nallInfluenceeRelationships:', allInfluenceeRelationships, '\n\n');
         return {
             makesDualRelationship: !!relationship,
             otherRelationship: relationship
@@ -446,9 +487,6 @@ const util = {
             associatedData
         };
     },
-    isValidRelationship({id, parentComponent, subconcepts, targetId}) {
-
-    }
 };
 
 export {

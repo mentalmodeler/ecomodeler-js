@@ -1,0 +1,163 @@
+{
+    "concepts": [
+        {
+            "id": "u9E9-iOqF-Wvoi-y2Nh",
+            "name": "u9E9-iOqF-Wvoi-y2Nh",
+            "notes": "",
+            "group": 0,
+            "x": 120,
+            "y": 98,
+            "relationships": [],
+            "properties": [
+                {
+                    "id": "Uxdu-mA22-1TZq-eBK6",
+                    "name": "Uxdu-mA22-1TZq-eBK6",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "u9E9-iOqF-Wvoi-y2Nh",
+                    "relationships": []
+                },
+                {
+                    "id": "CrPb-F9GR-ghxd-Subj",
+                    "name": "CrPb-F9GR-ghxd-Subj",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "u9E9-iOqF-Wvoi-y2Nh",
+                    "relationships": []
+                },
+                {
+                    "id": "zvni-RRfV-kLqT-Ofp7",
+                    "name": "zvni-RRfV-kLqT-Ofp7",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "u9E9-iOqF-Wvoi-y2Nh",
+                    "relationships": []
+                },
+                {
+                    "id": "WXQn-Fnrm-jb3X-3x3W",
+                    "name": "WXQn-Fnrm-jb3X-3x3W",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "u9E9-iOqF-Wvoi-y2Nh",
+                    "relationships": []
+                },
+                {
+                    "id": "vl6P-NWdq-bONH-LmOC",
+                    "name": "vl6P-NWdq-bONH-LmOC",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "u9E9-iOqF-Wvoi-y2Nh",
+                    "relationships": []
+                }
+            ]
+        },
+        {
+            "id": "Mi8P-Y5wd-EqDi-9iww",
+            "name": "Mi8P-Y5wd-EqDi-9iww",
+            "notes": "",
+            "group": 0,
+            "x": 513,
+            "y": 111,
+            "relationships": [],
+            "properties": [
+                {
+                    "id": "pv7j-jBoa-LesO-dpZC",
+                    "name": "pv7j-jBoa-LesO-dpZC",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "Mi8P-Y5wd-EqDi-9iww",
+                    "relationships": []
+                },
+                {
+                    "id": "a2YH-Nzfc-w7As-s2y2",
+                    "name": "a2YH-Nzfc-w7As-s2y2",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "Mi8P-Y5wd-EqDi-9iww",
+                    "relationships": []
+                },
+                {
+                    "id": "uh0A-56rz-Iyie-XeYK",
+                    "name": "uh0A-56rz-Iyie-XeYK",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "Mi8P-Y5wd-EqDi-9iww",
+                    "relationships": []
+                },
+                {
+                    "id": "N5Yt-klT7-x9Qe-qAPN",
+                    "name": "N5Yt-klT7-x9Qe-qAPN",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "Mi8P-Y5wd-EqDi-9iww",
+                    "relationships": []
+                },
+                {
+                    "id": "AVAE-9Xma-c2ag-Cnd6",
+                    "name": "AVAE-9Xma-c2ag-Cnd6",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "Mi8P-Y5wd-EqDi-9iww",
+                    "relationships": []
+                }
+            ]
+        },
+        {
+            "id": "qvdp-nATw-pyB4-7qiT",
+            "name": "qvdp-nATw-pyB4-7qiT",
+            "notes": "",
+            "group": 0,
+            "x": 347,
+            "y": 421,
+            "relationships": [],
+            "properties": [
+                {
+                    "id": "QG3n-BlZe-WIQN-OKAn",
+                    "name": "QG3n-BlZe-WIQN-OKAn",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "qvdp-nATw-pyB4-7qiT",
+                    "relationships": []
+                },
+                {
+                    "id": "SCsH-VDH8-u1xS-JnPw",
+                    "name": "SCsH-VDH8-u1xS-JnPw",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "qvdp-nATw-pyB4-7qiT",
+                    "relationships": []
+                },
+                {
+                    "id": "JQyt-gibv-iP3T-i7E5",
+                    "name": "JQyt-gibv-iP3T-i7E5",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "qvdp-nATw-pyB4-7qiT",
+                    "relationships": []
+                },
+                {
+                    "id": "OOUF-wN1H-cOZG-1FFN",
+                    "name": "OOUF-wN1H-cOZG-1FFN",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "qvdp-nATw-pyB4-7qiT",
+                    "relationships": []
+                },
+                {
+                    "id": "LR8L-0AmY-ipMC-5Rgc",
+                    "name": "LR8L-0AmY-ipMC-5Rgc",
+                    "notes": "",
+                    "group": 0,
+                    "parentComponentId": "qvdp-nATw-pyB4-7qiT",
+                    "relationships": []
+                }
+            ]
+        }
+    ],
+    "groupNames": { "0": "", "1": "", "2": "", "3": "", "4": "", "5": "" },
+    "info": {
+        "author": "jonathan",
+        "name": "lines",
+        "date": "Thu Dec 31 2020 15:28:31 GMT-0600 (Central Standard Time)"
+    }
+}

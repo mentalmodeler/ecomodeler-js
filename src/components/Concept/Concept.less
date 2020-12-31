@@ -255,14 +255,35 @@
                 transform: none;
             }
 
-            > .Concept__bg--group-0 { .mixin-selected-control-bg(@concept-0-outline); }
-            > .Concept__bg--group-1 { .mixin-selected-control-bg(@concept-1-outline); }
-            > .Concept__bg--group-2 { .mixin-selected-control-bg(@concept-2-outline); }
-            > .Concept__bg--group-3 { .mixin-selected-control-bg(@concept-3-outline); }
-            > .Concept__bg--group-4 { .mixin-selected-control-bg(@concept-4-outline); }
-            > .Concept__bg--group-5 { .mixin-selected-control-bg(@concept-5-outline); }
+            &:not(.Concept--temp-relationship-is-intraconcept) {
+                > .Concept__bg--group-0 { .mixin-selected-control-bg(@concept-0-outline); }
+                > .Concept__bg--group-1 { .mixin-selected-control-bg(@concept-1-outline); }
+                > .Concept__bg--group-2 { .mixin-selected-control-bg(@concept-2-outline); }
+                > .Concept__bg--group-3 { .mixin-selected-control-bg(@concept-3-outline); }
+                > .Concept__bg--group-4 { .mixin-selected-control-bg(@concept-4-outline); }
+                > .Concept__bg--group-5 { .mixin-selected-control-bg(@concept-5-outline); }
+                > .Concept__bg--group-0-sub { .mixin-selected-control-bg(@concept-0-outline); }
+                > .Concept__bg--group-1-sub { .mixin-selected-control-bg(@concept-1-outline); }
+                > .Concept__bg--group-2-sub { .mixin-selected-control-bg(@concept-2-outline); }
+                > .Concept__bg--group-3-sub { .mixin-selected-control-bg(@concept-3-outline); }
+                > .Concept__bg--group-4-sub { .mixin-selected-control-bg(@concept-4-outline); }
+                > .Concept__bg--group-5-sub { .mixin-selected-control-bg(@concept-5-outline); }
+            }
+
+            &.Concept--temp-relationship-is-intraconcept {
+                transform: none;
+            }
         }
     }
+
+    // .Concept--temp-relationship-exists.Concept--is-temp-relationship:hover {
+    //     .Concept__button--top,
+    //     .Concept__button--left,
+    //     .Concept__button--right {
+    //         transform: none;
+    //     }
+    //     transform: none;
+    // }
 
     .Concept__textarea::placeholder {
         color: @placeholder-color !important;

@@ -410,23 +410,44 @@
 .MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover .Concept__button--right {
   transform: none;
 }
-.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-0 {
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-0 {
   box-shadow: inset 0 0 0 3px #d44c36, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
-.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-1 {
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-1 {
   box-shadow: inset 0 0 0 3px #E57429, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
-.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-2 {
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-2 {
   box-shadow: inset 0 0 0 3px #2971E5, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
-.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-3 {
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-3 {
   box-shadow: inset 0 0 0 3px #E5E529, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
-.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-4 {
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-4 {
   box-shadow: inset 0 0 0 3px #E529E5, 0 3px 8px rgba(0, 0, 0, 0.15);
 }
-.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover > .Concept__bg--group-5 {
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-5 {
   box-shadow: inset 0 0 0 3px #14D192, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-0-sub {
+  box-shadow: inset 0 0 0 3px #d44c36, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-1-sub {
+  box-shadow: inset 0 0 0 3px #E57429, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-2-sub {
+  box-shadow: inset 0 0 0 3px #2971E5, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-3-sub {
+  box-shadow: inset 0 0 0 3px #E5E529, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-4-sub {
+  box-shadow: inset 0 0 0 3px #E529E5, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover:not(.Concept--temp-relationship-is-intraconcept) > .Concept__bg--group-5-sub {
+  box-shadow: inset 0 0 0 3px #14D192, 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+.MentalMapper .Concept--temp-relationship-exists:not(.Concept--is-temp-relationship):hover.Concept--temp-relationship-is-intraconcept {
+  transform: none;
 }
 .MentalMapper .Concept__textarea::placeholder {
   color: #9b9c9d !important;

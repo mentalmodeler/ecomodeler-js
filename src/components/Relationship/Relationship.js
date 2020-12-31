@@ -63,7 +63,7 @@ class Relationship extends Component {
 
     onClick = (e) => {
         const {influencerId, influenceeId, relationshipFocus} = this.props;
-        console.log('relationship, onClick')
+        console.log('Relationship > onClick');
         relationshipFocus(influencerId, influenceeId);
     }
 

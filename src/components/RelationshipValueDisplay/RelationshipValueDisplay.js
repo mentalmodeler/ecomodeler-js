@@ -5,7 +5,6 @@ import debounce from 'lodash.debounce';
 import ReactDOM from 'react-dom';
 
 import {
-    // relationshipChangeInfluence,
     relationshipChangeLabel,
     relationshipDelete,
     relationshipFocus
@@ -25,12 +24,6 @@ class RelationshipValueDisplay extends Component {
         this.inputRef = React.createRef();
     }
     
-    // componentDidMount = () => {
-    //     if (this.state.expanded || this.state.editing) {
-    //         this.toggleWindowMouseDownListener(true);
-    //     }
-    // }
-
     componentDidUpdate(prevProps, prevState) {
         // TODO: handle prop label and temp label state
         // const stateChanges = {};
@@ -55,29 +48,6 @@ class RelationshipValueDisplay extends Component {
         }
     }
 
-    // toggleWindowMouseDownListener = (enable) => {
-    //     if (typeof window !== 'undefined') {
-    //         window.removeEventListener('mousedown', this.handleWindowMouseDown);
-    //         if (enable) {
-    //             window.addEventListener('mousedown', this.handleWindowMouseDown);
-    //         }
-    //     }
-    // }
-
-    // handleWindowMouseDown = (e) => {
-    //     const expandedOrEditing = this.state.expanded || this.state.editing;
-    //     const rootContainsTarget = this.root && this.root.contains(e.target);
-    //     const rootIsTarget = this.root && this.root === e.target;
-    //     console.log('handleWindowMouseDown\n\texpandedOrEditing:', expandedOrEditing, '\n\trootContainsTarget:', rootContainsTarget, ', rootIsTarget:', rootIsTarget, '\n\tthis.root:', this.root, ', e.target:', e.target);
-    //     if (expandedOrEditing && this.root && !this.root.contains(e.target)) {
-    //         this.toggleWindowMouseDownListener(false);
-    //         this.setState({
-    //             expanded: false,
-    //             editing: false
-    //         });
-    //     }
-    // }
-
     onChangeDescriptionLabel = (e) => {
         const {descriptionLabel} = this.state;
         const value = e.target.value;
@@ -93,10 +63,6 @@ class RelationshipValueDisplay extends Component {
     setTextValue = () => {
         const {descriptionLabel} = this.state;
         const {influencerId, influenceeId, relationshipChangeLabel} = this.props;
-        // this.setState({
-        //     descriptionLabel: descriptionLabel,
-        //     editing: false
-        // });
         relationshipChangeLabel(influencerId, influenceeId, descriptionLabel);
     }
 
@@ -109,7 +75,11 @@ class RelationshipValueDisplay extends Component {
     }
 
     onClickDelete = (e) => {
+        // console.log('RelationshipValueDisplay > onClickDelete');
         const {influencerId, influenceeId, relationshipDelete} = this.props;
+        // prevent onClick from being handled, which will 
+        // try to set focus to just deleted relationship
+        e.stopPropagation();
         relationshipDelete(influencerId, influenceeId);
     }
 
@@ -119,54 +89,26 @@ class RelationshipValueDisplay extends Component {
                 editing: true,
                 expanded: false
             });
-            // this.toggleWindowMouseDownListener(true);
         }
     }
 
     onClick = (e) => {
+        // console.log('RelationshipValueDisplay > onClick');
         const {influencerId, influenceeId, relationshipFocus} = this.props;
         relationshipFocus(influencerId, influenceeId);
     }
 
     onMouseEnter = (e) => {
-        // const {influencerId, influenceeId, relationshipFocus} = this.props;
-        // relationshipFocus(influencerId, influenceeId);
-        // console.log('mouseEnter');
         this.toggleMenu(true);
-        // this.expandMenu();
     }
 
     onMouseLeave = (e) => {
         // console.log('mouseLeave');
         this.toggleMenu(false);
-        // if (this.state.expanded) {
-        //     this.setState({
-        //         expanded: false
-        //     });
-        //     // this.toggleWindowMouseDownListener(false);
-        // }
     }
     
     toggleMenu = (show) => this.state.expanded !== show && this.setState({expanded: show});
     
-    // expandMenu = () => {
-    //     if (!this.state.expanded) {
-    //         this.setState({
-    //             expanded: true
-    //         });
-    //         // this.toggleWindowMouseDownListener(true);
-    //     }
-    // }
-
-    // setRef = (ref) => {
-    //     this.root = ref;
-
-    //     const textArea = ref && this.root.querySelector("textarea");
-    //     if (textArea) {
-    //         textArea.focus();
-    //     }
-    // }
-
     render = () => {
         const {expanded, descriptionLabel, editing} = this.state;
         const {erX, erY, eeX, eeY} = this.props;
@@ -180,10 +122,6 @@ class RelationshipValueDisplay extends Component {
             const textAngle = (angle >= -90 && angle <= 90) ? angle : 180 + angle;
             const x = Math.round(((erX - cx) * Math.cos(angle * Math.PI / 180) + (erY - cy) * Math.sin(angle * Math.PI / 180)) + cx);
             const y = Math.round((-(erX - cx) * Math.sin(angle * Math.PI / 180) + (erY - cy) * Math.cos(angle * Math.PI / 180)) + cy);
-            // const expandedClassNames = classnames('relationship-value-display', {
-            //     'relationship-value-display--expanded': expanded,
-            //     'relationship-value-display__expanded': expanded
-            // });
             const textBoxStyle = { 
                 left: `${x}px`, 
                 top: `${y - textPadding / 2}px`, 
@@ -199,29 +137,21 @@ class RelationshipValueDisplay extends Component {
 
             return (
                 <div 
-                    // className="relationship-value-display__wrapper"
                     className="relationship-value-display"
                     onMouseEnter={this.onMouseEnter}
                     onMouseLeave={this.onMouseLeave}
                     onClick={this.onClick}
                 >
                     <div 
-                        key="descriptionLabel" 
-                        // className="relationship-value-display relationship-value-display__text"
                         className="relationship-value-display__text" 
                         style={textBoxStyle}
-                        // ref={this.setRef}
                     >
                         {descriptionLabel ? descriptionLabel : 'Enter line description'}
                     </div>
                     {expanded && 
                         <div 
-                            key="relationship-value-edit-delete"
-                            // className={expandedClassNames}
-                            // className="relationship-value-display relationship-value-display--expanded relationship-value-display__expanded"
                             className="relationship-value-display__delete-and-edit"
                             style={expandedPosStyle} 
-                            //ref={this.setRef}
                         >
                             <button className="relationship-value-display__delete" onClick={this.onClickDelete}>
                                 <svg className="relationship-value-display__delete-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 900.5 900.5">
@@ -258,13 +188,10 @@ class RelationshipValueDisplay extends Component {
 
             return ReactDOM.createPortal(
                 <div
-                    // className="relationship-value-display relationship-value-display__edit-wrapper"
                     className="relationship-value-display__edit-wrapper"
                     style={editingPosStyle}
-                    // ref={this.setRef}
                 >
                     <textarea
-                        // className="relationship-value-display relationship-value-display__input"
                         className="relationship-value-display__input"
                         ref={this.inputRef}
                         value={descriptionLabel}
@@ -283,10 +210,6 @@ class RelationshipValueDisplay extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // relationshipChangeInfluence: (influencerId, influenceeId, value) => {
-        //     dispatch(relationshipChangeInfluence(influencerId, influenceeId, value))
-        // },
-
         relationshipChangeLabel: (influencerId, influenceeId, value) => {
             dispatch(relationshipChangeLabel(influencerId, influenceeId, value))
         },

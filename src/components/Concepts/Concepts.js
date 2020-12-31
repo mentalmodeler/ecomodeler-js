@@ -19,6 +19,7 @@ class Concepts extends Component {
             tempTarget,
             viewFilter
         } = concepts;
+        // console.log('Concepts > Render\n\ttempTarget:', tempTarget);
         const hasTempRelationship = !!tempRelationship;
         let sConcept = {};
         let selectedRelationships = [];
@@ -27,20 +28,9 @@ class Concepts extends Component {
             selectedRelationships = sConcept && sConcept.relationships
                 ? sConcept.relationships
                 : [];
-        } 
-        // console.log('\n\nConcepts > render'
-        //     , '\n\tselectedConcept:', selectedConcept
-        //     , '\n\tsConcept:', sConcept
-        //     , '\n\tselectedRelationships:', selectedRelationships
-        //     , '\n\tselectedRelationships:', selectedRelationships
-        //     , '\n\tviewFilter:', viewFilter
-        //     // , '\n\ttempRelationship:', tempRelationship
-        //     // , '\n\ttempTarget:', tempTarget
-        //     , '\n\n'
-        // );
-        // console.log('Concepts > render\n\tconcepts:', concepts);
+        }
+        const isIntraConceptRelationship = hasTempRelationship && tempTarget && util.isIntraConceptRelationship({collection, tempRelationship, tempTarget});
         
-        // console.log('Concepts, collection:', collection);
         return (
             <div className="map__concepts">
             {collection
@@ -64,8 +54,10 @@ class Concepts extends Component {
                             <Concept
                                 {...concept}
                                 hasTempRelationship={hasTempRelationship}
+                                tempRelationship={tempRelationship}
                                 isTempRelationship={hasTempRelationship && concept.id === tempRelationship.id}
                                 tempTarget={tempTarget}
+                                isIntraConceptRelationship={isIntraConceptRelationship}
                                 selected={!selectedRelationship && id === selectedConcept}
                                 selectedRelationship={!!selectedRelationship && (id === selectedConcept || id === selectedRelationship)}
                                 isExcludedByFilter={isExcludedByFilter}
@@ -95,6 +87,7 @@ class Concepts extends Component {
                                         hasTempRelationship={hasTempRelationship}
                                         isTempRelationship={hasTempRelationship && property.id === tempRelationship.id}
                                         tempTarget={tempTarget}
+                                        isIntraConceptRelationship={isIntraConceptRelationship}
                                         selected={!selectedRelationship && property.id === selectedConcept}
                                         selectedRelationship={!!selectedRelationship && (property.id === selectedConcept || property.id === selectedRelationship)}
                                         isExcludedByFilter={isExcludedByFilter}

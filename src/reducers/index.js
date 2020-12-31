@@ -7,10 +7,11 @@ const createRelationship = function(props = {}) {
 }
 
 const createConcept = function(props = {}) {
-    console.log('Reducer > createConcept\n\tprops:', props);
+    // console.log('Reducer > createConcept\n\tprops:', props);
+    const id = util.createId();
     return {
-        id: util.createId(),
-        name: '',
+        id,
+        name: id,
         notes:  '',
         units: '',
         preferredState: 0,
@@ -24,10 +25,11 @@ const createConcept = function(props = {}) {
 }
 
 const createProperty = function(props = {}) {
+    const id = util.createId();
     return {
-        id: util.createId(),
+        id,
         parentComponentId: '',
-        name: '',
+        name: id,
         notes:  '',
         relationships: [],
         ...props
@@ -153,7 +155,7 @@ const concepts = (
                 })
             };
         case 'CONCEPT_FOCUS':
-            console.log('CONCEPT_FOCUS, selectedConcept:', selectedConcept)
+            // console.log('CONCEPT_FOCUS, selectedConcept:', selectedConcept)
             let selectedConcept = action.id;
             let selectedRelationship = null;
             let selectedAndAssociatedData = util.getSelectedAndAssociatedData({collection, selectedConcept, selectedRelationship});
