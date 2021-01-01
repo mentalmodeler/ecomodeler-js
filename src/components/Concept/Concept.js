@@ -26,9 +26,16 @@ import {
 
 import './Concept.css';
 
+const useInput = true;
+const CONCEPT_PADDING = 2;
+const CONCEPT_WIDTH = 204;
+const CONCEPT_HEIGHT = 32;
+const hasScrollOverflow = (elem) => elem && elem.scrollWidth && elem.scrollWidth > CONCEPT_WIDTH - (CONCEPT_PADDING * 2);
+const nameChanged = (state, prevState) => state.value !== prevState.value;
+const propertiesChanged = (props, prevProps) => !props.parentComponent && (props.properties.length !== prevProps.properties.length);
+
 class Concept extends Component {
     static defaultProps = {
-        updateStackHeight: () => {},
         properties: [],
     };
 
@@ -41,64 +48,71 @@ class Concept extends Component {
             lineMouseDown: false,
         }
 
-        this.height = 0;
+        this.height = 30; // 18px line-height + 6px each topa dn bottom padding
         this.width = 0;
         this.totalHeight = 0;
         this.centerClickDiffX = 0;
         this.centerClickDiffY = 0;
         this.xBeforeDrag = 0;
         this.yBeforeDrag = 0;
-
-        // console.log('this.props:', this.props);
     }
 
 
     componentDidMount() {
         if (this.textarea) {
-            // initialize autoExpand;
-            this.textarea.style.overflow = 'hidden';
-            this.autoExpand();
+            // this.textarea.style.overflow = 'hidden';
+            // this.autoExpand();
+            this.conceptChange()
         }
     }
 
-    debouncedConceptChange = debounce(() => {
-        if (this.root) {
-            const {id, conceptChange, parentComponentId} = this.props;
-            const {value} = this.state;
-            const {width, height} = this.root.getBoundingClientRect();
-            const isHovered = this.root.matches(':hover');
-            const mult = isHovered ? (1 / 1.1) : 1;
-            const roundedWidth = Math.round(width * mult);
-            const roundedHeight = Math.round(height * mult);
-            // console.log('mult:', mult, ', height:', height, ', roundedHeight:', roundedHeight);
-            this.width = roundedWidth;
-            this.height = roundedHeight;
-            this.totalHeight = roundedHeight;
-
-            if (!parentComponentId) {
-                const parentNode = this.root.parentNode;
-                if (parentNode) {
-                    const {height: totalHeight} = parentNode.getBoundingClientRect();
-                    // console.log('totalHeight:', totalHeight);
-                    this.totalHeight = totalHeight;
-                }
-            }
-
-            conceptChange(id, value, roundedWidth, roundedHeight, this.totalHeight);
-        }
-    }, 150)
-
     componentDidUpdate(prevProps, prevState) {
-        const {properties, parentComponentId} = this.props;
-        const valueChanged = this.state.value !== prevState.value;
-        if (valueChanged) {
-            this.autoExpand();
-        }
-        if (!parentComponentId && properties.length !== prevProps.properties.length) {
-            // console.log('updateHeight');
+        // const {properties, parentComponentId} = this.props;
+        // const valueChanged = this.state.value !== prevState.value;
+        // if (valueChanged) {
+        //     this.autoExpand();
+        // }
+        // if (!parentComponentId && properties.length !== prevProps.properties.length) {
+        //     // console.log('updateHeight');
+        //     this.debouncedConceptChange();
+        // }
+        if (nameChanged(this.state, prevState) || propertiesChanged(this.props, prevProps)) {
             this.debouncedConceptChange();
         }
     }
+
+    conceptChange = () => {
+        const {id, parentComponentId, conceptChange, properties} = this.props;
+        this.width = CONCEPT_WIDTH;
+        this.height = CONCEPT_HEIGHT;
+        this.totalHeight = !parentComponentId
+            ? this.height + properties.length * CONCEPT_HEIGHT
+            : this.height;
+        conceptChange(id, this.state.value, this.width, this.height, this.totalHeight);
+        
+        // if (this.root) {
+        //     const {id, conceptChange, parentComponentId} = this.props;
+        //     const {value} = this.state;
+        //     const {width, height} = this.root.getBoundingClientRect();
+        //     const isHovered = this.root.matches(':hover');
+        //     const mult = isHovered ? (1 / 1.1) : 1;
+        //     const roundedWidth = Math.round(width * mult);
+        //     const roundedHeight = Math.round(height * mult);
+        //     this.width = roundedWidth;
+        //     this.height = roundedHeight;
+        //     this.totalHeight = roundedHeight;
+        //     if (!parentComponentId) {
+        //         const parentNode = this.root.parentNode;
+        //         if (parentNode) {
+        //             const {height: totalHeight} = parentNode.getBoundingClientRect();
+        //             this.totalHeight = totalHeight;
+        //         }
+        //     }
+        //     conceptChange(id, value, roundedWidth, roundedHeight, this.totalHeight);
+        // }
+    }
+
+    debouncedConceptChange = debounce(this.conceptChange, 150);
 
     toggleDragHandlers(on, e) {
         const func = on ? 'addEventListener' : 'removeEventListener';
@@ -106,28 +120,30 @@ class Concept extends Component {
         window[func]('mouseup', this.onMouseUp);
     }
 
-    autoExpand() {
-        // Set the height to 0, so we can get the correct content height via scrollHeight
-        // Also, running this through state changes causes a race condition when decreasing scrollHeight.
-        this.textarea.style.overflow = 'hidden';
-        this.textarea.style.height = '0px';
+    // autoExpand() {
+    //     // Set the height to 0, so we can get the correct content height via scrollHeight
+    //     // Also, running this through state changes causes a race condition when decreasing scrollHeight.
+    //     this.textarea.style.overflow = 'hidden';
+    //     this.textarea.style.height = '0px';
         
-        // set height to scrollHeight, but add border-width * 2 since that is not reported in scrollHeight
-        // but is used in box-sizing: border-box to determine height of textarea element
-        const newHeight = this.textarea.scrollHeight;
-        // console.log('newHeight:', newHeight);
-        // const paddingAdj = TEXTAREA_STYLES.padding * 2;
-        // console.log('newHeight:', newHeight);
-        this.height = newHeight; // - paddingAdj;
-        this.textarea.style.height = `${this.height}px`;
+    //     // set height to scrollHeight, but add border-width * 2 since that is not reported in scrollHeight
+    //     // but is used in box-sizing: border-box to determine height of textarea element
+    //     const newHeight = this.textarea.scrollHeight;
+    //     // console.log('newHeight:', newHeight);
+    //     // const paddingAdj = TEXTAREA_STYLES.padding * 2;
+    //     // console.log('newHeight:', newHeight);
+    //     this.height = newHeight + 12; // - paddingAdj;
+    //     this.textarea.style.height = `${this.height}px`;
 
-        this.debouncedConceptChange();
-    }
+    //     console.log('this.textarea.scrollWidth:', this.textarea.scrollWidth);
+
+    //     this.debouncedConceptChange();
+    // }
 
     onChange = (e) => {
         const { value } = this.state;
         const newValue = e.target.value;
-        if (newValue !== value) {
+        if (newValue !== value && !hasScrollOverflow(e.target)) {
             this.setState({
                 value: newValue
             });
@@ -192,13 +208,9 @@ class Concept extends Component {
         const deltaY = e.screenY - this.screenYBeforeDrag;
         const newX = Math.max(deltaX + this.xBeforeDrag, 0);
         const newY = Math.max(deltaY + this.yBeforeDrag, 0);
-        // const newX = Math.max(0, e.movementX + x);
-        // const newY = Math.max(0, e.movementY + y);
         const dragId = parentComponentId || id;
-        // console.log('dragId:', dragId,', newX:', newX, ', newY:', newY);
         if (lineMouseDown) {
             relationshipDrawTemp(id /* dragId */, true, this.xBeforeDrag, this.yBeforeDrag, newX, newY, this.width, this.height, this.centerClickDiffX, this.centerClickDiffY);
-            // relationshipDrawTemp(id, true, this.xBeforeDrag, this.yBeforeDrag, newX, newY, this.width, this.height, this.centerClickDiffX, this.centerClickDiffY);
         } else {
             conceptMove(dragId, newX, newY);
         }
@@ -259,7 +271,7 @@ class Concept extends Component {
     }
 
     onClickDelete = (e) => {
-        const {id, parentComponentId, propertyDelete, conceptDelete, updateStackHeight} = this.props;
+        const {id, parentComponentId, propertyDelete, conceptDelete} = this.props;
         return parentComponentId
             ? propertyDelete(id, parentComponentId)
             : conceptDelete(id);
@@ -297,7 +309,6 @@ class Concept extends Component {
             // boxShadow: 'inset 0 0 0 2px #fff, 0 3px 8px rgba(0, 0, 0, 0.15)'
         };
         const placeholder = isSub ? "Enter property" : "Enter component";
-
         return  (
             <div
                 className={rootClassnames}
@@ -307,16 +318,31 @@ class Concept extends Component {
                 onMouseOut={this.onMouseOut}
                 dataid={id}
             >
-            <textarea
-                    className={textAreaClassnames}
-                    value={value}
-                    onFocus={this.onFocus}
-                    onChange={this.onChange}
-                    ref={this.setTextareaRef}
-                    placeholder={placeholder}
-                    // rows={1}
-                    style={getTextAreaStyle()}
-                />
+                {!useInput && (
+                    <textarea
+                        className={textAreaClassnames}
+                        value={value}
+                        onFocus={this.onFocus}
+                        onChange={this.onChange}
+                        ref={this.setTextareaRef}
+                        placeholder={placeholder}
+                        // rows={1}
+                        // style={getTextAreaStyle()}
+                    />
+                )}
+                {useInput && (
+                    <input
+                        type="text"
+                        className={textAreaClassnames}
+                        value={value}
+                        onFocus={this.onFocus}
+                        onChange={this.onChange}
+                        ref={this.setTextareaRef}
+                        placeholder={placeholder}
+                        // rows={1}
+                        // style={getTextAreaStyle()}
+                    />
+                )}
                 {!isSub &&
                     renderAddButton(this.onClickAdd)
                 }

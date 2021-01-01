@@ -13,6 +13,10 @@ const arrowheadHeight = 16; // 6
 const arrowheadWidth = 16; // 9
 
 class Relationship extends Component {
+    static defaultProps = {
+        influence: 0
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -138,23 +142,9 @@ class Relationship extends Component {
             eeY = influenceeY + centerClickDiffY;
         }
         
-        // const svgClasses = classnames('Relationship__svg', {
-        //     'Relationship__svg--negative': influence < 0,
-        //     'Relationship__svg--positive': influence > 0,
-        //     'Relationship__svg--neutral': influence === 0,
-        //     'Relationship__svg--selected': selected 
-        // });
-        
-        const negative = influence < 0;
         let influenceModifier = selected ? 'selected' : 'neutral';
         let color = selected ? '#d44c36' : '#333';
-        if (!selected && influence !== 0) {
-            color = negative ? '#BF5513' : '#0351A6';
-            influenceModifier = negative ? 'negative' : 'positive';
-        }
-
-        const rootClassname = classnames('Relationship', {
-            [className]: !!className,
+        const rootClassname = classnames('Relationship', className, {
             'Relationship--has-temp-relationship': hasTempRelationship,
             'Relationship--excluded-by-filter': isExcludedByFilter,
             'Relationship--temp-line' : tempLine
@@ -166,27 +156,6 @@ class Relationship extends Component {
         }
         return (
             <span className={rootClassname}>
-                {/* {lineThickness > 1 &&
-                    <svg
-                        className="Relationship__svg Relationship__svg--bg"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{
-                            stroke: `${color}`,
-                            opacity: '0.3'
-                        }}
-                    >
-                        <line
-                            x1={erX}
-                            x2={eeX}
-                            y1={erY}
-                            y2={eeY}
-                            strokeWidth={lineThickness * 3}
-                            // opacity={0.3}
-                            // stroke={color}
-                        />
-                    </svg>
-                } */}
                 <svg
                     className="Relationship__svg Relationship__svg--line"
                     version="1.1"

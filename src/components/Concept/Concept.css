@@ -379,8 +379,9 @@
 }
 .MentalMapper .Concept__textarea {
   width: 200px;
-  line-height: 18px;
   font-size: 14px;
+  color: #333;
+  line-height: 18px;
   min-height: 18px;
   border: none;
   padding: 6px;

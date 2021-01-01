@@ -12,6 +12,17 @@ import {
 
 import './RelationshipValueDisplay.css';
 
+const DELETE_AND_EDIT_WIDTH = 80;
+const DELETE_AND_EDIT_HEIGHT = 30;
+const TEXTAREA_WIDTH = 305;
+const TEXTAREA_HEIGHT = 50;
+const LABEL_LINE_HEIGHT = 24;
+const INPUT_LINE_HEIGHT = 18;
+const MAX_NUM_LINES = 2;
+
+const hasScrollOverflow = (elem) => elem && elem.scrollHeight && elem.scrollHeight > (MAX_NUM_LINES * LABEL_LINE_HEIGHT);
+const nameChanged = (state, prevState) => state.value !== prevState.value;
+
 class RelationshipValueDisplay extends Component {
     constructor(props) {
         super(props);
@@ -50,14 +61,29 @@ class RelationshipValueDisplay extends Component {
 
     onChangeDescriptionLabel = (e) => {
         const {descriptionLabel} = this.state;
-        const value = e.target.value;
-        if (value !== descriptionLabel) {
+        const newValue = e.target.value;
+
+        if (newValue !== descriptionLabel && !hasScrollOverflow(e.target)) {
             this.setState({
-                descriptionLabel: value
+                descriptionLabel: newValue
             });
+
+            // make debounced call to update the store with updated label
+            this.debouncedChangeDescriptionLabel();
         }
-        // make debounced call to update the store with updated label
-        this.debouncedChangeDescriptionLabel();
+    }
+
+    onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.stopPropagation();
+            e.preventDefault();
+            // const labelChanged = this.props.label !== this.state.descriptionLabel;
+            this.setState({
+                editing: false,
+                expanded: false, // this.state.mouseOver
+            });
+            // this.setTextValue();
+        }
     }
 
     setTextValue = () => {
@@ -66,13 +92,7 @@ class RelationshipValueDisplay extends Component {
         relationshipChangeLabel(influencerId, influenceeId, descriptionLabel);
     }
 
-    debouncedChangeDescriptionLabel = debounce(this.setTextValue, 500);
-
-    onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            this.setTextValue();
-        }
-    }
+    debouncedChangeDescriptionLabel = debounce(this.setTextValue, 150);
 
     onClickDelete = (e) => {
         // console.log('RelationshipValueDisplay > onClickDelete');
@@ -93,7 +113,6 @@ class RelationshipValueDisplay extends Component {
     }
 
     onClick = (e) => {
-        // console.log('RelationshipValueDisplay > onClick');
         const {influencerId, influenceeId, relationshipFocus} = this.props;
         relationshipFocus(influencerId, influenceeId);
     }
@@ -103,11 +122,10 @@ class RelationshipValueDisplay extends Component {
     }
 
     onMouseLeave = (e) => {
-        // console.log('mouseLeave');
         this.toggleMenu(false);
     }
     
-    toggleMenu = (show) => this.state.expanded !== show && this.setState({expanded: show});
+    toggleMenu = (show) => this.state.expanded !== show && this.setState({expanded: show, mouseOver: show});
     
     render = () => {
         const {expanded, descriptionLabel, editing} = this.state;
@@ -124,17 +142,22 @@ class RelationshipValueDisplay extends Component {
             const y = Math.round((-(erX - cx) * Math.sin(angle * Math.PI / 180) + (erY - cy) * Math.cos(angle * Math.PI / 180)) + cy);
             const textBoxStyle = { 
                 left: `${x}px`, 
-                top: `${y - textPadding / 2}px`, 
+                top: `${y - (LABEL_LINE_HEIGHT + 1)}px`, 
                 transform: `rotate(${textAngle}deg)`, 
-                paddingBottom: `${textPadding}px`,
-                width: `${dist}px` 
+                width: `${dist}px`,
+                WebkitBoxOrient: 'vertical',
+                WebkitLineClamp: MAX_NUM_LINES,
+            };
+            const textContentStyle = { 
+               
+                
+                width: `${dist}px`
             };
             const expandedPosStyle = {
-                left: `${cx - 40}px`,
-                top: `${cy - 12}px`,
+                left: `${cx - (DELETE_AND_EDIT_WIDTH / 2)}px`,
+                top: `${cy - (DELETE_AND_EDIT_HEIGHT / 2)}px`,
                 zIndex: '3'
             };
-
             return (
                 <div 
                     className="relationship-value-display"
@@ -182,8 +205,8 @@ class RelationshipValueDisplay extends Component {
         else {
             const domNode = document && document.querySelector('.MentalMapper .map__content');
             const editingPosStyle = {
-                left: `${cx - 150}px`,
-                top: `${cy - 18}px`
+                left: `${cx - (TEXTAREA_WIDTH / 2)}px`,
+                top: `${cy - (TEXTAREA_HEIGHT / 2)}px`
             };
 
             return ReactDOM.createPortal(

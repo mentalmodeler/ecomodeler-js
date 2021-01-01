@@ -20,13 +20,15 @@
         // -----------------------
 
         &__text {
-            // position: absolute;
-            // z-index: 1;
             .mixin-relationship-value-display();
-            display: flex;
-            height: 25px;
-            justify-content: center;
-            align-items: center;
+            text-align: center;
+            align-items: flex-start;
+            padding: 0 12px;
+            display: -webkit-box;
+            overflow: hidden;
+            word-break: break-word;
+            // text-overflow: ellipsis;
+            // -webkit-box-orient: vertical;
         }
 
         // -----------------------
@@ -90,14 +92,17 @@
 
         &__input {
             // .mixin-relationship-value-display();
+            font-size: 14px;
+            line-height: 18px;
             border-radius: 6px;
-            padding: 2px 6px; // 5px;
-            width: 300px;
-            height: 52px; //36px;
+            padding: 6px; // 5px;
+            width: 305px;
+            height: 50px; //36px;
             text-align: center;
             outline: none;
             overflow: hidden;
             resize: none;
+            word-break: break-word;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
     }

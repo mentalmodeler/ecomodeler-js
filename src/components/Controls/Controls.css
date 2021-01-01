@@ -88,16 +88,19 @@
   letter-spacing: 0.5px;
   line-height: 20px;
   font-size: 16px;
+  word-break: break-word;
 }
 .MentalMapper .selected-control__relationship-concept-text {
   font-weight: 300;
   font-size: 14px;
   line-height: 18px;
+  word-break: break-word;
 }
 .MentalMapper .selected-control__relationship-influence-text {
   font-weight: 600;
   margin: 6px 0 4px;
-  line-height: 16px;
+  line-height: 20px;
+  word-break: break-word;
 }
 .MentalMapper .control-panel {
   flex-shrink: 0;

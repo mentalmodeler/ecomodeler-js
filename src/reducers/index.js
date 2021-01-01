@@ -2,8 +2,10 @@
 import {combineReducers} from 'redux';
 import {util, SETTINGS} from '../utils/util';
 
+const isLocalhost = document.location.hostname === 'localhost'
+
 const createRelationship = function(props = {}) {
-    return {...{id: '-1', name: '', notes:  '', confidence: 0, influence: 0}, ...props};
+    return {...{id: '-1', name: '', notes:  '', label: ''}, ...props};
 }
 
 const createConcept = function(props = {}) {
@@ -11,7 +13,7 @@ const createConcept = function(props = {}) {
     const id = util.createId();
     return {
         id,
-        name: id,
+        name: isLocalhost ? id : '',
         notes:  '',
         units: '',
         preferredState: 0,
@@ -29,7 +31,7 @@ const createProperty = function(props = {}) {
     return {
         id,
         parentComponentId: '',
-        name: id,
+        name: isLocalhost ? id : '',
         notes:  '',
         relationships: [],
         ...props

@@ -9,10 +9,12 @@
 .MentalMapper .relationship-value-display__text {
   position: absolute;
   z-index: 1;
-  display: flex;
-  height: 25px;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
+  align-items: flex-start;
+  padding: 0 12px;
+  display: -webkit-box;
+  overflow: hidden;
+  word-break: break-word;
 }
 .MentalMapper .relationship-value-display__delete-and-edit {
   position: absolute;
@@ -138,14 +140,17 @@
   z-index: 3;
 }
 .MentalMapper .relationship-value-display__input {
+  font-size: 14px;
+  line-height: 18px;
   border-radius: 6px;
-  padding: 2px 6px;
-  width: 300px;
-  height: 52px;
+  padding: 6px;
+  width: 305px;
+  height: 50px;
   text-align: center;
   outline: none;
   overflow: hidden;
   resize: none;
+  word-break: break-word;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 @keyframes MentalMapper-menu-pop-in-expand {

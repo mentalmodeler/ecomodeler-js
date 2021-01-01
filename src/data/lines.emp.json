@@ -31,7 +31,13 @@
                     "notes": "",
                     "group": 0,
                     "parentComponentId": "u9E9-iOqF-Wvoi-y2Nh",
-                    "relationships": []
+                    "relationships": [
+                        {
+                            "id": "uh0A-56rz-Iyie-XeYK",
+                            "notes": "Deez is the notes",
+                            "label": "A really long name on the line that will"
+                        }
+                    ]
                 },
                 {
                     "id": "WXQn-Fnrm-jb3X-3x3W",
@@ -57,7 +63,7 @@
             "notes": "",
             "group": 0,
             "x": 513,
-            "y": 111,
+            "y": 98,
             "relationships": [],
             "properties": [
                 {

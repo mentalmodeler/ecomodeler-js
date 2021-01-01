@@ -58,12 +58,12 @@ function save() {
     const info = data.js.info;
     const {author, name} = info;
     // console.log('\n\n---- MentalModelerConceptMap > save\ndata.js:', data.js, '\n\n');
-    console.log('data.json:', data.json);
-    // util.writeLocalFile({
-    //     content: data.json,
-    //     name: `${name || '[name]'} - ${author || '[author]'}.emp`,
-    //     type: 'json'
-    // });
+    // console.log('data.json:', data.json);
+    util.writeLocalFile({
+        content: data.json,
+        name: `${name || '[name]'} - ${author || '[author]'}.emp`,
+        type: 'json'
+    });
 }
 
 function render(target = '#root') {

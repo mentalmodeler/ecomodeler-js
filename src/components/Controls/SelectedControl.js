@@ -29,13 +29,7 @@ class SelectedControl extends Component {
     }
 
     getRelationshipName(relationship) {
-        const influence = parseFloat(relationship.influence);
-        if (isNaN(influence) || influence === 0) {
-            return 'To'
-        }
-        return influence > 0
-            ? `INCREASES (${influence})`
-            : `DECREASES (${influence})`
+        return relationship && relationship.label || '[Enter line description]';
     }
 
     shouldComponentUpdate(nextProps) {
