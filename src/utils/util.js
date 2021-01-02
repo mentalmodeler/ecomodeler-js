@@ -1,6 +1,8 @@
 import { saveAs } from 'file-saver';
 
-const LINE_VALUE_INDICATOR_WIDTH = 120;
+const MAX_DUAL_LINE_DISTANCE = 60;
+const LINE_VALUE_INDICATOR_WIDTH = MAX_DUAL_LINE_DISTANCE; // 120;
+const LINE_VALUE_INDICATOR_HEIGHT = 30;
 const ELEMENT_TYPE = {
     CONCEPT: 'concept',
     RELATIONSHIP: 'relationship'
@@ -40,7 +42,7 @@ const util = {
 
         // assign relationships dual relationship status, if needed
         collection = collection.map((concept) => {
-            const newRelationships = (concept && concept.relationships || []).map((relationship) => {
+            const newRelationships = (concept && concept.relationships ? concept.relationships : []).map((relationship) => {
                 if (!relationship.inDualRelationship) {
                     const {makesDualRelationship, otherRelationship} = util.makesDualRelationship({
                         collection,
@@ -63,8 +65,8 @@ const util = {
             // parse x/y position and remove those attributes if this is a property/sub-concept
             const conceptWithPositionUpdated = {
                 ...concept,
-                x: concept.x && parseInt(concept.x, 10) || 13,
-                y: concept.y && parseInt(concept.y, 10) || 13,
+                x: concept.x && !isNaN(parseInt(concept.x, 10)) ? parseInt(concept.x, 10) : 13,
+                y: concept.y && !isNaN(parseInt(concept.y, 10)) ? parseInt(concept.y, 10) : 13,
             };
             if (concept.parentComponentId) {
                 delete conceptWithPositionUpdated.x;
@@ -105,16 +107,16 @@ const util = {
             concepts = state.concepts.collection.filter((concept) => (
                 !concept.parentComponentId
             )).map((concept) => {
-                const relationships = (concept && concept.relationships || []).map((relationship) => (
+                const relationships = (concept && concept.relationships ? concept.relationships : []).map((relationship) => (
                     {
                         id: relationship.id,
                         notes: relationship.notes,
                         name: relationship.name
                     } 
                 ));
-                const properties = (concept && concept.properties || []).map((propertyId) => {
+                const properties = (concept && concept.properties ? concept.properties : []).map((propertyId) => {
                     const property = util.findConcept(state.concepts.collection, propertyId);
-                    const propertyRelationships = (property && property.relationships || []).map((relationship) => (
+                    const propertyRelationships = (property && property.relationships ? property.relationships : []).map((relationship) => (
                         {
                             id: relationship.id,
                             notes: relationship.notes,
@@ -236,7 +238,7 @@ const util = {
         return Math.sqrt(a * a + b * b);
     },
 
-    getOffset({inDualRelationship, isFirstInDualRelationship}) {
+    getOffsetX({inDualRelationship, isFirstInDualRelationship}) {
         if (inDualRelationship) {
             return isFirstInDualRelationship
                 ? LINE_VALUE_INDICATOR_WIDTH / 2
@@ -245,14 +247,26 @@ const util = {
         return 0;
     },
 
-    determineEdgePoint({eeX, eeY, erX, erY, eeWidth, eeHeight, inDualRelationship = false, isFirstInDualRelationship = false}) {
+    getOffsetY({inDualRelationship, isFirstInDualRelationship, height = LINE_VALUE_INDICATOR_HEIGHT}) {
+        if (inDualRelationship) {
+            const heightToUse = Math.max(LINE_VALUE_INDICATOR_HEIGHT, Math.min(height, MAX_DUAL_LINE_DISTANCE))
+            return isFirstInDualRelationship
+                ? (heightToUse - 2) / 2
+                : - (heightToUse - 2) / 2;
+        }
+        return 0;
+    },
+
+    determineEdgePoint({eeX, eeY, erX, erY, eeWidth, eeHeight, inDualRelationship = false, isFirstInDualRelationship = false, dualRelationshipHeight = LINE_VALUE_INDICATOR_HEIGHT}) {
         let pct;
         const dist = util.getDistanceBetweenPoints(eeX, eeY, erX, erY);
         const eeRadians = Math.atan2(erX - eeX, erY - eeY);
         const w = eeWidth / 2 + (erX > eeX 
-            ? - util.getOffset({inDualRelationship, isFirstInDualRelationship})
-            : util.getOffset({inDualRelationship, isFirstInDualRelationship}));
-        const h = eeHeight / 2;
+            ? - util.getOffsetX({inDualRelationship, isFirstInDualRelationship})
+            : util.getOffsetX({inDualRelationship, isFirstInDualRelationship}));
+        const h = eeHeight / 2 + (erY > eeY
+            ? - util.getOffsetY({inDualRelationship, isFirstInDualRelationship, height: dualRelationshipHeight})
+            : util.getOffsetY({inDualRelationship, isFirstInDualRelationship, height: dualRelationshipHeight}));
         const cos = Math.cos(eeRadians);
         let hypo = Math.abs(h / cos);
         const opposite = Math.sqrt(Math.pow(hypo, 2) - Math.pow(h, 2));
@@ -309,15 +323,10 @@ const util = {
         return Math.max(Math.min(value, max), min);
     },
 
-    // getParentAndPropertyIds({collection, conceptId, concept}) {
-    //     const parentConcept = util.getParentConcept({collection, conceptId, concept});
-    //     return [parentConcept.id, ...(parentConcept && parentConcept.properties || [])]
-    // },
-
     getParentAndProperties({collection, conceptId, concept, idsOnly = true}) {
         // TODO Optimize to use concept ref from args instead of concept id
         const conceptParent = util.getParentConcept({collection, conceptId}) || {};
-        const conceptPropertiesIds = conceptParent && conceptParent.properties || [];
+        const conceptPropertiesIds = conceptParent && conceptParent.properties ? conceptParent.properties : [];
         // safety check with Array.filter might be overkill
         return idsOnly
             ? [conceptParent.id, ...conceptPropertiesIds] // .filter((id) => !!id)
@@ -329,19 +338,6 @@ const util = {
             ? util.getParentAndProperties({collection, conceptId: tempRelationship.id})
                   .indexOf(tempTarget) > -1
             : false;
-
-        // more verbose new way
-        // if (tempTarget && tempRelationship && tempRelationship.id) {
-        //     const conceptIds = util.getParentAndProperties({collection, conceptId: tempRelationship.id});
-        //     return conceptIds.indexOf(tempTarget) > -1
-        // }
-        // return false;
-
-        // old way
-        // const tempRelationshipId = tempRelationship && tempRelationship.id;
-        // const {properties = []} = util.findConcept(collection, tempRelationshipId) || {};
-        // const conceptIds = [tempRelationshipId, ...properties];
-        // return conceptIds.indexOf(tempTarget) > -1;        
     },
 
     getAllRelationships({collection, conceptId, concept, idsOnly = false}) {
@@ -353,15 +349,6 @@ const util = {
                     ? relationships.map((relationship) => relationship.id)
                     : relationships;
             });
-        
-        // old way
-        // const conceptParent = util.getParentConcept({collection, conceptId});
-        // const conceptParentRelationships = conceptParent && conceptParent.relationships || [];
-        // const conceptParentPropertiesRelationships = (conceptParent && conceptParent.properties || []).flatMap((propertyId) => {
-        //     const property = util.findConcept(collection, propertyId);
-        //     return property.relationships || []
-        // });
-        // return [...conceptParentRelationships, ...conceptParentPropertiesRelationships];
     },
 
     alreadyHasRelationship({collection, influencerId, influenceeId, influencer, influencee}) {

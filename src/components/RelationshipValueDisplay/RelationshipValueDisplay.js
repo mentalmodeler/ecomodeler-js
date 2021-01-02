@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import classnames from 'classnames';
 import debounce from 'lodash.debounce';
 import ReactDOM from 'react-dom';
 
@@ -17,11 +16,9 @@ const DELETE_AND_EDIT_HEIGHT = 30;
 const TEXTAREA_WIDTH = 305;
 const TEXTAREA_HEIGHT = 50;
 const LABEL_LINE_HEIGHT = 24;
-const INPUT_LINE_HEIGHT = 18;
+const LABEL_DISPLAY_LINE_HEIGHT = 20;
+// const INPUT_LINE_HEIGHT = 18;
 const MAX_NUM_LINES = 2;
-
-const hasScrollOverflow = (elem) => elem && elem.scrollHeight && elem.scrollHeight > (MAX_NUM_LINES * LABEL_LINE_HEIGHT);
-const nameChanged = (state, prevState) => state.value !== prevState.value;
 
 class RelationshipValueDisplay extends Component {
     constructor(props) {
@@ -29,7 +26,7 @@ class RelationshipValueDisplay extends Component {
        
         this.state = {
             expanded: false, // are the delete and edit buttons shown
-            editing: false, // is the tet input shown
+            editing: false, // is the text input shown
             descriptionLabel: props.label || ''
         }
         this.inputRef = React.createRef();
@@ -37,33 +34,27 @@ class RelationshipValueDisplay extends Component {
     
     componentDidUpdate(prevProps, prevState) {
         // TODO: handle prop label and temp label state
-        // const stateChanges = {};
-        // let stateDidChange = false;
-        // if (this.props.label !== prevProps.label) {
-        //     stateDidChange = true;
-        //     stateChanges.descriptionLabel = this.props.label;
-        // }
-
         if (this.state.editing && this.state.editing !== prevState.editing && this.inputRef.current) {
             this.inputRef.current.focus();
         }
     }
 
     onInputBlur = (e) => {
-        console.log('onInputBlur')
         if (this.state.editing) {
             this.setTextValue();
             this.setState({
-                editing: false
+                editing: false,
+                expanded: false, // this.state.mouseOver
             });
         }
     }
 
     onChangeDescriptionLabel = (e) => {
         const {descriptionLabel} = this.state;
-        const newValue = e.target.value;
-
-        if (newValue !== descriptionLabel && !hasScrollOverflow(e.target)) {
+        const hasScrollOverflow = e.target && e.target.scrollHeight && e.target.scrollHeight > (MAX_NUM_LINES * LABEL_LINE_HEIGHT);
+        const newValue = e.target.value.replace(/  +/g, ' '); // replace(/\s\s+/g, ' ')
+        
+        if (newValue !== descriptionLabel && !hasScrollOverflow) {
             this.setState({
                 descriptionLabel: newValue
             });
@@ -77,12 +68,7 @@ class RelationshipValueDisplay extends Component {
         if (e.key === 'Enter') {
             e.stopPropagation();
             e.preventDefault();
-            // const labelChanged = this.props.label !== this.state.descriptionLabel;
-            this.setState({
-                editing: false,
-                expanded: false, // this.state.mouseOver
-            });
-            // this.setTextValue();
+            this.onInputBlur()
         }
     }
 
@@ -95,7 +81,6 @@ class RelationshipValueDisplay extends Component {
     debouncedChangeDescriptionLabel = debounce(this.setTextValue, 150);
 
     onClickDelete = (e) => {
-        // console.log('RelationshipValueDisplay > onClickDelete');
         const {influencerId, influenceeId, relationshipDelete} = this.props;
         // prevent onClick from being handled, which will 
         // try to set focus to just deleted relationship
@@ -134,7 +119,6 @@ class RelationshipValueDisplay extends Component {
         const cy = Math.round((erY + eeY) / 2);
 
         if (!editing) {
-            const textPadding = 24;
             const dist = Math.round(Math.sqrt(Math.pow(eeX - erX, 2) + Math.pow(eeY - erY, 2)));
             const angle = Math.round(Math.atan2(eeY - erY, eeX - erX) * (180 / Math.PI));
             const textAngle = (angle >= -90 && angle <= 90) ? angle : 180 + angle;
@@ -142,16 +126,11 @@ class RelationshipValueDisplay extends Component {
             const y = Math.round((-(erX - cx) * Math.sin(angle * Math.PI / 180) + (erY - cy) * Math.cos(angle * Math.PI / 180)) + cy);
             const textBoxStyle = { 
                 left: `${x}px`, 
-                top: `${y - (LABEL_LINE_HEIGHT + 1)}px`, 
+                top: `${y - (LABEL_DISPLAY_LINE_HEIGHT)}px`, 
                 transform: `rotate(${textAngle}deg)`, 
                 width: `${dist}px`,
                 WebkitBoxOrient: 'vertical',
                 WebkitLineClamp: MAX_NUM_LINES,
-            };
-            const textContentStyle = { 
-               
-                
-                width: `${dist}px`
             };
             const expandedPosStyle = {
                 left: `${cx - (DELETE_AND_EDIT_WIDTH / 2)}px`,

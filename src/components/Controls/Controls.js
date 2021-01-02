@@ -21,10 +21,8 @@ import './Controls.css';
 
 const mapStateToProps = (state) => {
     const {concepts, groupNames} = state;
-    const {collection, selectedConcept, selectedRelationship, viewFilter} = concepts;
+    const {viewFilter} = concepts;
     const {selectedType, selectedData, associatedData} = util.getSelectedAndAssociatedData(concepts);
-    
-    // console.log('Controls, \n\tselectedConcept:', selectedConcept, ', selectedRelationship:', selectedRelationship, '\n\tselectedType:', selectedType, '\n\tselectedData:', selectedData);
     
     return {
         selectedType,
@@ -122,8 +120,16 @@ class Controls extends Component {
 
         return (
             <div className="controls">
+                <div className="controls__logo">
+                    <span>{'Eco'}</span>
+                    <span>{'Modeler'}</span>
+                </div>
                 {!(selectedType || selectedData) &&
-                    <div className="controls__bg">{'EcoModeler'}</div>
+                    <div className="controls__bg-wrapper">
+                        <div className="controls__bg">
+                            {'EcoModeler'}
+                        </div>
+                    </div>
                 }
                 {selectedType && selectedData &&
                     <Fragment>
@@ -143,17 +149,6 @@ class Controls extends Component {
                         </ControlPanel>
                         {selectedType === ELEMENT_TYPE.CONCEPT && !selectedData.parentComponentId &&
                             <Fragment>
-                                {/* <ControlPanel title="Unit of measurement">
-                                    <TextAreaControl
-                                        className="control-panel__body-content"
-                                        maxHeight={80}
-                                        autoExpand
-                                        value={selectedData && selectedData.units ? selectedData.units : ''}
-                                        onChange={this.onUnitsChange}
-                                        onBlur={this.onUnitsBlur}
-                                        placeholder="Enter units"
-                                    />  
-                                </ControlPanel> */}
                                 <ControlPanel title="Group">
                                     <GroupControl
                                         selectedType={selectedType}
@@ -165,25 +160,6 @@ class Controls extends Component {
                                 </ControlPanel>
                             </Fragment>
                         }
-                        {/* {selectedType === ELEMENT_TYPE.RELATIONSHIP &&
-                            <ControlPanel title="Confidence Rating">
-                                    <ConfidenceControl
-                                        maxHeight={200}
-                                        onChange={this.onConfidenceChange}
-                                        onBlur={this.onConfidenceBlur}
-                                        value={selectedData && selectedData.confidence ? selectedData.confidence : '0'}
-                                    />  
-                                </ControlPanel>
-                        } */}
-                        {/* {(selectedType === ELEMENT_TYPE.CONCEPT || (selectedType === ELEMENT_TYPE.RELATIONSHIP && viewFilter > -1)) &&
-                            <ControlPanel title="View Filter ">
-                                <FilterViewControl
-                                    selectedType={selectedType}
-                                    viewFilter={this.props.viewFilter}
-                                    onFilterChange={this.onViewFilterChange}
-                                />
-                            </ControlPanel>
-                        } */}
                     </Fragment>
                 }
             </div>

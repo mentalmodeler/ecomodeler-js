@@ -11,8 +11,6 @@
 
 .MentalMapper {
     .relationship-value-display {
-        // position: absolute;
-        // z-index: 1;
         .mixin-relationship-value-display();
 
         // -----------------------
@@ -26,9 +24,10 @@
             padding: 0 12px;
             display: -webkit-box;
             overflow: hidden;
-            word-break: break-word;
-            // text-overflow: ellipsis;
-            // -webkit-box-orient: vertical;
+            word-break: break-word; // break-all;
+            font-size: 14px;
+            line-height: 20px;
+            min-height: 40px;
         }
 
         // -----------------------
@@ -36,8 +35,6 @@
         // -----------------------
 
         &__delete-and-edit {
-            // position: absolute;
-            // z-index: 1;
             .mixin-relationship-value-display();
             overflow: hidden;
             border-radius: 6px;
@@ -103,6 +100,7 @@
             overflow: hidden;
             resize: none;
             word-break: break-word;
+            white-space: break-spaces;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
     }

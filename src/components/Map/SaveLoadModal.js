@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import classnames from 'classnames';
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {CSSTransition} from 'react-transition-group';
 
 import {
     infoChange
@@ -23,7 +22,7 @@ class SaveLoadModal extends Component {
 		}
 	}
 	componentDidUpdate(prevProps) {
-		const {author, name, date, infoChange} = this.props;
+		const {author, name, infoChange} = this.props;
 		if (!prevProps.isOpen && this.props.isOpen) {
 			const date = new Date();
 			infoChange(author, name, date);
@@ -32,17 +31,17 @@ class SaveLoadModal extends Component {
 	}
 
 	handleNameChange = (e) => {
-		const {author, name, date, infoChange} = this.props;
+		const {author, date, infoChange} = this.props;
 		infoChange(author, e.target.value, date);
 	};
 	
 	handleAuthorChange = (e) => {
-		const {author, name, date, infoChange} = this.props;
+		const {name, date, infoChange} = this.props;
 		infoChange(e.target.value, name, date);
 	}
 	
 	handleSave = () => {
-		const {author, name, date, onClose, infoChange} = this.props;
+		const {onClose} = this.props;
 		if (window.MentalModelerConceptMap) {
             window.MentalModelerConceptMap.save();
 		}
@@ -50,7 +49,7 @@ class SaveLoadModal extends Component {
 	}
 
 	render() {
-		const {isOpen, mode, onClose, author, name, date, infoChange} = this.props;
+		const {isOpen, mode, onClose, author, name} = this.props;
 		return (
 			<CSSTransition
 				in={isOpen}

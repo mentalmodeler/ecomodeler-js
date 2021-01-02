@@ -104,7 +104,13 @@
                     "notes": "",
                     "group": 0,
                     "parentComponentId": "Mi8P-Y5wd-EqDi-9iww",
-                    "relationships": []
+                    "relationships": [
+                        {
+                            "id": "vl6P-NWdq-bONH-LmOC",
+                            "notes": "Some more notes about something here",
+                            "label": "a dual relationship label doing its thing"
+                        }
+                    ]
                 }
             ]
         },

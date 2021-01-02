@@ -18,7 +18,7 @@ class TextAreaControl extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.value !== this.state.value) {
             this.setState({
                 value: nextProps.value

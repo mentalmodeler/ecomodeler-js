@@ -103,12 +103,13 @@ class Relationship extends Component {
             return null;
         }
 
+        const dualRelationshipHeight = Math.min(influencerHeight, influenceeHeight);
         const influenceAbsValue = Math.abs(influence);
         const lineThickness = Math.round(influenceAbsValue * 3 + 1);
-        let erX = influencerX + influencerWidth / 2 + util.getOffset({inDualRelationship, isFirstInDualRelationship});
-        let erY = influencerY + influencerHeight / 2;
-        let eeX = influenceeX + influenceeWidth / 2 + util.getOffset({inDualRelationship, isFirstInDualRelationship});
-        let eeY = influenceeY + influenceeHeight / 2;
+        let erX = influencerX + influencerWidth / 2 + util.getOffsetX({inDualRelationship, isFirstInDualRelationship});
+        let erY = influencerY + influencerHeight / 2 + util.getOffsetY({inDualRelationship, isFirstInDualRelationship, height: dualRelationshipHeight});
+        let eeX = influenceeX + influenceeWidth / 2 + util.getOffsetX({inDualRelationship, isFirstInDualRelationship});
+        let eeY = influenceeY + influenceeHeight / 2 + util.getOffsetY({inDualRelationship, isFirstInDualRelationship, height: dualRelationshipHeight});
         if (!tempLine) {
             const edgeEE = util.determineEdgePoint({
                 eeX,
@@ -118,7 +119,8 @@ class Relationship extends Component {
                 eeWidth: influenceeWidth,
                 eeHeight: influenceeHeight,
                 inDualRelationship,
-                isFirstInDualRelationship
+                isFirstInDualRelationship,
+                dualRelationshipHeight
             });
             eeX = edgeEE.x;
             eeY = edgeEE.y;
@@ -131,7 +133,8 @@ class Relationship extends Component {
                 eeWidth: influencerWidth,
                 eeHeight: influencerHeight,
                 inDualRelationship,
-                isFirstInDualRelationship
+                isFirstInDualRelationship,
+                dualRelationshipHeight
             });
             erX  = edgeEr.x;
             erY  = edgeEr.y;

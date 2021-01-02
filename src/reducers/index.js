@@ -1,4 +1,3 @@
-
 import {combineReducers} from 'redux';
 import {util, SETTINGS} from '../utils/util';
 
@@ -37,11 +36,6 @@ const createProperty = function(props = {}) {
         ...props
     };
 }
-
-const getConcept = function (collection, id) {
-    const concept = collection.find((concept) => concept.id === id) || {};
-    return {...concept};
-};
 
 const updateCollectionConcept = function (collection, id, updatedProps = {}) {
     // console.log('updateCollectionConcept\n\tid:', id, '\n\tupdatedProps:', updatedProps );

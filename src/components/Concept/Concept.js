@@ -7,8 +7,6 @@ import {
     renderAddButton,
     renderDeleteButton,
     renderLineButton,
-    getTextAreaStyle,
-
 } from './ConceptDisplays';
 
 import {
@@ -89,27 +87,6 @@ class Concept extends Component {
             ? this.height + properties.length * CONCEPT_HEIGHT
             : this.height;
         conceptChange(id, this.state.value, this.width, this.height, this.totalHeight);
-        
-        // if (this.root) {
-        //     const {id, conceptChange, parentComponentId} = this.props;
-        //     const {value} = this.state;
-        //     const {width, height} = this.root.getBoundingClientRect();
-        //     const isHovered = this.root.matches(':hover');
-        //     const mult = isHovered ? (1 / 1.1) : 1;
-        //     const roundedWidth = Math.round(width * mult);
-        //     const roundedHeight = Math.round(height * mult);
-        //     this.width = roundedWidth;
-        //     this.height = roundedHeight;
-        //     this.totalHeight = roundedHeight;
-        //     if (!parentComponentId) {
-        //         const parentNode = this.root.parentNode;
-        //         if (parentNode) {
-        //             const {height: totalHeight} = parentNode.getBoundingClientRect();
-        //             this.totalHeight = totalHeight;
-        //         }
-        //     }
-        //     conceptChange(id, value, roundedWidth, roundedHeight, this.totalHeight);
-        // }
     }
 
     debouncedConceptChange = debounce(this.conceptChange, 150);
@@ -119,26 +96,6 @@ class Concept extends Component {
         window[func]('mousemove', this.onMouseMove);
         window[func]('mouseup', this.onMouseUp);
     }
-
-    // autoExpand() {
-    //     // Set the height to 0, so we can get the correct content height via scrollHeight
-    //     // Also, running this through state changes causes a race condition when decreasing scrollHeight.
-    //     this.textarea.style.overflow = 'hidden';
-    //     this.textarea.style.height = '0px';
-        
-    //     // set height to scrollHeight, but add border-width * 2 since that is not reported in scrollHeight
-    //     // but is used in box-sizing: border-box to determine height of textarea element
-    //     const newHeight = this.textarea.scrollHeight;
-    //     // console.log('newHeight:', newHeight);
-    //     // const paddingAdj = TEXTAREA_STYLES.padding * 2;
-    //     // console.log('newHeight:', newHeight);
-    //     this.height = newHeight + 12; // - paddingAdj;
-    //     this.textarea.style.height = `${this.height}px`;
-
-    //     console.log('this.textarea.scrollWidth:', this.textarea.scrollWidth);
-
-    //     this.debouncedConceptChange();
-    // }
 
     onChange = (e) => {
         const { value } = this.state;
@@ -159,7 +116,7 @@ class Concept extends Component {
     }
 
     onMouseDown = (e) => {
-        const {id, selected, conceptFocus, parentComponent, parentComponentId} = this.props;
+        const {id, selected, conceptFocus, parentComponent} = this.props;
         let {x, y} = this.props;
         if (parentComponent) { // && typeof x === 'undefined') {
             x = parentComponent.x;
@@ -217,11 +174,11 @@ class Concept extends Component {
     }
 
     onMouseUp = (e) => {
-        const {id, relationshipDrawTemp, relationshipAdd, tempTarget, isIntraConceptRelationship} = this.props;
+        const {id, relationshipDrawTemp, relationshipAdd, tempTarget} = this.props;
         const {lineMouseDown} = this.state;
         this.toggleDragHandlers(false, e);
         if (lineMouseDown) {
-            if (!!tempTarget && id !== tempTarget) { // && !isIntraConceptRelationship) { // if (tempTarget !== null && id !== tempTarget) {
+            if (!!tempTarget && id !== tempTarget) { // && !isIntraConceptRelationship) {
                 relationshipAdd(id, tempTarget);
             }
             this.centerClickDiffX = 0;
@@ -234,14 +191,14 @@ class Concept extends Component {
     }
 
     onMouseOver = (e) => {
-        const {id, hasTempRelationship, isIntraConceptRelationship, relationshipSetTempTarget} = this.props;
+        const {id, hasTempRelationship, relationshipSetTempTarget} = this.props;
         if (hasTempRelationship) {
             relationshipSetTempTarget(id)
         }
     }
 
     onMouseOut = (e) => {
-        const {hasTempRelationship, isIntraConceptRelationship, relationshipSetTempTarget} = this.props;
+        const {hasTempRelationship, relationshipSetTempTarget} = this.props;
         if (hasTempRelationship) {
             relationshipSetTempTarget(null)
         }

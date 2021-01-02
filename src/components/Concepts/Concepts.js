@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ConceptStack from '../Concept/ConceptStack';
 import Concept from '../Concept/Concept';
 import util from '../../utils/util';
 
@@ -12,14 +11,13 @@ class Concepts extends Component {
             collection,
             selectedConcept,
             selectedRelationship,
-            selectedType,
-            selectedData,
-            associatedData,
+            // selectedType,
+            // selectedData,
+            // associatedData,
             tempRelationship,
             tempTarget,
             viewFilter
         } = concepts;
-        // console.log('Concepts > Render\n\ttempTarget:', tempTarget);
         const hasTempRelationship = !!tempRelationship;
         let sConcept = {};
         let selectedRelationships = [];
@@ -101,28 +99,6 @@ class Concepts extends Component {
                             })}
                         </div>
                     );
-                    {/* return (
-                        <Concept
-                            key={`concept_${concept.id}`}
-                            {...concept}
-                            hasTempRelationship={hasTempRelationship}
-                            isTempRelationship={hasTempRelationship && concept.id === tempRelationship.id}
-                            tempTarget={tempTarget}
-                            selected={concept.id === selectedConcept && selectedRelationship === null}
-                            isExcludedByFilter={isExcludedByFilter}
-                        />
-                        <ConceptStack
-                            key={`concept-stack_${concept.id}`}
-                            {...concept}
-                            hasTempRelationship={hasTempRelationship}
-                            isTempRelationship={hasTempRelationship && concept.id === tempRelationship.id}
-                            tempTarget={tempTarget}
-                            selected={concept.id === selectedConcept && selectedRelationship === null}
-                            isExcludedByFilter={isExcludedByFilter}
-                            concepts={concepts}
-                        />
-                    );
-                    */}
                 })
             }
             </div>

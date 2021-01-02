@@ -29,7 +29,7 @@ class SelectedControl extends Component {
     }
 
     getRelationshipName(relationship) {
-        return relationship && relationship.label || '[Enter line description]';
+        return relationship && relationship.label ? relationship.label : '[Enter line description]';
     }
 
     shouldComponentUpdate(nextProps) {
@@ -38,6 +38,8 @@ class SelectedControl extends Component {
         const {selectedType, selectedData, associatedData} = this.props;
         return (selectedType !== nextProps.selectedType)
             || (selectedData.id !== nextProps.selectedData.id)
+            || (selectedData.name !== nextProps.selectedData.name)
+            || (selectedData.label !== nextProps.selectedData.label)
             || (associatedData.influencer.id !== nextProps.associatedData.influencer.id)
             || (associatedData.influencee.id !== nextProps.associatedData.influencee.id);
 

@@ -28,6 +28,8 @@ function mmpXMLToJSON(xmlString, excludeArray = []) {
                     json.scenarios = getJSONFromArray(getChildNodes(node));
                 }
             break;
+            default:
+                break;
         }
     });
 

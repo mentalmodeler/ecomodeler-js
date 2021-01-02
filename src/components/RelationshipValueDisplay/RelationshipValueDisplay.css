@@ -15,6 +15,9 @@
   display: -webkit-box;
   overflow: hidden;
   word-break: break-word;
+  font-size: 14px;
+  line-height: 20px;
+  min-height: 40px;
 }
 .MentalMapper .relationship-value-display__delete-and-edit {
   position: absolute;
@@ -151,6 +154,7 @@
   overflow: hidden;
   resize: none;
   word-break: break-word;
+  white-space: break-spaces;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 @keyframes MentalMapper-menu-pop-in-expand {
